@@ -1,0 +1,65 @@
+{
+  "initialize": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+      "protocolVersion": "2025-06-18",
+      "capabilities": {
+        "tools": {
+          "listChanged": false
+        }
+      },
+      "serverInfo": {
+        "name": "Local Computer Use",
+        "version": "0.1.0"
+      }
+    }
+  },
+  "toolCount": 10,
+  "toolNames": [
+    "list_apps",
+    "get_app_state",
+    "click",
+    "perform_secondary_action",
+    "set_value",
+    "select_text",
+    "scroll",
+    "drag",
+    "press_key",
+    "type_text"
+  ],
+  "listApps": {
+    "jsonrpc": "2.0",
+    "id": 3,
+    "result": {
+      "_meta": {
+        "local-computer-use/status": "stub"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "[]"
+        }
+      ],
+      "isError": false
+    }
+  },
+  "stubState": {
+    "jsonrpc": "2.0",
+    "id": 4,
+    "result": {
+      "_meta": {
+        "local-computer-use/status": "not_implemented",
+        "tool": "get_app_state",
+        "local-computer-use/adapterStatus": "not_implemented"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Tool not implemented in local skeleton: get_app_state"
+        }
+      ],
+      "isError": true
+    }
+  }
+}

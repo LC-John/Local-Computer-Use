@@ -1,0 +1,182 @@
+#!/usr/bin/env node
+
+import { listApps, notImplemented } from "./mac-adapter.mjs";
+import {
+  findTool,
+  loadNativeToolCatalog,
+  validateRequiredArguments,
+} from "./tools/catalog.mjs";
+
+const serverInfo = {
+  name: "Local Computer Use",
+  version: "0.1.0",
+};
+
+let initialized = false;
+let tools = [];
+
+async function loadTools() {
+  tools = await loadNativeToolCatalog();
+}
+
+function writeJson(message) {
+  process.stdout.write(`${JSON.stringify(message)}\n`);
+}
+
+function jsonRpcError(id, code, message, data) {
+  return {
+    jsonrpc: "2.0",
+    id,
+    error: {
+      code,
+      message,
+      ...(data === undefined ? {} : { data }),
+    },
+  };
+}
+
+function toolResultError(id, text, metadata = {}) {
+  return {
+    jsonrpc: "2.0",
+    id,
+    result: {
+      _meta: {
+        "local-computer-use/status": "not_implemented",
+        ...metadata,
+      },
+      content: [
+        {
+          type: "text",
+          text,
+        },
+      ],
+      isError: true,
+    },
+  };
+}
+
+function handleInitialize(id, params = {}) {
+  initialized = true;
+  return {
+    jsonrpc: "2.0",
+    id,
+    result: {
+      protocolVersion: params.protocolVersion || "2025-06-18",
+      capabilities: {
+        tools: {
+          listChanged: false,
+        },
+      },
+      serverInfo,
+    },
+  };
+}
+
+function handleToolsList(id) {
+  return {
+    jsonrpc: "2.0",
+    id,
+    result: {
+      tools,
+    },
+  };
+}
+
+async function handleToolsCall(id, params = {}) {
+  const name = params.name;
+  const args = params.arguments || {};
+  const tool = findTool(tools, name);
+
+  if (!tool) {
+    return toolResultError(id, `Unknown tool: ${name || ""}`, {
+      tool: name || null,
+    });
+  }
+
+  const requiredError = validateRequiredArguments(tool, args);
+  if (requiredError) {
+    return toolResultError(id, requiredError, {
+      tool: name,
+    });
+  }
+
+  if (name === "list_apps") {
+    const apps = await listApps();
+    return {
+      jsonrpc: "2.0",
+      id,
+      result: {
+        _meta: {
+          "local-computer-use/status": "stub",
+        },
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(apps),
+          },
+        ],
+        isError: false,
+      },
+    };
+  }
+
+  const result = await notImplemented(name);
+  return toolResultError(id, result.message, {
+    tool: name,
+    "local-computer-use/adapterStatus": result.status,
+  });
+}
+
+async function handleMessage(message) {
+  const { id, method, params } = message;
+
+  if (method === "initialize") return handleInitialize(id, params);
+  if (method === "notifications/initialized") {
+    initialized = true;
+    return null;
+  }
+
+  if (!initialized) {
+    return jsonRpcError(id, -32002, "Server not initialized");
+  }
+
+  if (method === "tools/list") return handleToolsList(id);
+  if (method === "tools/call") return await handleToolsCall(id, params);
+
+  return jsonRpcError(id, -32601, `Method not found: Unknown method: ${method}`, {
+    detail: `Unknown method: ${method}`,
+  });
+}
+
+async function main() {
+  await loadTools();
+
+  let buffer = "";
+  process.stdin.setEncoding("utf8");
+  process.stdin.on("data", (chunk) => {
+    buffer += chunk;
+    while (buffer.includes("\n")) {
+      const index = buffer.indexOf("\n");
+      const line = buffer.slice(0, index).trim();
+      buffer = buffer.slice(index + 1);
+      if (!line) continue;
+
+      try {
+        handleMessage(JSON.parse(line))
+          .then((response) => {
+            if (response) writeJson(response);
+          })
+          .catch((error) => {
+            writeJson(jsonRpcError(null, -32603, "Internal error", { detail: error.message }));
+          });
+      } catch (error) {
+        writeJson(jsonRpcError(null, -32700, "Parse error", { detail: error.message }));
+      }
+    }
+  });
+}
+
+main().catch((error) => {
+  console.error(error.stack || error.message);
+  process.exitCode = 1;
+});

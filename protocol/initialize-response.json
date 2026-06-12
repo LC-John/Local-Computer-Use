@@ -1,0 +1,16 @@
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "result": {
+    "capabilities": {
+      "tools": {
+        "listChanged": false
+      }
+    },
+    "protocolVersion": "2025-03-26",
+    "serverInfo": {
+      "name": "Computer Use",
+      "version": "d10a51766bb4d162ef1eed308e86a0f8f3816fb860896cb92c18e6de998142af"
+    }
+  }
+}

@@ -1,0 +1,3 @@
+Computer Use TextEdit fixture
+
+This file is used for state model discovery.

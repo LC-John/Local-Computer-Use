@@ -1,0 +1,13 @@
+{
+  "name": "computer-use-reimplementation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "local-computer-use": "./src/server.mjs"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "probe:local": "node scripts/probe-reimplementation-mcp.mjs"
+  }
+}

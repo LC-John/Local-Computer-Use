@@ -1,0 +1,5 @@
+{"timestamp":"2026-06-12T09:06:23.046Z","phase":"request","request":{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"native-state-probe","version":"0.1.0"}}}}
+{"timestamp":"2026-06-12T09:06:23.125Z","phase":"response","response":{"id":1,"jsonrpc":"2.0","result":{"capabilities":{"tools":{"listChanged":false}},"protocolVersion":"2025-03-26","serverInfo":{"name":"Computer Use","version":"d10a51766bb4d162ef1eed308e86a0f8f3816fb860896cb92c18e6de998142af"}}}}
+{"timestamp":"2026-06-12T09:06:23.125Z","phase":"request","request":{"jsonrpc":"2.0","method":"notifications/initialized"}}
+{"timestamp":"2026-06-12T09:06:23.125Z","phase":"request","request":{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"get_app_state","arguments":{"app":"__definitely_missing_app_for_probe__"}}}}
+{"timestamp":"2026-06-12T09:06:23.195Z","phase":"response","response":{"id":2,"jsonrpc":"2.0","result":{"content":[{"text":"Invalid app: __definitely_missing_app_for_probe__","type":"text"}],"isError":true}}}
