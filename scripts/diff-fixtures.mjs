@@ -14,6 +14,12 @@ const outDir = defaultReportsDir;
 const reportPath = path.join(outDir, "m10-local-fixture-diff.json");
 const jsonlPath = path.join(outDir, "m10-local-fixture-diff.jsonl");
 const nativeToolsPath = path.resolve("protocol/tools-list.json");
+const hostedCalculatorOraclePath = path.resolve(
+  "fixtures",
+  "Calculator",
+  "basic",
+  "codex-hosted-state.md",
+);
 const missingAppName = "__definitely_missing_app_for_m10_diff__";
 
 function assert(condition, message) {
@@ -63,6 +69,8 @@ function normalizeToolError(response) {
 
 function normalizeState(state) {
   const roleCounts = {};
+  const identifiers = new Set();
+  const descriptions = new Set();
   let nodeCount = 0;
   let indexedNodeCount = 0;
   let buttonCount = 0;
@@ -74,6 +82,8 @@ function normalizeState(state) {
     if (node.role) roleCounts[node.role] = (roleCounts[node.role] || 0) + 1;
     if (node.role === "AXButton") buttonCount += 1;
     if (node.role === "AXStaticText") staticTextCount += 1;
+    if (node.identifier) identifiers.add(String(node.identifier));
+    if (node.description) descriptions.add(String(node.description));
   });
 
   return {
@@ -104,7 +114,45 @@ function normalizeState(state) {
       staticTextCount,
       rootRole: state.tree?.role,
       roleCounts,
+      identifiers: sorted(identifiers),
+      descriptions: sorted(descriptions),
     },
+  };
+}
+
+function parseHostedCalculatorOracle(markdown) {
+  const bundleIdentifier =
+    markdown.match(/bundleID\s+([^\s]+)/)?.[1] ||
+    markdown.match(/bundleIdentifier["\s:]+([A-Za-z0-9_.-]+)/)?.[1] ||
+    null;
+  const observedTree =
+    markdown.match(/Observed tree shape:\n\n```text\n([\s\S]*?)```/)?.[1] || "";
+  const nodeLines = observedTree
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => /^\d+\s+/.test(line));
+  const ids = sorted(
+    new Set(
+      nodeLines
+        .map((line) => line.match(/\bID:\s*([^,\n]+)/)?.[1]?.trim())
+        .filter(Boolean),
+    ),
+  );
+  const buttonDescriptions = sorted(
+    new Set(
+      nodeLines
+        .filter((line) => line.includes("按钮"))
+        .map((line) => line.match(/Description:\s*([^,]+)/)?.[1]?.trim())
+        .filter(Boolean),
+    ),
+  );
+
+  return {
+    source: hostedCalculatorOraclePath,
+    bundleIdentifier,
+    nodeCount: nodeLines.length,
+    ids,
+    buttonDescriptions,
   };
 }
 
@@ -184,6 +232,54 @@ function compareCalculatorState(state) {
   };
 }
 
+function compareHostedCalculatorOracle(hostedOracle, state) {
+  const normalized = normalizeState(state);
+  const requiredIds = ["One", "Add", "Equals", "StandardInputView"];
+  const hostedSemanticIds = hostedOracle.ids.filter((id) =>
+    requiredIds.includes(id),
+  );
+  const missingIds = hostedSemanticIds.filter(
+    (id) => !normalized.tree.identifiers.includes(id),
+  );
+  const hostedMinNodeCount = Math.max(
+    10,
+    Math.floor(hostedOracle.nodeCount * 0.7),
+  );
+
+  const diffs = [
+    ...diffValue(
+      "app.bundleIdentifier",
+      hostedOracle.bundleIdentifier,
+      normalized.app.bundleIdentifier,
+    ),
+    ...expectTrue(
+      "tree.nodeCount >= 70% hosted oracle nodes",
+      normalized.tree.nodeCount >= hostedMinNodeCount,
+      normalized.tree.nodeCount,
+    ),
+    ...diffValue("missingSemanticIds", [], missingIds),
+  ];
+
+  return {
+    fixture: "calculator-hosted-oracle-semantic-diff",
+    expected: {
+      source: path.relative(process.cwd(), hostedOracle.source),
+      bundleIdentifier: hostedOracle.bundleIdentifier,
+      minimumNodeCount: hostedMinNodeCount,
+      semanticIdsPresent: hostedSemanticIds,
+    },
+    actual: {
+      bundleIdentifier: normalized.app.bundleIdentifier,
+      nodeCount: normalized.tree.nodeCount,
+      identifiersPresent: hostedSemanticIds.filter((id) =>
+        normalized.tree.identifiers.includes(id),
+      ),
+      missingSemanticIds: missingIds,
+    },
+    diffs,
+  };
+}
+
 function compareErrorFixture(fixture, response, expectedCode) {
   const normalized = normalizeToolError(response);
   return {
@@ -221,6 +317,9 @@ async function main() {
   const nativeTools = JSON.parse(await readFile(nativeToolsPath, "utf8"));
   const nativeToolList = nativeTools.tools || nativeTools.result?.tools || [];
   const nativeToolNames = nativeToolList.map((tool) => tool.name);
+  const hostedCalculatorOracle = parseHostedCalculatorOracle(
+    await readFile(hostedCalculatorOraclePath, "utf8"),
+  );
   const client = createLocalMcpClient({
     env: {
       LOCAL_CUA_APPROVAL_MODE: "store",
@@ -247,8 +346,10 @@ async function main() {
       !calculatorStateResponse.result?.isError,
       `Calculator get_app_state failed: ${responseText(calculatorStateResponse)}`,
     );
+    const calculatorState = parseToolText(calculatorStateResponse);
+    fixtures.push(compareCalculatorState(calculatorState));
     fixtures.push(
-      compareCalculatorState(parseToolText(calculatorStateResponse)),
+      compareHostedCalculatorOracle(hostedCalculatorOracle, calculatorState),
     );
 
     fixtures.push(
@@ -284,6 +385,11 @@ async function main() {
         status: "deferred",
         reason:
           "Raw native/proxy get_app_state capture still times out after app approval in this environment.",
+      },
+      hostedOracle: {
+        status: "active",
+        source: path.relative(process.cwd(), hostedCalculatorOracle.source),
+        role: "Codex-hosted Computer Use fixture used as semantic oracle while raw native backend is blocked.",
       },
       summary,
       fixtures,

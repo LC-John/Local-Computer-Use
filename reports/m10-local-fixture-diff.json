@@ -1,14 +1,19 @@
 {
-  "generatedAt": "2026-06-15T09:01:31.802Z",
+  "generatedAt": "2026-06-15T09:26:38.387Z",
   "milestone": "M10",
   "backend": "local",
   "nativeBackend": {
     "status": "deferred",
     "reason": "Raw native/proxy get_app_state capture still times out after app approval in this environment."
   },
+  "hostedOracle": {
+    "status": "active",
+    "source": "fixtures/Calculator/basic/codex-hosted-state.md",
+    "role": "Codex-hosted Computer Use fixture used as semantic oracle while raw native backend is blocked."
+  },
   "summary": {
     "ok": true,
-    "fixtureCount": 5,
+    "fixtureCount": 6,
     "diffCount": 0,
     "diffs": []
   },
@@ -90,8 +95,85 @@
             "AXButton": 22,
             "AXMenuButton": 1,
             "AXToolbar": 1
-          }
+          },
+          "identifiers": [
+            "Add",
+            "calculator.fill",
+            "CalculatorKeypadView",
+            "Decimal",
+            "Delete",
+            "Divide",
+            "Eight",
+            "Equals",
+            "Five",
+            "Four",
+            "main",
+            "main, SidebarNavigationSplitView",
+            "Mode: basic; unitConversion: false",
+            "Multiply",
+            "Negate",
+            "Nine",
+            "One",
+            "Percent",
+            "Seven",
+            "Six",
+            "StandardInputView",
+            "Subtract",
+            "Three",
+            "Two",
+            "Zero"
+          ],
+          "descriptions": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "calculator.fill",
+            "乘",
+            "减",
+            "删除",
+            "加",
+            "更改模式",
+            "更改正负号",
+            "点",
+            "百分比",
+            "等于",
+            "输入",
+            "除"
+          ]
         }
+      },
+      "diffs": []
+    },
+    {
+      "fixture": "calculator-hosted-oracle-semantic-diff",
+      "expected": {
+        "source": "fixtures/Calculator/basic/codex-hosted-state.md",
+        "bundleIdentifier": "com.apple.calculator",
+        "minimumNodeCount": 27,
+        "semanticIdsPresent": [
+          "Add",
+          "Equals",
+          "One",
+          "StandardInputView"
+        ]
+      },
+      "actual": {
+        "bundleIdentifier": "com.apple.calculator",
+        "nodeCount": 36,
+        "identifiersPresent": [
+          "Add",
+          "Equals",
+          "One",
+          "StandardInputView"
+        ],
+        "missingSemanticIds": []
       },
       "diffs": []
     },

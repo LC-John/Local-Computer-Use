@@ -4,9 +4,9 @@ Date: 2026-06-15
 
 Status: M10.1 local fixture diff harness complete. M10.2 hosted-context
 emulation probe complete, with the native real-app state gap reproduced and
-documented. M10.3 native-vs-local state diffing remains deferred until raw
-native/proxy `get_app_state` capture can return successfully after app
-approval, or until the project adopts a Codex-hosted oracle fixture path.
+documented. M10.3 has an initial Codex-hosted oracle semantic diff for
+Calculator; raw native-vs-local state diffing remains deferred until raw
+native/proxy `get_app_state` capture can return successfully after app approval.
 
 ## Split Milestones
 
@@ -64,13 +64,22 @@ The report confirms:
 - real-app `get_app_state(Calculator)` triggers `elicitation/create`, accepts
   successfully, and then times out without returning a state payload.
 
-### M10.3 Native-vs-Local Diff
+### M10.3 Oracle-vs-Local Diff
 
-Status: Deferred.
+Status: Initial Codex-hosted oracle semantic diff complete; raw native backend
+deferred.
 
-This becomes actionable when a future M10.2 follow-up can obtain a successful
-native real-app state payload, or when the project adopts a Codex-hosted oracle
-fixture flow instead of raw native stdio/proxy capture.
+The local diff harness now parses the Codex-hosted Calculator fixture at
+`fixtures/Calculator/basic/codex-hosted-state.md` and compares local live state
+against stable hosted-oracle semantics:
+
+- Calculator bundle identifier is `com.apple.calculator`;
+- local AX tree has at least 70% of the hosted fixture's observed node count;
+- stable semantic IDs such as `One`, `Add`, `Equals`, and `StandardInputView`
+  are present locally.
+
+Raw native-vs-local diffing becomes actionable when a future M10.2 follow-up can
+obtain a successful native real-app state payload.
 
 ## Implemented Components
 
@@ -88,6 +97,8 @@ results against stable semantic expectations:
 - `tools/list` exposes the same tool names captured under `protocol/`.
 - Calculator `get_app_state` returns the expected app identity, screenshot
   metadata, and a sufficiently populated AX tree.
+- Calculator local state matches the Codex-hosted oracle fixture on stable
+  semantic IDs and minimum tree shape.
 - Unknown apps return `invalid_app`.
 - Denied sensitive apps return `app_denied`.
 - Malformed click calls on an allowed app return `missing_click_target`.
@@ -109,6 +120,7 @@ The JSON report contains:
 
 - backend metadata;
 - native backend status;
+- hosted oracle status;
 - fixture summary;
 - per-fixture expected values;
 - per-fixture normalized actual values;
@@ -131,4 +143,11 @@ Current accepted output:
 
 ```text
 Local MCP M10 fixture diff harness passed.
+```
+
+Current report summary:
+
+```text
+fixtureCount: 6
+diffCount: 0
 ```
