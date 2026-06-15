@@ -32,7 +32,7 @@ Milestone 8: Initial implementation complete, Calculator/TextEdit/Chrome/Finder 
 Milestone 9: Complete for local reimplementation
 Milestone 10.1: Local fixture diff harness complete
 Milestone 10.2: Hosted context emulation probe complete, native state gap still open
-Milestone 10.3: Hosted oracle semantic diff initial complete, raw native-vs-local diff deferred
+Milestone 10.3: Hosted oracle semantic diff complete for Calculator/TextEdit/Chrome/Finder, raw native-vs-local diff deferred
 Milestone 11-14: Not started
 ```
 
@@ -845,12 +845,12 @@ denied = ["Terminal", "Codex"]
 ## Milestone 10: Native-vs-Reimplementation Diff Harness
 
 Status: Split into M10.1/M10.2/M10.3 as of 2026-06-15. M10.1 is complete:
-`npm run diff:m10:local` compares local MCP tool names, Calculator state
-semantics, and structured error behavior against stable expectations. M10.2 now
-has a probe: `npm run probe:m10:host` replays hosted MCP context against the
-native client and confirms that hosted initialize/tools metadata is not enough
-to make real-app native state capture return. M10.3 now has an initial
-Codex-hosted oracle semantic diff for Calculator; raw native-vs-local state
+`npm run diff:m10:local` compares local MCP tool names, fixture state semantics,
+and structured error behavior against stable expectations. M10.2 now has a
+probe: `npm run probe:m10:host` replays hosted MCP context against the native
+client and confirms that hosted initialize/tools metadata is not enough to make
+real-app native state capture return. M10.3 now has Codex-hosted oracle semantic
+diffs for Calculator, TextEdit, Chrome, and Finder; raw native-vs-local state
 diffing remains deferred until raw native/proxy `get_app_state` capture can
 return successfully after app approval. See
 `docs/milestone-10-diff-harness.md`.

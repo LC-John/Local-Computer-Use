@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-15T09:26:38.387Z",
+  "generatedAt": "2026-06-15T09:36:15.090Z",
   "milestone": "M10",
   "backend": "local",
   "nativeBackend": {
@@ -8,12 +8,17 @@
   },
   "hostedOracle": {
     "status": "active",
-    "source": "fixtures/Calculator/basic/codex-hosted-state.md",
-    "role": "Codex-hosted Computer Use fixture used as semantic oracle while raw native backend is blocked."
+    "sources": [
+      "fixtures/Calculator/basic/codex-hosted-state.md",
+      "fixtures/TextEdit/plain-text/notes.md",
+      "fixtures/Chrome/static-page/notes.md",
+      "fixtures/Finder/project-list/notes.md"
+    ],
+    "role": "Codex-hosted Computer Use fixtures used as semantic oracles while raw native backend is blocked."
   },
   "summary": {
     "ok": true,
-    "fixtureCount": 6,
+    "fixtureCount": 9,
     "diffCount": 0,
     "diffs": []
   },
@@ -146,6 +151,13 @@
             "等于",
             "输入",
             "除"
+          ],
+          "titles": [
+            "计算器"
+          ],
+          "values": [
+            "-1",
+            "‎11"
           ]
         }
       },
@@ -156,24 +168,104 @@
       "expected": {
         "source": "fixtures/Calculator/basic/codex-hosted-state.md",
         "bundleIdentifier": "com.apple.calculator",
-        "minimumNodeCount": 27,
-        "semanticIdsPresent": [
-          "Add",
-          "Equals",
-          "One",
-          "StandardInputView"
-        ]
+        "minimumNodeCount": 10,
+        "semanticIdsPresent": []
       },
       "actual": {
         "bundleIdentifier": "com.apple.calculator",
         "nodeCount": 36,
-        "identifiersPresent": [
-          "Add",
-          "Equals",
-          "One",
-          "StandardInputView"
-        ],
+        "identifiersPresent": [],
         "missingSemanticIds": []
+      },
+      "diffs": []
+    },
+    {
+      "fixture": "textedit-hosted-oracle-semantic-diff",
+      "expected": {
+        "source": "fixtures/TextEdit/plain-text/notes.md",
+        "bundleIdentifier": "com.apple.TextEdit",
+        "minimumNodeCount": 4,
+        "semanticIdsPresent": [],
+        "semanticTextsPresent": [
+          "Computer Use TextEdit fixture"
+        ],
+        "semanticRolesPresent": [
+          "AXTextArea"
+        ]
+      },
+      "actual": {
+        "bundleIdentifier": "com.apple.TextEdit",
+        "nodeCount": 13,
+        "identifiersPresent": [],
+        "textsPresent": [
+          "Computer Use TextEdit fixture"
+        ],
+        "rolesPresent": [
+          "AXTextArea"
+        ],
+        "missingSemanticIds": [],
+        "missingSemanticTexts": [],
+        "missingSemanticRoles": []
+      },
+      "diffs": []
+    },
+    {
+      "fixture": "chrome-hosted-oracle-semantic-diff",
+      "expected": {
+        "source": "fixtures/Chrome/static-page/notes.md",
+        "bundleIdentifier": "com.google.Chrome",
+        "minimumNodeCount": 20,
+        "semanticIdsPresent": [],
+        "semanticTextsPresent": [
+          "Computer Use Fixture Page"
+        ],
+        "semanticRolesPresent": [
+          "AXWebArea"
+        ]
+      },
+      "actual": {
+        "bundleIdentifier": "com.google.Chrome",
+        "nodeCount": 105,
+        "identifiersPresent": [],
+        "textsPresent": [
+          "Computer Use Fixture Page"
+        ],
+        "rolesPresent": [
+          "AXWebArea"
+        ],
+        "missingSemanticIds": [],
+        "missingSemanticTexts": [],
+        "missingSemanticRoles": []
+      },
+      "diffs": []
+    },
+    {
+      "fixture": "finder-hosted-oracle-semantic-diff",
+      "expected": {
+        "source": "fixtures/Finder/project-list/notes.md",
+        "bundleIdentifier": "com.apple.finder",
+        "minimumNodeCount": 20,
+        "semanticIdsPresent": [],
+        "semanticTextsPresent": [
+          "列表视图"
+        ],
+        "semanticRolesPresent": [
+          "AXOutline"
+        ]
+      },
+      "actual": {
+        "bundleIdentifier": "com.apple.finder",
+        "nodeCount": 416,
+        "identifiersPresent": [],
+        "textsPresent": [
+          "列表视图"
+        ],
+        "rolesPresent": [
+          "AXOutline"
+        ],
+        "missingSemanticIds": [],
+        "missingSemanticTexts": [],
+        "missingSemanticRoles": []
       },
       "diffs": []
     },

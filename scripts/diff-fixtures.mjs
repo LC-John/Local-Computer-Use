@@ -20,6 +20,62 @@ const hostedCalculatorOraclePath = path.resolve(
   "basic",
   "codex-hosted-state.md",
 );
+const hostedOracleFixtures = [
+  {
+    fixture: "textedit-hosted-oracle-semantic-diff",
+    source: path.resolve("fixtures", "TextEdit", "plain-text", "notes.md"),
+    localState: path.resolve(
+      "fixtures",
+      "TextEdit",
+      "plain-text",
+      "local-m7-state.json",
+    ),
+    expected: {
+      bundleIdentifier: "com.apple.TextEdit",
+      minimumNodeCount: 4,
+      minimumHostedNodeRatio: 0.7,
+      requiredIds: ["First Text View"],
+      requiredTexts: ["Computer Use TextEdit fixture"],
+      requiredRoles: ["AXTextArea"],
+    },
+  },
+  {
+    fixture: "chrome-hosted-oracle-semantic-diff",
+    source: path.resolve("fixtures", "Chrome", "static-page", "notes.md"),
+    localState: path.resolve(
+      "fixtures",
+      "Chrome",
+      "static-page",
+      "local-m7-state.json",
+    ),
+    expected: {
+      bundleIdentifier: "com.google.Chrome",
+      minimumNodeCount: 20,
+      minimumHostedNodeRatio: 0.7,
+      requiredIds: [],
+      requiredTexts: ["Computer Use Fixture Page"],
+      requiredRoles: ["AXWebArea"],
+    },
+  },
+  {
+    fixture: "finder-hosted-oracle-semantic-diff",
+    source: path.resolve("fixtures", "Finder", "project-list", "notes.md"),
+    localState: path.resolve(
+      "fixtures",
+      "Finder",
+      "project-list",
+      "local-m7-state.json",
+    ),
+    expected: {
+      bundleIdentifier: "com.apple.finder",
+      minimumNodeCount: 20,
+      minimumHostedNodeRatio: 0.7,
+      requiredIds: ["FinderWindow", "ListView"],
+      requiredTexts: ["列表视图"],
+      requiredRoles: ["AXOutline"],
+    },
+  },
+];
 const missingAppName = "__definitely_missing_app_for_m10_diff__";
 
 function assert(condition, message) {
@@ -71,6 +127,8 @@ function normalizeState(state) {
   const roleCounts = {};
   const identifiers = new Set();
   const descriptions = new Set();
+  const titles = new Set();
+  const values = new Set();
   let nodeCount = 0;
   let indexedNodeCount = 0;
   let buttonCount = 0;
@@ -84,6 +142,10 @@ function normalizeState(state) {
     if (node.role === "AXStaticText") staticTextCount += 1;
     if (node.identifier) identifiers.add(String(node.identifier));
     if (node.description) descriptions.add(String(node.description));
+    if (node.title) titles.add(String(node.title));
+    if (node.value !== undefined && node.value !== null) {
+      values.add(String(node.value));
+    }
   });
 
   return {
@@ -116,17 +178,18 @@ function normalizeState(state) {
       roleCounts,
       identifiers: sorted(identifiers),
       descriptions: sorted(descriptions),
+      titles: sorted(titles),
+      values: sorted(values),
     },
   };
 }
 
-function parseHostedCalculatorOracle(markdown) {
+function parseHostedOracle(markdown, source) {
   const bundleIdentifier =
     markdown.match(/bundleID\s+([^\s]+)/)?.[1] ||
     markdown.match(/bundleIdentifier["\s:]+([A-Za-z0-9_.-]+)/)?.[1] ||
     null;
-  const observedTree =
-    markdown.match(/Observed tree shape:\n\n```text\n([\s\S]*?)```/)?.[1] || "";
+  const observedTree = markdown.match(/```text\n([\s\S]*?)```/)?.[1] || "";
   const nodeLines = observedTree
     .split(/\r?\n/)
     .map((line) => line.trim())
@@ -138,21 +201,105 @@ function parseHostedCalculatorOracle(markdown) {
         .filter(Boolean),
     ),
   );
-  const buttonDescriptions = sorted(
+  const descriptions = sorted(
     new Set(
       nodeLines
-        .filter((line) => line.includes("按钮"))
         .map((line) => line.match(/Description:\s*([^,]+)/)?.[1]?.trim())
+        .filter(Boolean),
+    ),
+  );
+  const values = sorted(
+    new Set(
+      nodeLines
+        .map((line) => line.match(/Value:\s*([^,\n]+)/)?.[1]?.trim())
         .filter(Boolean),
     ),
   );
 
   return {
-    source: hostedCalculatorOraclePath,
+    source,
     bundleIdentifier,
     nodeCount: nodeLines.length,
     ids,
-    buttonDescriptions,
+    descriptions,
+    values,
+  };
+}
+
+function includesText(values, needle) {
+  return values.some((value) => value.includes(needle));
+}
+
+function compareHostedOracleFixture(fixtureDef, hostedOracle, state) {
+  const normalized = normalizeState(state);
+  const expected = fixtureDef.expected;
+  const hostedMinNodeCount = Math.max(
+    expected.minimumNodeCount,
+    Math.floor(hostedOracle.nodeCount * expected.minimumHostedNodeRatio),
+  );
+  const requiredIds = expected.requiredIds.filter((id) =>
+    hostedOracle.ids.includes(id),
+  );
+  const textCorpus = [
+    normalized.window.hasTitle ? state.window?.title || "" : "",
+    ...normalized.tree.identifiers,
+    ...normalized.tree.descriptions,
+    ...normalized.tree.titles,
+    ...normalized.tree.values,
+  ];
+  const missingIds = requiredIds.filter(
+    (id) => !normalized.tree.identifiers.includes(id),
+  );
+  const missingTexts = expected.requiredTexts.filter(
+    (text) => !includesText(textCorpus, text),
+  );
+  const missingRoles = expected.requiredRoles.filter(
+    (role) => !normalized.tree.roleCounts[role],
+  );
+
+  const diffs = [
+    ...diffValue(
+      "app.bundleIdentifier",
+      expected.bundleIdentifier,
+      normalized.app.bundleIdentifier,
+    ),
+    ...expectTrue(
+      "tree.nodeCount >= hosted semantic threshold",
+      normalized.tree.nodeCount >= hostedMinNodeCount,
+      normalized.tree.nodeCount,
+    ),
+    ...diffValue("missingSemanticIds", [], missingIds),
+    ...diffValue("missingSemanticTexts", [], missingTexts),
+    ...diffValue("missingSemanticRoles", [], missingRoles),
+  ];
+
+  return {
+    fixture: fixtureDef.fixture,
+    expected: {
+      source: path.relative(process.cwd(), hostedOracle.source),
+      bundleIdentifier: expected.bundleIdentifier,
+      minimumNodeCount: hostedMinNodeCount,
+      semanticIdsPresent: requiredIds,
+      semanticTextsPresent: expected.requiredTexts,
+      semanticRolesPresent: expected.requiredRoles,
+    },
+    actual: {
+      bundleIdentifier: normalized.app.bundleIdentifier,
+      nodeCount: normalized.tree.nodeCount,
+      identifiersPresent: requiredIds.filter((id) =>
+        normalized.tree.identifiers.includes(id),
+      ),
+      textsPresent: expected.requiredTexts.filter((text) =>
+        includesText(textCorpus, text),
+      ),
+      rolesPresent: expected.requiredRoles.filter(
+        (role) => normalized.tree.roleCounts[role],
+      ),
+      missingSemanticIds: missingIds,
+      missingSemanticTexts: missingTexts,
+      missingSemanticRoles: missingRoles,
+    },
+    diffs,
   };
 }
 
@@ -317,8 +464,19 @@ async function main() {
   const nativeTools = JSON.parse(await readFile(nativeToolsPath, "utf8"));
   const nativeToolList = nativeTools.tools || nativeTools.result?.tools || [];
   const nativeToolNames = nativeToolList.map((tool) => tool.name);
-  const hostedCalculatorOracle = parseHostedCalculatorOracle(
+  const hostedCalculatorOracle = parseHostedOracle(
     await readFile(hostedCalculatorOraclePath, "utf8"),
+    hostedCalculatorOraclePath,
+  );
+  const hostedOracles = await Promise.all(
+    hostedOracleFixtures.map(async (fixture) => ({
+      fixture,
+      oracle: parseHostedOracle(
+        await readFile(fixture.source, "utf8"),
+        fixture.source,
+      ),
+      localState: JSON.parse(await readFile(fixture.localState, "utf8")),
+    })),
   );
   const client = createLocalMcpClient({
     env: {
@@ -351,6 +509,15 @@ async function main() {
     fixtures.push(
       compareHostedCalculatorOracle(hostedCalculatorOracle, calculatorState),
     );
+    for (const hostedFixture of hostedOracles) {
+      fixtures.push(
+        compareHostedOracleFixture(
+          hostedFixture.fixture,
+          hostedFixture.oracle,
+          hostedFixture.localState,
+        ),
+      );
+    }
 
     fixtures.push(
       compareErrorFixture(
@@ -388,8 +555,13 @@ async function main() {
       },
       hostedOracle: {
         status: "active",
-        source: path.relative(process.cwd(), hostedCalculatorOracle.source),
-        role: "Codex-hosted Computer Use fixture used as semantic oracle while raw native backend is blocked.",
+        sources: [
+          path.relative(process.cwd(), hostedCalculatorOracle.source),
+          ...hostedOracleFixtures.map((fixture) =>
+            path.relative(process.cwd(), fixture.source),
+          ),
+        ],
+        role: "Codex-hosted Computer Use fixtures used as semantic oracles while raw native backend is blocked.",
       },
       summary,
       fixtures,
