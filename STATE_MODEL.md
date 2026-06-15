@@ -175,13 +175,16 @@ Current behavior:
 - The payload records CoreGraphics window bounds as `windowFrame`.
 - The payload estimates `displayScale` from screenshot pixels and window-frame
   points.
+- `scripts/render-bounds-overlay.mjs` maps AX element bounds onto the screenshot
+  and emits an SVG overlay.
 - If screenshot capture fails, `screenshot.status` is `unavailable` and AX state
   still returns.
 
 Current gaps:
 
 - Native CUA screenshot content encoding remains unknown.
-- Overlay validation for AX bounds against screenshot pixels remains open.
+- Initial SVG overlay generation for AX bounds is implemented; manual visual
+  review and additional app fixtures remain open.
 - Multi-display and mixed-scale fixtures remain open.
 - Click-by-coordinate validation remains Milestone 8 work.
 

@@ -68,3 +68,26 @@ Calculator state payload; that hosted result is summarized in
 `codex-hosted-state.md`. The local permission snapshot in
 `../../permission-snapshot.md` records the permission change and the remaining
 direct-probe blocking behavior.
+
+## Local M7 Reimplementation Artifacts
+
+The local reimplementation can now capture Calculator AX state, a target-window
+screenshot, and an AX-bounds overlay:
+
+```bash
+LOCAL_CUA_PROBE_APP=Calculator npm run probe:local
+npm run overlay:latest
+```
+
+Current local M7 fixture files:
+
+```text
+local-m7-state.json
+local-m7-screenshot.png
+local-m7-bounds-overlay.svg
+```
+
+The local M7 probe verifies that the screenshot was captured, the PNG file is
+valid, and the overlay SVG contains mapped AX rectangles. This does not replace
+the hosted native fixture; it records the current local reimplementation output
+for comparison.

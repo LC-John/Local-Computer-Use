@@ -27,7 +27,7 @@ Milestone 3: Complete
 Milestone 4: In progress, raw proxy/native capture blocker on hold
 Milestone 5: Complete
 Milestone 6: Initial implementation complete, fixture diffing still open
-Milestone 7: Initial implementation complete, overlay/coordinate validation open
+Milestone 7: Initial screenshot and overlay implementation complete
 Milestone 8-14: Not started
 ```
 
@@ -640,8 +640,9 @@ src/app-resolve.swift
 
 ## Milestone 7: Screenshot and Coordinate Capture
 
-Status: Initial implementation complete as of 2026-06-15; overlay tooling,
-multi-display validation, and click-coordinate validation remain open.
+Status: Initial implementation complete as of 2026-06-15; overlay tooling is
+available, while multi-display validation and click-coordinate validation remain
+open.
 `get_app_state` now includes a `screenshot` object with a PNG file path,
 dimensions, CoreGraphics window ID, window frame, display-scale estimate, and
 coordinate-system notes. See
@@ -668,6 +669,8 @@ Add visual state so agents can reason about UI even when AX data is incomplete.
   - base64 image;
   - binary MCP content if supported.
 - Align screenshot coordinates with element bounds.
+- Add an overlay/debug tool for element bounds. Initial implementation complete
+  in `scripts/render-bounds-overlay.mjs`.
 - Test retina display scaling and multiple-monitor setups.
 
 ### Feasible Methods
@@ -681,7 +684,8 @@ Add visual state so agents can reason about UI even when AX data is incomplete.
 - Returned screenshot is nonblank and corresponds to the target app/window.
   Initial probe verifies PNG existence, header, and positive dimensions.
 - Clicking by returned coordinates lands at the intended visual point.
-- Element bounds overlay correctly on screenshots.
+- Element bounds overlay correctly on screenshots. Initial SVG overlay
+  generation is implemented and verified by the local probe.
 - Retina scaling does not produce off-by-two coordinate bugs.
 
 ### Deliverables
@@ -689,7 +693,8 @@ Add visual state so agents can reason about UI even when AX data is incomplete.
 - Screenshot capture path. Initial implementation is in `src/ax-state.swift`.
 - Screenshot metadata schema. Initial JSON object returned under
   `get_app_state.screenshot`.
-- Overlay/debug tool for element bounds.
+- Overlay/debug tool for element bounds. Initial implementation complete in
+  `scripts/render-bounds-overlay.mjs`.
 
 ### Risks and Notes
 

@@ -1,13 +1,16 @@
 #!/usr/bin/env node
 
 import { spawn } from "node:child_process";
+import { execFile as execFileCallback } from "node:child_process";
 import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { promisify } from "node:util";
 
 const serverPath = path.resolve("src/server.mjs");
 const outDir = path.resolve("reports");
 const requestTimeoutMs = Number(process.env.LOCAL_CUA_PROBE_TIMEOUT_MS || 20000);
 const samples = [];
+const execFile = promisify(execFileCallback);
 
 function record(entry) {
   samples.push({
@@ -160,8 +163,19 @@ async function main() {
     ) {
       throw new Error("Expected captured screenshot to be a PNG file");
     }
+    const overlayPath = path.join(outDir, "latest-bounds-overlay.svg");
+    await execFile("node", [
+      path.resolve("scripts/render-bounds-overlay.mjs"),
+      path.join(outDir, "local-mcp-skeleton-probe.json"),
+      overlayPath,
+    ]);
+    await stat(overlayPath);
+    const overlay = await readFile(overlayPath, "utf8");
+    if (!overlay.includes("<rect") || !overlay.includes("ax-bounds")) {
+      throw new Error("Expected bounds overlay SVG to include AX rectangles");
+    }
 
-    console.log("Local MCP AX screenshot probe passed.");
+    console.log("Local MCP AX screenshot overlay probe passed.");
   } finally {
     server.child.stdin.end();
     server.child.kill("SIGTERM");

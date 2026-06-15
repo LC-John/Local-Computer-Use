@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node src/server.mjs",
-    "probe:local": "node scripts/probe-reimplementation-mcp.mjs"
+    "probe:local": "node scripts/probe-reimplementation-mcp.mjs",
+    "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   }
 }

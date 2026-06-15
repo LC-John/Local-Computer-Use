@@ -2,8 +2,8 @@
 
 Date: 2026-06-15
 
-Status: Initial implementation complete; overlay tooling and click-coordinate
-validation remain open.
+Status: Initial implementation complete; initial overlay tooling complete;
+click-coordinate validation remains open.
 
 Milestone 7 adds visual window state to the local Computer Use
 reimplementation. `get_app_state` now returns a captured target-window PNG plus
@@ -27,6 +27,30 @@ The helper:
 The local implementation uses `screencapture` rather than
 `CGWindowListCreateImage` because the current macOS SDK marks
 `CGWindowListCreateImage` unavailable on macOS 15.
+
+## Bounds Overlay Tool
+
+`scripts/render-bounds-overlay.mjs` reads a local probe report, maps AX
+`position` and `size` values from global screen points into screenshot pixels,
+and writes an SVG overlay containing the screenshot plus AX element rectangles.
+
+Default command:
+
+```bash
+npm run overlay:latest
+```
+
+Explicit command:
+
+```bash
+node scripts/render-bounds-overlay.mjs \
+  reports/local-mcp-skeleton-probe.json \
+  reports/latest-bounds-overlay.svg
+```
+
+The overlay is a debugging artifact. It verifies that screenshot metadata,
+window-frame coordinates, display-scale estimates, and AX element bounds are
+coherent enough to map into one visual plane.
 
 ## Returned Screenshot Shape
 
@@ -83,11 +107,21 @@ The probe now verifies:
 - the screenshot path exists;
 - the screenshot has positive dimensions;
 - the screenshot file has a PNG header.
+- a bounds overlay SVG can be generated;
+- the overlay contains AX rectangle elements.
 
 Expected output:
 
 ```text
-Local MCP AX screenshot probe passed.
+Local MCP AX screenshot overlay probe passed.
+```
+
+Calculator fixture artifacts:
+
+```text
+fixtures/Calculator/basic/local-m7-state.json
+fixtures/Calculator/basic/local-m7-screenshot.png
+fixtures/Calculator/basic/local-m7-bounds-overlay.svg
 ```
 
 ## Current Limits
@@ -97,16 +131,15 @@ Local MCP AX screenshot probe passed.
 - Minimized windows, occluded windows, or windows without a CoreGraphics match
   may return `screenshot.status = "unavailable"`.
 - Screen Recording permission is required by macOS for successful capture.
-- Element bounds and screenshot pixels are reported together, but overlay
-  tooling still needs to verify exact alignment.
+- Element bounds and screenshot pixels are mapped into an SVG overlay, but
+  manual visual review and broader app fixtures are still needed.
 - Click-by-coordinate behavior is still Milestone 8 work.
 - Multi-display and mixed-scale behavior still needs dedicated fixtures.
 
 ## Next Work
 
-- Add an overlay/debug tool that draws AX element bounds over the captured PNG.
-- Add fixture snapshots for Calculator, TextEdit, Chrome, and Finder using the
-  local screenshot path.
+- Add fixture snapshots for TextEdit, Chrome, and Finder using the local
+  screenshot path and overlay tool.
 - Validate the display-scale calculation on multi-display setups.
 - Use the screenshot metadata when implementing click-by-coordinate in
   Milestone 8.
