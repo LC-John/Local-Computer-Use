@@ -14,6 +14,7 @@
     "probe:m8:remaining": "node scripts/probe-m8-remaining-actions.mjs",
     "probe:m8:chrome-finder": "node scripts/probe-m8-chrome-finder.mjs",
     "probe:m9:policy": "node scripts/probe-m9-policy.mjs",
+    "diff:m10:local": "node scripts/diff-fixtures.mjs",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },

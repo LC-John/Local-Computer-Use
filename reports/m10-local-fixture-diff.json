@@ -1,0 +1,144 @@
+{
+  "generatedAt": "2026-06-15T07:43:45.414Z",
+  "milestone": "M10",
+  "backend": "local",
+  "nativeBackend": {
+    "status": "deferred",
+    "reason": "Raw native/proxy get_app_state capture still times out after app approval in this environment."
+  },
+  "summary": {
+    "ok": true,
+    "fixtureCount": 5,
+    "diffCount": 0,
+    "diffs": []
+  },
+  "fixtures": [
+    {
+      "fixture": "tools-list",
+      "expected": {
+        "toolNames": [
+          "click",
+          "drag",
+          "get_app_state",
+          "list_apps",
+          "perform_secondary_action",
+          "press_key",
+          "scroll",
+          "select_text",
+          "set_value",
+          "type_text"
+        ]
+      },
+      "actual": {
+        "toolNames": [
+          "click",
+          "drag",
+          "get_app_state",
+          "list_apps",
+          "perform_secondary_action",
+          "press_key",
+          "scroll",
+          "select_text",
+          "set_value",
+          "type_text"
+        ]
+      },
+      "diffs": []
+    },
+    {
+      "fixture": "calculator-state",
+      "expected": {
+        "appBundleIdentifier": "com.apple.calculator",
+        "screenshotStatus": "captured",
+        "minimumNodeCount": 10,
+        "minimumButtonCount": 10
+      },
+      "actual": {
+        "ok": true,
+        "source": "local-macos-accessibility",
+        "app": {
+          "bundleIdentifier": "com.apple.calculator",
+          "pathBasename": "Calculator.app",
+          "hasPid": true
+        },
+        "window": {
+          "hasTitle": true,
+          "hasPosition": true,
+          "hasSize": true
+        },
+        "screenshot": {
+          "status": "captured",
+          "hasPath": true,
+          "widthPositive": true,
+          "heightPositive": true,
+          "hasWindowFrame": true,
+          "hasDisplayScale": true
+        },
+        "tree": {
+          "nodeCount": 36,
+          "indexedNodeCount": 36,
+          "buttonCount": 22,
+          "staticTextCount": 1,
+          "rootRole": "AXWindow",
+          "roleCounts": {
+            "AXWindow": 1,
+            "AXGroup": 7,
+            "AXSplitGroup": 1,
+            "AXSplitter": 1,
+            "AXScrollArea": 1,
+            "AXStaticText": 1,
+            "AXButton": 22,
+            "AXMenuButton": 1,
+            "AXToolbar": 1
+          }
+        }
+      },
+      "diffs": []
+    },
+    {
+      "fixture": "missing-app-state-error",
+      "expected": {
+        "isError": true,
+        "code": "invalid_app"
+      },
+      "actual": {
+        "isError": true,
+        "text": "Invalid app: __definitely_missing_app_for_m10_diff__",
+        "code": "invalid_app",
+        "status": "error",
+        "tool": "get_app_state"
+      },
+      "diffs": []
+    },
+    {
+      "fixture": "denied-app-policy-error",
+      "expected": {
+        "isError": true,
+        "code": "app_denied"
+      },
+      "actual": {
+        "isError": true,
+        "text": "App is denied by local Computer Use policy: 终端",
+        "code": "app_denied",
+        "status": "error",
+        "tool": "get_app_state"
+      },
+      "diffs": []
+    },
+    {
+      "fixture": "click-missing-target-error",
+      "expected": {
+        "isError": true,
+        "code": "missing_click_target"
+      },
+      "actual": {
+        "isError": true,
+        "text": "click requires element_index or both x and y screenshot coordinates",
+        "code": "missing_click_target",
+        "status": "error",
+        "tool": "click"
+      },
+      "diffs": []
+    }
+  ]
+}

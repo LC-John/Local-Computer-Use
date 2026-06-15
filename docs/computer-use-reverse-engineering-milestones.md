@@ -30,7 +30,8 @@ Milestone 6: Initial implementation complete, fixture diffing still open
 Milestone 7: Initial screenshot and overlay implementation complete
 Milestone 8: Initial implementation complete, Calculator/TextEdit/Chrome/Finder fixtures accepted
 Milestone 9: Complete for local reimplementation
-Milestone 10-14: Not started
+Milestone 10: Initial local fixture diff harness complete
+Milestone 11-14: Not started
 ```
 
 Completed architecture discovery work is summarized in
@@ -47,6 +48,9 @@ and Finder acceptance probes; see `docs/milestone-8-action-tools.md`.
 Milestone 9 adds resolved app identity, app policy, persisted approvals, manual
 approval CLI, and permission checks before native helper execution; see
 `docs/milestone-9-permission-approval-model.md`.
+Milestone 10 adds a local fixture diff harness with native backend follow-up
+deferred by the raw native/proxy capture blocker; see
+`docs/milestone-10-diff-harness.md`.
 
 ## Target Outcome
 
@@ -837,6 +841,13 @@ denied = ["Terminal", "Codex"]
   name.
 
 ## Milestone 10: Native-vs-Reimplementation Diff Harness
+
+Status: Initial local fixture diff harness complete as of 2026-06-15. A single
+command, `npm run diff:m10:local`, now compares local MCP tool names, Calculator
+state semantics, and structured error behavior against stable expectations.
+Native-vs-local state diffing remains deferred until raw native/proxy
+`get_app_state` capture can return successfully after app approval. See
+`docs/milestone-10-diff-harness.md`.
 
 ### Purpose
 
