@@ -34,7 +34,7 @@ Milestone 10.1: Local fixture diff harness complete
 Milestone 10.2: Hosted context emulation probe complete, native state gap still open
 Milestone 10.3: Hosted oracle semantic diff complete for Calculator/TextEdit/Chrome/Finder, raw native-vs-local diff deferred
 Milestone 11: Complete for local automated fixture gate
-Milestone 12: Complete for local Codex installation
+Milestone 12: Complete
 Milestone 13-14: Not started
 ```
 
@@ -973,13 +973,13 @@ Turn exploratory behavior into repeatable tests.
 
 ## Milestone 12: Codex Plugin Packaging
 
-Status: Complete for local Codex installation as of 2026-06-15. The bundle uses
-the distinct plugin name `local-computer-use`, points
-`.codex-plugin/plugin.json` at `./.mcp.json` and `./skills/`, starts the local
-MCP server through `node src/server.mjs` with plugin-root cwd, is listed in the
-personal marketplace, and is installed/enabled in Codex. Fresh-thread tool
-exposure and transcript capture remain practical follow-up checks; see
-`docs/milestone-12-codex-plugin-packaging.md`.
+Status: Complete as of 2026-06-15. The bundle uses the distinct plugin name
+`local-computer-use`, points `.codex-plugin/plugin.json` at `./.mcp.json` and
+`./skills/`, starts the local MCP server through `node src/server.mjs` with
+plugin-root cwd, is listed in the personal marketplace, and is installed/enabled
+in Codex. A fresh-thread Codex smoke test verified `list_apps`,
+`get_app_state(Calculator)`, and a Calculator action sequence ending with result
+`3`; see `docs/milestone-12-codex-plugin-packaging.md`.
 
 ### Purpose
 

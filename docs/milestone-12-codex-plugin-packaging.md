@@ -2,10 +2,9 @@
 
 Date: 2026-06-15
 
-Status: Complete for local Codex installation. The repo-local plugin bundle is
-validated, listed in the personal marketplace, installed through Codex, and
-enabled. Fresh-thread tool exposure remains the practical follow-up because
-running threads do not pick up newly installed MCP tools.
+Status: Complete. The repo-local plugin bundle is validated, listed in the
+personal marketplace, installed through Codex, enabled, and verified from a fresh
+Codex thread with read and action smoke tests.
 
 ## Purpose
 
@@ -101,6 +100,15 @@ returns MCP initialize metadata:
 }
 ```
 
+Fresh-thread Codex smoke test:
+
+```text
+list_apps: passed
+get_app_state(Calculator): passed
+Calculator action sequence: AllClear -> 1 -> Add -> 2 -> Equals
+Final Calculator state: expression 1+2, result 3
+```
+
 ## Install Notes
 
 This milestone creates a repo-local plugin bundle and installs it through the
@@ -139,8 +147,9 @@ If a marketplace-backed personal plugin is desired later, create a separate
 marketplace entry for `local-computer-use` rather than renaming this plugin to
 `computer-use`.
 
-## Remaining Follow-Up
+## Post-M12 Notes
 
-- Confirm Codex exposes the `local-computer-use` MCP tools in a fresh thread.
-- Capture a Codex-host smoke transcript for a basic fixture such as Calculator
-  state or the M11 fixture gate.
+- Running threads do not pick up newly installed MCP tools; use a fresh Codex
+  thread after reinstalling or changing plugin metadata.
+- Future plugin updates should use the cachebuster/reinstall flow before
+  retesting in a fresh thread.
