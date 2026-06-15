@@ -317,6 +317,18 @@ async function setupTextEditFixture() {
   ]).catch(() => {});
   await writeFile(textEditFixturePath, "");
   await execFile("open", ["-a", "TextEdit", textEditFixturePath]);
+  await execFile("osascript", [
+    "-e",
+    'tell application "TextEdit"',
+    "-e",
+    "activate",
+    "-e",
+    "if (count of documents) = 0 then make new document",
+    "-e",
+    'set text of front document to ""',
+    "-e",
+    "end tell",
+  ]).catch(() => {});
   await sleep(1000);
 }
 
@@ -339,6 +351,21 @@ function textValue(state) {
   return String(textArea(state).value || "");
 }
 
+async function waitForTextArea(client) {
+  let lastError = null;
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    const state = await appState(client, "TextEdit");
+    try {
+      textArea(state);
+      return state;
+    } catch (error) {
+      lastError = error;
+      await sleep(250);
+    }
+  }
+  throw lastError || new Error("TextEdit AXTextArea not found");
+}
+
 async function waitForText(client, expected) {
   for (let attempt = 0; attempt < 10; attempt += 1) {
     const state = await appState(client, "TextEdit");
@@ -352,7 +379,7 @@ async function runTextEditKeyboardFixture(client) {
   await setupTextEditFixture();
   const typedText = "M11 keyboard fixture";
   const replacementText = "M11 replacement text";
-  const initialState = await appState(client, "TextEdit");
+  const initialState = await waitForTextArea(client);
   const initialTextArea = textArea(initialState);
   const clickTextArea = await callOk(client, "click", {
     app: "TextEdit",
@@ -419,7 +446,7 @@ async function runTextEditKeyboardFixture(client) {
 
 async function runTextEditActionFixture(client) {
   await setupTextEditFixture();
-  const initialState = await appState(client, "TextEdit");
+  const initialState = await waitForTextArea(client);
   const initialTextArea = textArea(initialState);
   await callOk(client, "click", {
     app: "TextEdit",

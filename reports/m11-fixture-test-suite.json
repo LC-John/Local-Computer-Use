@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-15T11:43:04.843Z",
+  "generatedAt": "2026-06-15T12:28:37.600Z",
   "milestone": "M11",
   "backend": "local",
   "scope": "automated core fixture suite",
@@ -101,8 +101,8 @@
       "cleanup": [],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T11:42:39.128Z",
-      "finishedAt": "2026-06-15T11:42:39.357Z"
+      "startedAt": "2026-06-15T12:28:10.713Z",
+      "finishedAt": "2026-06-15T12:28:10.965Z"
     },
     {
       "fixture": "calculator-arithmetic-click",
@@ -200,8 +200,8 @@
       "cleanup": [],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T11:42:39.357Z",
-      "finishedAt": "2026-06-15T11:42:42.831Z"
+      "startedAt": "2026-06-15T12:28:10.966Z",
+      "finishedAt": "2026-06-15T12:28:14.593Z"
     },
     {
       "fixture": "textedit-keyboard-editing",
@@ -225,7 +225,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 22068,
+            "pid": 21996,
             "query": "TextEdit"
           },
           "ok": true,
@@ -246,7 +246,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 22068,
+            "pid": 21996,
             "query": "TextEdit"
           },
           "ok": true,
@@ -261,7 +261,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 22068,
+            "pid": 21996,
             "query": "TextEdit"
           },
           "ok": true,
@@ -280,7 +280,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 22068,
+            "pid": 21996,
             "query": "TextEdit"
           },
           "ok": true,
@@ -297,7 +297,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 22068,
+            "pid": 21996,
             "query": "TextEdit"
           },
           "ok": true,
@@ -335,8 +335,8 @@
       ],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T11:42:42.831Z",
-      "finishedAt": "2026-06-15T11:42:47.951Z"
+      "startedAt": "2026-06-15T12:28:14.593Z",
+      "finishedAt": "2026-06-15T12:28:20.088Z"
     },
     {
       "fixture": "textedit-rich-actions",
@@ -368,7 +368,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 22068,
+            "pid": 21996,
             "query": "TextEdit"
           },
           "ok": true,
@@ -383,7 +383,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 22068,
+            "pid": 21996,
             "query": "TextEdit"
           },
           "ok": true,
@@ -400,7 +400,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 22068,
+            "pid": 21996,
             "query": "TextEdit"
           },
           "ok": true,
@@ -415,7 +415,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 22068,
+            "pid": 21996,
             "query": "TextEdit"
           },
           "ok": true,
@@ -431,7 +431,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 22068,
+            "pid": 21996,
             "query": "TextEdit"
           },
           "ok": true,
@@ -446,7 +446,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 22068,
+            "pid": 21996,
             "query": "TextEdit"
           },
           "ok": true,
@@ -502,8 +502,8 @@
       ],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T11:42:48.059Z",
-      "finishedAt": "2026-06-15T11:42:52.719Z"
+      "startedAt": "2026-06-15T12:28:20.213Z",
+      "finishedAt": "2026-06-15T12:28:25.127Z"
     },
     {
       "fixture": "chrome-browser-page-actions",
@@ -601,7 +601,7 @@
         },
         "beforeClick": {
           "tabCount": 1,
-          "activeUrl": "file://fixtures/Chrome/static-page/index.html?m11=1781523759077"
+          "activeUrl": "file://fixtures/Chrome/static-page/index.html?m11=1781526490659"
         },
         "afterClick": {
           "tabCount": 2,
@@ -650,8 +650,8 @@
       ],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T11:42:52.842Z",
-      "finishedAt": "2026-06-15T11:43:01.226Z"
+      "startedAt": "2026-06-15T12:28:25.243Z",
+      "finishedAt": "2026-06-15T12:28:33.903Z"
     },
     {
       "fixture": "finder-project-list-actions",
@@ -766,8 +766,8 @@
       ],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T11:43:01.374Z",
-      "finishedAt": "2026-06-15T11:43:04.318Z"
+      "startedAt": "2026-06-15T12:28:34.033Z",
+      "finishedAt": "2026-06-15T12:28:37.047Z"
     }
   ]
 }

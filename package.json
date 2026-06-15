@@ -17,6 +17,7 @@
     "diff:m10:local": "node scripts/diff-fixtures.mjs",
     "probe:m10:host": "node scripts/probe-m10-host-context.mjs",
     "test:m11:fixtures": "node scripts/run-m11-fixtures.mjs",
+    "test:m13:negative": "node scripts/run-m13-negative-tests.mjs",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },

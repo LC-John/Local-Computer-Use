@@ -1057,11 +1057,19 @@ func screenshotPointToGlobal(_ x: Double, _ y: Double, screenshot: [String: Any]
           let scale = screenshot["displayScale"] as? [String: Any],
           let frameX = numberFromJSON(frame["x"]),
           let frameY = numberFromJSON(frame["y"]),
+          let screenshotWidth = numberFromJSON(screenshot["width"]),
+          let screenshotHeight = numberFromJSON(screenshot["height"]),
           let scaleX = numberFromJSON(scale["x"]),
           let scaleY = numberFromJSON(scale["y"]),
+          screenshotWidth > 0,
+          screenshotHeight > 0,
           scaleX > 0,
           scaleY > 0
     else {
+        return nil
+    }
+
+    guard x >= 0, y >= 0, x <= screenshotWidth, y <= screenshotHeight else {
         return nil
     }
 

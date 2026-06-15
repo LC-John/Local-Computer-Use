@@ -25,3 +25,64 @@ export function validateRequiredArguments(tool, args) {
   }
   return null;
 }
+
+function typeName(value) {
+  if (Array.isArray(value)) return "array";
+  if (value === null) return "null";
+  return typeof value;
+}
+
+function matchesJsonSchemaType(value, expectedType) {
+  if (expectedType === "integer") {
+    return Number.isInteger(value);
+  }
+  if (expectedType === "number") {
+    return typeof value === "number" && Number.isFinite(value);
+  }
+  if (expectedType === "object") {
+    return value !== null && typeof value === "object" && !Array.isArray(value);
+  }
+  return typeof value === expectedType;
+}
+
+export function validateArgumentShape(tool, args) {
+  const schema = tool.inputSchema || {};
+  if (!matchesJsonSchemaType(args, schema.type || "object")) {
+    return {
+      code: "invalid_arguments",
+      message: `Tool arguments must be a ${schema.type || "object"}`,
+    };
+  }
+
+  const properties = schema.properties || {};
+  if (schema.additionalProperties === false) {
+    const unknownKeys = Object.keys(args).filter((key) => !(key in properties));
+    if (unknownKeys.length > 0) {
+      return {
+        code: "unexpected_argument",
+        message: `Unexpected argument: ${unknownKeys[0]}`,
+      };
+    }
+  }
+
+  for (const [key, value] of Object.entries(args)) {
+    const property = properties[key];
+    if (!property) continue;
+
+    if (property.type && !matchesJsonSchemaType(value, property.type)) {
+      return {
+        code: "invalid_argument_type",
+        message: `Argument ${key} must be ${property.type}; received ${typeName(value)}`,
+      };
+    }
+
+    if (property.enum && !property.enum.includes(value)) {
+      return {
+        code: "invalid_argument_value",
+        message: `Argument ${key} must be one of: ${property.enum.join(", ")}`,
+      };
+    }
+  }
+
+  return null;
+}

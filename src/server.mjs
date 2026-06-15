@@ -24,6 +24,7 @@ import {
 import {
   findTool,
   loadNativeToolCatalog,
+  validateArgumentShape,
   validateRequiredArguments,
 } from "./tools/catalog.mjs";
 
@@ -45,6 +46,106 @@ function writeJson(message) {
   process.stdout.write(`${JSON.stringify(message)}\n`);
 }
 
+const errorRecovery = {
+  accessibility_permission_denied:
+    "Grant Accessibility permission, then retry after refreshing app state.",
+  accessibility_permission_missing:
+    "Grant Accessibility permission, then retry after refreshing app state.",
+  app_denied:
+    "Choose a different app or update the local policy intentionally.",
+  app_not_allowed:
+    "Add the app to the allowlist or remove the strict allowlist for this test.",
+  approval_denied: "Approve the app explicitly before retrying action tools.",
+  approval_required:
+    "Run the approval flow or switch to an approved app before retrying.",
+  click_failed: "Refresh app state and retry the action on a current element.",
+  coordinate_mapping_failed:
+    "Refresh app state and use coordinates from the latest screenshot.",
+  element_not_found:
+    "Refresh app state and retry with an element index from the latest tree.",
+  helper_failed:
+    "Inspect helper stderr/stdout and retry after confirming macOS permissions.",
+  helper_stderr:
+    "Inspect helper stderr and retry after confirming the local helper can run.",
+  helper_timeout:
+    "Retry after closing modal dialogs or reducing app state complexity.",
+  invalid_app:
+    "Use list_apps to find a running app name or bundle identifier, then retry.",
+  invalid_argument_type:
+    "Fix the argument type to match the tool schema before retrying.",
+  invalid_argument_value:
+    "Use one of the schema-supported argument values before retrying.",
+  invalid_arguments:
+    "Send a JSON object matching the tool schema before retrying.",
+  missing_arguments: "Send all required action arguments before retrying.",
+  missing_click_target:
+    "Pass either element_index or both x and y screenshot coordinates.",
+  missing_element_index:
+    "Refresh app state and pass an element index from the current tree.",
+  missing_required_argument:
+    "Add the missing required argument before retrying.",
+  screen_recording_permission_missing:
+    "Grant Screen Recording permission, then retry state or coordinate-based actions.",
+  screenshot_capture_failed:
+    "Grant Screen Recording permission or refresh the target window before retrying.",
+  screenshot_directory_failed:
+    "Ensure the local screenshot directory is writable before retrying.",
+  server_not_initialized:
+    "Call initialize and send notifications/initialized before other MCP requests.",
+  text_not_found:
+    "Refresh app state and select text that exists in the current element value.",
+  unexpected_argument:
+    "Remove arguments that are not declared in the tool schema before retrying.",
+  unknown_tool: "Call tools/list and use one of the advertised tool names.",
+  unsupported_action:
+    "Refresh app state and choose one of the element's advertised AX actions.",
+  unsupported_direction:
+    "Use one of the supported directions: up, down, left, right.",
+  unsupported_element:
+    "Refresh app state and choose an element with AXPress or usable bounds.",
+  unsupported_key:
+    "Use a supported key name or key combination before retrying.",
+  window_not_found:
+    "Bring the app window on screen and retry after refreshing app state.",
+};
+
+const retryableErrorCodes = new Set([
+  "accessibility_permission_denied",
+  "accessibility_permission_missing",
+  "approval_required",
+  "coordinate_mapping_failed",
+  "element_not_found",
+  "helper_timeout",
+  "screen_recording_permission_missing",
+  "screenshot_capture_failed",
+  "server_not_initialized",
+  "text_not_found",
+  "window_not_found",
+]);
+
+function recoveryHintFor(code) {
+  return (
+    errorRecovery[code] ||
+    "Refresh app state, inspect the error, and retry if the condition is recoverable."
+  );
+}
+
+function severityFor(code) {
+  if (
+    [
+      "accessibility_permission_denied",
+      "accessibility_permission_missing",
+      "app_denied",
+      "approval_denied",
+      "screen_recording_permission_missing",
+    ].includes(code)
+  ) {
+    return "blocked";
+  }
+  if (retryableErrorCodes.has(code)) return "recoverable";
+  return "fatal";
+}
+
 function jsonRpcError(id, code, message, data) {
   return {
     jsonrpc: "2.0",
@@ -57,15 +158,28 @@ function jsonRpcError(id, code, message, data) {
   };
 }
 
-function toolResultError(id, text, metadata = {}) {
+function errorMetadata({ tool = null, code = "unknown", metadata = {} } = {}) {
+  return {
+    "local-computer-use/status": "error",
+    ...(tool === null ? {} : { tool }),
+    "local-computer-use/errorCode": code,
+    "local-computer-use/errorSeverity": severityFor(code),
+    "local-computer-use/retryable": retryableErrorCodes.has(code),
+    "local-computer-use/recoveryHint": recoveryHintFor(code),
+    ...metadata,
+  };
+}
+
+function toolResultError(
+  id,
+  text,
+  { tool = null, code = "unknown", metadata = {} } = {},
+) {
   return {
     jsonrpc: "2.0",
     id,
     result: {
-      _meta: {
-        "local-computer-use/status": "not_implemented",
-        ...metadata,
-      },
+      _meta: errorMetadata({ tool, code, metadata }),
       content: [
         {
           type: "text",
@@ -132,6 +246,15 @@ async function handleToolsCall(id, params = {}) {
   if (!tool) {
     return toolResultError(id, `Unknown tool: ${name || ""}`, {
       tool: name || null,
+      code: "unknown_tool",
+    });
+  }
+
+  const shapeError = validateArgumentShape(tool, args);
+  if (shapeError) {
+    return toolResultError(id, shapeError.message, {
+      tool: name,
+      code: shapeError.code,
     });
   }
 
@@ -139,6 +262,7 @@ async function handleToolsCall(id, params = {}) {
   if (requiredError) {
     return toolResultError(id, requiredError, {
       tool: name,
+      code: "missing_required_argument",
     });
   }
 
@@ -146,9 +270,10 @@ async function handleToolsCall(id, params = {}) {
   if (!appPolicyResult.ok) {
     return toolResultError(id, appPolicyResult.message, {
       tool: name,
-      "local-computer-use/status": "error",
-      "local-computer-use/errorCode": appPolicyResult.code,
-      "local-computer-use/policySource": appPolicy?.source,
+      code: appPolicyResult.code,
+      metadata: {
+        "local-computer-use/policySource": appPolicy?.source,
+      },
     });
   }
 
@@ -157,7 +282,7 @@ async function handleToolsCall(id, params = {}) {
     if (apps.error) {
       return toolResultError(id, apps.error.message, {
         tool: name,
-        "local-computer-use/errorCode": apps.error.code,
+        code: apps.error.code,
       });
     }
     return {
@@ -186,8 +311,7 @@ async function handleToolsCall(id, params = {}) {
         state.error?.message || "Unable to read app state",
         {
           tool: name,
-          "local-computer-use/status": "error",
-          "local-computer-use/errorCode": state.error?.code || "unknown",
+          code: state.error?.code || "unknown",
         },
       );
     }
@@ -202,8 +326,7 @@ async function handleToolsCall(id, params = {}) {
     if (!result.ok) {
       return toolResultError(id, result.error?.message || "Unable to click", {
         tool: name,
-        "local-computer-use/status": "error",
-        "local-computer-use/errorCode": result.error?.code || "unknown",
+        code: result.error?.code || "unknown",
       });
     }
     return toolResultSuccess(id, JSON.stringify(result), {
@@ -220,8 +343,7 @@ async function handleToolsCall(id, params = {}) {
         result.error?.message || "Unable to type text",
         {
           tool: name,
-          "local-computer-use/status": "error",
-          "local-computer-use/errorCode": result.error?.code || "unknown",
+          code: result.error?.code || "unknown",
         },
       );
     }
@@ -239,8 +361,7 @@ async function handleToolsCall(id, params = {}) {
         result.error?.message || "Unable to press key",
         {
           tool: name,
-          "local-computer-use/status": "error",
-          "local-computer-use/errorCode": result.error?.code || "unknown",
+          code: result.error?.code || "unknown",
         },
       );
     }
@@ -265,8 +386,7 @@ async function handleToolsCall(id, params = {}) {
         result.error?.message || `Unable to execute ${name}`,
         {
           tool: name,
-          "local-computer-use/status": "error",
-          "local-computer-use/errorCode": result.error?.code || "unknown",
+          code: result.error?.code || "unknown",
         },
       );
     }
@@ -279,7 +399,10 @@ async function handleToolsCall(id, params = {}) {
   const result = await notImplemented(name);
   return toolResultError(id, result.message, {
     tool: name,
-    "local-computer-use/adapterStatus": result.status,
+    code: "not_implemented",
+    metadata: {
+      "local-computer-use/adapterStatus": result.status,
+    },
   });
 }
 
@@ -338,7 +461,14 @@ async function handleMessage(message) {
   }
 
   if (!initialized) {
-    return jsonRpcError(id, -32002, "Server not initialized");
+    return jsonRpcError(id, -32002, "Server not initialized", {
+      "local-computer-use/errorCode": "server_not_initialized",
+      "local-computer-use/errorSeverity": severityFor("server_not_initialized"),
+      "local-computer-use/retryable": true,
+      "local-computer-use/recoveryHint": recoveryHintFor(
+        "server_not_initialized",
+      ),
+    });
   }
 
   if (method === "tools/list") return handleToolsList(id);

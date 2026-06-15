@@ -35,7 +35,8 @@ Milestone 10.2: Hosted context emulation probe complete, native state gap still 
 Milestone 10.3: Hosted oracle semantic diff complete for Calculator/TextEdit/Chrome/Finder, raw native-vs-local diff deferred
 Milestone 11: Complete for local automated fixture gate
 Milestone 12: Complete
-Milestone 13-14: Not started
+Milestone 13: Complete for local error semantics baseline
+Milestone 14: Not started
 ```
 
 Completed architecture discovery work is summarized in
@@ -58,7 +59,9 @@ emulation, and M10.3 oracle-vs-local diff; see
 runner covering every exposed tool across Calculator, TextEdit, Chrome, Finder,
 and core policy errors; see `docs/milestone-11-fixture-test-suite.md`.
 Milestone 12 adds and locally installs a distinct `local-computer-use` Codex
-plugin bundle; see `docs/milestone-12-codex-plugin-packaging.md`.
+plugin bundle; see `docs/milestone-12-codex-plugin-packaging.md`. Milestone 13
+adds the local error model, stable error metadata, negative tests, and
+coordinate safety checks; see `docs/milestone-13-error-semantics.md`.
 
 ## Target Outcome
 
@@ -1034,6 +1037,12 @@ bin/ or src/
   invocation instructions.
 
 ## Milestone 13: Error Semantics and Edge Cases
+
+Status: Complete for the local reimplementation baseline as of 2026-06-15.
+The MCP server now returns stable local error metadata, validates schema shape
+before native dispatch, rejects out-of-bounds screenshot coordinates, and passes
+`npm run test:m13:negative`. See `ERROR_MODEL.md` and
+`docs/milestone-13-error-semantics.md`.
 
 ### Purpose
 
