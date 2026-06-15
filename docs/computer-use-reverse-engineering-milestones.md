@@ -29,7 +29,8 @@ Milestone 5: Complete
 Milestone 6: Initial implementation complete, fixture diffing still open
 Milestone 7: Initial screenshot and overlay implementation complete
 Milestone 8: Initial implementation complete, Calculator/TextEdit/Chrome/Finder fixtures accepted
-Milestone 9-14: Not started
+Milestone 9: Complete for local reimplementation
+Milestone 10-14: Not started
 ```
 
 Completed architecture discovery work is summarized in
@@ -43,6 +44,9 @@ adds target-window PNG capture and coordinate metadata through the same helper;
 see `docs/milestone-7-screenshot-coordinate-capture.md`. Milestone 8 has
 initial implementations for all action tools plus Calculator, TextEdit, Chrome,
 and Finder acceptance probes; see `docs/milestone-8-action-tools.md`.
+Milestone 9 adds resolved app identity, app policy, persisted approvals, manual
+approval CLI, and permission checks before native helper execution; see
+`docs/milestone-9-permission-approval-model.md`.
 
 ## Target Outcome
 
@@ -775,6 +779,13 @@ Implement GUI actions with macOS-native APIs.
 - Keyboard layouts and IME state can affect text input.
 
 ## Milestone 9: Permission and Approval Model
+
+Status: Complete for the local reimplementation as of 2026-06-15. The local MCP
+server now loads `config/app-policy.toml`, resolves app identity, applies
+denied/allowed app policy, checks persisted/manual approval state, verifies
+Accessibility and Screen Recording permission with the Swift helper, and
+includes an M9 acceptance probe. See
+`docs/milestone-9-permission-approval-model.md`.
 
 ### Purpose
 

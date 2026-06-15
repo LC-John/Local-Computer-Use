@@ -226,5 +226,5 @@ each other.
 - Chrome app coverage intentionally avoids typing into the fixture page because
   Chrome's address-bar focus behavior is profile-dependent; text input remains
   accepted through TextEdit, while Chrome covers browser click and scroll paths.
-- App allow/deny policy is not yet implemented; that is tracked under
-  Milestone 9.
+- App allow/deny policy is now implemented in the MCP layer under Milestone 9;
+  see `docs/milestone-9-permission-approval-model.md`.

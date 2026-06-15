@@ -1,0 +1,60 @@
+[apps]
+# Empty allowed means "allow unless denied". Set a comma-separated
+# LOCAL_CUA_ALLOWED_APPS env override in tests for strict allowlist mode.
+allowed = []
+denied = [
+  "Terminal",
+  "iTerm",
+  "iTerm2",
+  "Warp",
+  "Alacritty",
+  "kitty",
+  "WezTerm",
+  "Hyper",
+  "Codex",
+  "Cursor",
+  "Visual Studio Code",
+  "VS Code",
+  "Xcode",
+  "System Settings",
+  "System Preferences",
+  "Keychain Access",
+  "Password Manager",
+  "1Password",
+  "Bitwarden",
+  "Dashlane",
+  "LastPass",
+  "Keeper Password Manager",
+  "com.apple.Terminal",
+  "com.googlecode.iterm2",
+  "dev.warp.Warp-Stable",
+  "org.alacritty",
+  "net.kovidgoyal.kitty",
+  "com.github.wez.wezterm",
+  "co.zeit.hyper",
+  "com.todesktop.230313mzl4w4u92",
+  "com.microsoft.VSCode",
+  "com.microsoft.VSCodeInsiders",
+  "com.apple.dt.Xcode",
+  "com.apple.systempreferences",
+  "com.apple.keychainaccess",
+  "com.1password.1password",
+  "com.bitwarden.desktop",
+]
+
+[approvals]
+# Modes:
+# - store: persist allowed app approvals in the store path.
+# - prompt: return approval_required instead of auto-approving.
+# - native_prompt: show a macOS approval dialog, then persist approved apps.
+# - disabled: skip local app approval after allow/deny checks.
+mode = "store"
+store_path = ".build/approvals.json"
+require_for_read = false
+require_for_actions = true
+auto_approve_allowed = true
+native_prompt_timeout_seconds = 60
+
+[permissions]
+require_accessibility = true
+require_screen_recording_for_state = true

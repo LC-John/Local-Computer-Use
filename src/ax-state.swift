@@ -56,6 +56,23 @@ func fail(_ code: String, _ message: String, status: Int32 = 1) -> Never {
     exit(status)
 }
 
+func permissionState() -> [String: Any] {
+    [
+        "ok": true,
+        "source": "local-macos-permission-check",
+        "permissions": [
+            "accessibility": [
+                "granted": AXIsProcessTrusted(),
+                "method": "AXIsProcessTrusted",
+            ],
+            "screenRecording": [
+                "granted": CGPreflightScreenCaptureAccess(),
+                "method": "CGPreflightScreenCaptureAccess",
+            ],
+        ],
+    ]
+}
+
 func runningApps() -> [[String: Any]] {
     NSWorkspace.shared.runningApplications
         .filter { isUserFacingApplication($0) }
@@ -173,7 +190,7 @@ func findRunningApp(_ normalized: String) -> NSRunningApplication? {
     return nil
 }
 
-func launchKnownApplication(_ query: String) -> Bool {
+func knownApplicationURL(_ query: String) -> URL? {
     let workspace = NSWorkspace.shared
     var candidateURLs: [URL] = []
 
@@ -190,7 +207,59 @@ func launchKnownApplication(_ query: String) -> Bool {
         candidateURLs.append(URL(fileURLWithPath: "/System/Applications/\(query).app"))
     }
 
-    for url in candidateURLs where FileManager.default.fileExists(atPath: url.path) {
+    return candidateURLs.first { FileManager.default.fileExists(atPath: $0.path) }
+}
+
+func appIdentity(_ query: String) throws -> [String: Any] {
+    let normalized = query.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !normalized.isEmpty else {
+        throw ToolError(code: "missing_app", message: "Missing required argument: app")
+    }
+
+    if let app = findRunningApp(normalized) {
+        return [
+            "ok": true,
+            "source": "local-macos-app-identity",
+            "app": [
+                "query": query,
+                "name": app.localizedName ?? "",
+                "bundleIdentifier": app.bundleIdentifier ?? "",
+                "path": app.bundleURL?.path ?? "",
+                "executablePath": app.executableURL?.path ?? "",
+                "pid": app.processIdentifier,
+                "isRunning": true,
+                "isActive": app.isActive,
+            ],
+        ]
+    }
+
+    if let url = knownApplicationURL(normalized) {
+        let bundle = Bundle(url: url)
+        return [
+            "ok": true,
+            "source": "local-macos-app-identity",
+            "app": [
+                "query": query,
+                "name": bundle?.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
+                    ?? bundle?.object(forInfoDictionaryKey: "CFBundleName") as? String
+                    ?? url.deletingPathExtension().lastPathComponent,
+                "bundleIdentifier": bundle?.bundleIdentifier ?? "",
+                "path": url.path,
+                "executablePath": "",
+                "pid": 0,
+                "isRunning": false,
+                "isActive": false,
+            ],
+        ]
+    }
+
+    throw ToolError(code: "invalid_app", message: "Invalid app: \(query)")
+}
+
+func launchKnownApplication(_ query: String) -> Bool {
+    let workspace = NSWorkspace.shared
+
+    if let url = knownApplicationURL(query) {
         let configuration = NSWorkspace.OpenConfiguration()
         configuration.activates = false
         let semaphore = DispatchSemaphore(value: 0)
@@ -1444,6 +1513,13 @@ guard let command = args.first else {
 
 do {
     switch command {
+    case "permissions":
+        try writeJSON(permissionState())
+    case "app-identity":
+        guard args.count >= 2 else {
+            throw ToolError(code: "missing_app", message: "Missing required argument: app")
+        }
+        try writeJSON(try appIdentity(args.dropFirst().joined(separator: " ")))
     case "list-apps":
         try writeJSON(["ok": true, "apps": runningApps()])
     case "state":

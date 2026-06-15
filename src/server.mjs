@@ -2,7 +2,9 @@
 
 import {
   click,
+  checkPermissions,
   drag,
+  getAppIdentity,
   getAppState,
   listApps,
   notImplemented,
@@ -13,6 +15,12 @@ import {
   setValue,
   typeText,
 } from "./mac-adapter.mjs";
+import {
+  evaluateApproval,
+  evaluateAppPolicy,
+  loadAppPolicy,
+  permissionErrorForTool,
+} from "./policy.mjs";
 import {
   findTool,
   loadNativeToolCatalog,
@@ -26,9 +34,11 @@ const serverInfo = {
 
 let initialized = false;
 let tools = [];
+let appPolicy = null;
 
 async function loadTools() {
   tools = await loadNativeToolCatalog();
+  appPolicy = await loadAppPolicy();
 }
 
 function writeJson(message) {
@@ -129,6 +139,16 @@ async function handleToolsCall(id, params = {}) {
   if (requiredError) {
     return toolResultError(id, requiredError, {
       tool: name,
+    });
+  }
+
+  const appPolicyResult = await enforcePolicy(name, args);
+  if (!appPolicyResult.ok) {
+    return toolResultError(id, appPolicyResult.message, {
+      tool: name,
+      "local-computer-use/status": "error",
+      "local-computer-use/errorCode": appPolicyResult.code,
+      "local-computer-use/policySource": appPolicy?.source,
     });
   }
 
@@ -261,6 +281,51 @@ async function handleToolsCall(id, params = {}) {
     tool: name,
     "local-computer-use/adapterStatus": result.status,
   });
+}
+
+async function enforcePolicy(name, args = {}) {
+  if (!appPolicy) appPolicy = await loadAppPolicy();
+  if (name === "list_apps") return { ok: true };
+
+  const app = args.app;
+  const identity = await getAppIdentity(app);
+  if (!identity.ok) {
+    return {
+      ok: false,
+      code: identity.error?.code || "invalid_app",
+      message: identity.error?.message || `Invalid app: ${app}`,
+    };
+  }
+
+  const appResult = evaluateAppPolicy(appPolicy, identity.app);
+  if (!appResult.ok) return appResult;
+
+  const approvalResult = await evaluateApproval(appPolicy, identity.app, name);
+  if (!approvalResult.ok) return approvalResult;
+
+  const permissions = await checkPermissions();
+  if (!permissions.ok) {
+    return {
+      ok: false,
+      code: permissions.error?.code || "permission_check_failed",
+      message:
+        permissions.error?.message || "Unable to check local permissions",
+    };
+  }
+
+  const permissionError = permissionErrorForTool(
+    appPolicy,
+    permissions.permissions || {},
+    name,
+    args,
+  );
+  if (permissionError) return { ok: false, ...permissionError };
+
+  return {
+    ok: true,
+    identity: identity.app,
+    approval: approvalResult.approval,
+  };
 }
 
 async function handleMessage(message) {

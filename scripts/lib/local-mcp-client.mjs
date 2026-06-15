@@ -6,10 +6,15 @@ export const defaultReportsDir = path.resolve("reports");
 
 export function createLocalMcpClient({
   serverPath = path.resolve("src/server.mjs"),
+  env = {},
   requestTimeoutMs = Number(process.env.LOCAL_CUA_PROBE_TIMEOUT_MS || 20000),
 } = {}) {
   const samples = [];
   const child = spawn("node", [serverPath], {
+    env: {
+      ...process.env,
+      ...env,
+    },
     stdio: ["pipe", "pipe", "pipe"],
   });
 

@@ -8,7 +8,9 @@ import { promisify } from "node:util";
 
 const serverPath = path.resolve("src/server.mjs");
 const outDir = path.resolve("reports");
-const requestTimeoutMs = Number(process.env.LOCAL_CUA_PROBE_TIMEOUT_MS || 20000);
+const requestTimeoutMs = Number(
+  process.env.LOCAL_CUA_PROBE_TIMEOUT_MS || 20000,
+);
 const samples = [];
 const execFile = promisify(execFileCallback);
 
@@ -113,7 +115,7 @@ async function main() {
     const appState = await server.request(4, "tools/call", {
       name: "get_app_state",
       arguments: {
-        app: process.env.LOCAL_CUA_PROBE_APP || "frontmost",
+        app: process.env.LOCAL_CUA_PROBE_APP || "Calculator",
       },
     });
 
@@ -134,11 +136,15 @@ async function main() {
       throw new Error(`Expected 10 tools, got ${report.toolCount}`);
     }
     if (appState.result?.isError) {
-      throw new Error(`Expected get_app_state to succeed: ${appState.result.content?.[0]?.text}`);
+      throw new Error(
+        `Expected get_app_state to succeed: ${appState.result.content?.[0]?.text}`,
+      );
     }
     const parsedState = JSON.parse(appState.result?.content?.[0]?.text || "{}");
     if (!parsedState.tree || !parsedState.app) {
-      throw new Error("Expected get_app_state to return app metadata and an AX tree");
+      throw new Error(
+        "Expected get_app_state to return app metadata and an AX tree",
+      );
     }
     if (parsedState.screenshot?.status !== "captured") {
       throw new Error(
@@ -150,11 +156,18 @@ async function main() {
     if (!parsedState.screenshot.path) {
       throw new Error("Expected captured screenshot to include a file path");
     }
-    if (parsedState.screenshot.width <= 0 || parsedState.screenshot.height <= 0) {
-      throw new Error("Expected captured screenshot to include positive dimensions");
+    if (
+      parsedState.screenshot.width <= 0 ||
+      parsedState.screenshot.height <= 0
+    ) {
+      throw new Error(
+        "Expected captured screenshot to include positive dimensions",
+      );
     }
     await stat(parsedState.screenshot.path);
-    const header = await readFile(parsedState.screenshot.path, { encoding: null });
+    const header = await readFile(parsedState.screenshot.path, {
+      encoding: null,
+    });
     if (
       header[0] !== 0x89 ||
       header[1] !== 0x50 ||

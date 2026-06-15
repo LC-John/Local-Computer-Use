@@ -81,6 +81,14 @@ export async function getAppState(app) {
   return await runAxHelper(["state", app]);
 }
 
+export async function checkPermissions() {
+  return await runAxHelper(["permissions"]);
+}
+
+export async function getAppIdentity(app) {
+  return await runAxHelper(["app-identity", app]);
+}
+
 export async function click(args) {
   return await runAxHelper(["click", JSON.stringify(args)]);
 }

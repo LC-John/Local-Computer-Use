@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="532" height="836" viewBox="0 0 532 836">
   <title>计算器 bounds overlay</title>
-  <image href="/Users/lczhang/Documents/computer-use/.build/screenshots/计算器-75929-1781505901699.png" x="0" y="0" width="532" height="836" preserveAspectRatio="none"/>
+  <image href="/Users/lczhang/Documents/computer-use/.build/screenshots/计算器-75929-1781508865515.png" x="0" y="0" width="532" height="836" preserveAspectRatio="none"/>
   <g id="ax-bounds">
 <rect x="68.00" y="68.00" width="396.00" height="700.00" fill="none" stroke="#ff3b30" stroke-width="2" opacity="0.85"><title>0: AXWindow main</title></rect>
 <rect x="68.00" y="68.00" width="396.00" height="700.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>1: AXGroup</title></rect>
