@@ -2,9 +2,8 @@
   "mcpServers": {
     "local-computer-use": {
       "command": "node",
-      "args": [
-        "/Users/lczhang/Documents/computer-use/src/server.mjs"
-      ]
+      "args": ["src/server.mjs"],
+      "cwd": "."
     }
   }
 }

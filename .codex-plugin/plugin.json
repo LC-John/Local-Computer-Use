@@ -1,0 +1,33 @@
+{
+  "name": "local-computer-use",
+  "version": "0.1.0",
+  "description": "Local black-box Computer Use reimplementation for macOS fixture testing.",
+  "author": {
+    "name": "Local Computer Use Project"
+  },
+  "homepage": "https://openai.com/",
+  "license": "UNLICENSED",
+  "keywords": [
+    "computer-use",
+    "macos",
+    "mcp",
+    "accessibility",
+    "fixture-testing"
+  ],
+  "mcpServers": "./.mcp.json",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Local Computer Use",
+    "shortDescription": "Run the local Computer Use-like MCP server",
+    "longDescription": "Local Computer Use packages this repository's black-box macOS Computer Use reimplementation as a distinct Codex plugin for safe fixture testing and compatibility work. It is intentionally separate from the bundled OpenAI Computer Use plugin.",
+    "developerName": "Local Computer Use Project",
+    "category": "Developer Tools",
+    "capabilities": ["MCP", "Desktop Automation", "Testing"],
+    "defaultPrompt": [
+      "List apps with Local Computer Use",
+      "Run the local M11 fixture gate",
+      "Check Calculator state locally"
+    ],
+    "brandColor": "#2563EB"
+  }
+}
