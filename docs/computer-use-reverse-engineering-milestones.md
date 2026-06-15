@@ -33,7 +33,8 @@ Milestone 9: Complete for local reimplementation
 Milestone 10.1: Local fixture diff harness complete
 Milestone 10.2: Hosted context emulation probe complete, native state gap still open
 Milestone 10.3: Hosted oracle semantic diff complete for Calculator/TextEdit/Chrome/Finder, raw native-vs-local diff deferred
-Milestone 11-14: Not started
+Milestone 11: Complete for local automated fixture gate
+Milestone 12-14: Not started
 ```
 
 Completed architecture discovery work is summarized in
@@ -52,7 +53,9 @@ approval CLI, and permission checks before native helper execution; see
 `docs/milestone-9-permission-approval-model.md`.
 Milestone 10 is now split into M10.1 local fixture diff, M10.2 hosted-context
 emulation, and M10.3 oracle-vs-local diff; see
-`docs/milestone-10-diff-harness.md`.
+`docs/milestone-10-diff-harness.md`. Milestone 11 has a local fixture test
+runner covering every exposed tool across Calculator, TextEdit, Chrome, Finder,
+and core policy errors; see `docs/milestone-11-fixture-test-suite.md`.
 
 ## Target Outcome
 
@@ -905,6 +908,14 @@ Continuously compare the replacement against native CUA behavior.
   successfully?
 
 ## Milestone 11: Fixture Test Suite
+
+Status: Complete for the local automated fixture gate as of 2026-06-15. The command
+`npm run test:m11:fixtures` covers all exposed tools at least once across
+Calculator/TextEdit/Chrome/Finder state and action fixtures, plus missing-app,
+denied-app, and malformed-click error behavior. Modal-dialog, multi-window, and
+explicit missing-permission fixtures remain deferred follow-up coverage because
+they are environment-sensitive rather than core local gate blockers; see
+`docs/milestone-11-fixture-test-suite.md`.
 
 ### Purpose
 
