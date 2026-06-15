@@ -1,6 +1,18 @@
 #!/usr/bin/env node
 
-import { getAppState, listApps, notImplemented } from "./mac-adapter.mjs";
+import {
+  click,
+  drag,
+  getAppState,
+  listApps,
+  notImplemented,
+  performSecondaryAction,
+  pressKey,
+  scroll,
+  selectText,
+  setValue,
+  typeText,
+} from "./mac-adapter.mjs";
 import {
   findTool,
   loadNativeToolCatalog,
@@ -149,15 +161,98 @@ async function handleToolsCall(id, params = {}) {
   if (name === "get_app_state") {
     const state = await getAppState(args.app);
     if (!state.ok) {
-      return toolResultError(id, state.error?.message || "Unable to read app state", {
-        tool: name,
-        "local-computer-use/status": "error",
-        "local-computer-use/errorCode": state.error?.code || "unknown",
-      });
+      return toolResultError(
+        id,
+        state.error?.message || "Unable to read app state",
+        {
+          tool: name,
+          "local-computer-use/status": "error",
+          "local-computer-use/errorCode": state.error?.code || "unknown",
+        },
+      );
     }
     return toolResultSuccess(id, JSON.stringify(state), {
       tool: name,
       "local-computer-use/source": state.source,
+    });
+  }
+
+  if (name === "click") {
+    const result = await click(args);
+    if (!result.ok) {
+      return toolResultError(id, result.error?.message || "Unable to click", {
+        tool: name,
+        "local-computer-use/status": "error",
+        "local-computer-use/errorCode": result.error?.code || "unknown",
+      });
+    }
+    return toolResultSuccess(id, JSON.stringify(result), {
+      tool: name,
+      "local-computer-use/source": result.source,
+    });
+  }
+
+  if (name === "type_text") {
+    const result = await typeText(args);
+    if (!result.ok) {
+      return toolResultError(
+        id,
+        result.error?.message || "Unable to type text",
+        {
+          tool: name,
+          "local-computer-use/status": "error",
+          "local-computer-use/errorCode": result.error?.code || "unknown",
+        },
+      );
+    }
+    return toolResultSuccess(id, JSON.stringify(result), {
+      tool: name,
+      "local-computer-use/source": result.source,
+    });
+  }
+
+  if (name === "press_key") {
+    const result = await pressKey(args);
+    if (!result.ok) {
+      return toolResultError(
+        id,
+        result.error?.message || "Unable to press key",
+        {
+          tool: name,
+          "local-computer-use/status": "error",
+          "local-computer-use/errorCode": result.error?.code || "unknown",
+        },
+      );
+    }
+    return toolResultSuccess(id, JSON.stringify(result), {
+      tool: name,
+      "local-computer-use/source": result.source,
+    });
+  }
+
+  const actionHandlers = {
+    scroll,
+    drag,
+    set_value: setValue,
+    select_text: selectText,
+    perform_secondary_action: performSecondaryAction,
+  };
+  if (name in actionHandlers) {
+    const result = await actionHandlers[name](args);
+    if (!result.ok) {
+      return toolResultError(
+        id,
+        result.error?.message || `Unable to execute ${name}`,
+        {
+          tool: name,
+          "local-computer-use/status": "error",
+          "local-computer-use/errorCode": result.error?.code || "unknown",
+        },
+      );
+    }
+    return toolResultSuccess(id, JSON.stringify(result), {
+      tool: name,
+      "local-computer-use/source": result.source,
     });
   }
 
@@ -184,9 +279,14 @@ async function handleMessage(message) {
   if (method === "tools/list") return handleToolsList(id);
   if (method === "tools/call") return await handleToolsCall(id, params);
 
-  return jsonRpcError(id, -32601, `Method not found: Unknown method: ${method}`, {
-    detail: `Unknown method: ${method}`,
-  });
+  return jsonRpcError(
+    id,
+    -32601,
+    `Method not found: Unknown method: ${method}`,
+    {
+      detail: `Unknown method: ${method}`,
+    },
+  );
 }
 
 async function main() {
@@ -208,10 +308,16 @@ async function main() {
             if (response) writeJson(response);
           })
           .catch((error) => {
-            writeJson(jsonRpcError(null, -32603, "Internal error", { detail: error.message }));
+            writeJson(
+              jsonRpcError(null, -32603, "Internal error", {
+                detail: error.message,
+              }),
+            );
           });
       } catch (error) {
-        writeJson(jsonRpcError(null, -32700, "Parse error", { detail: error.message }));
+        writeJson(
+          jsonRpcError(null, -32700, "Parse error", { detail: error.message }),
+        );
       }
     }
   });

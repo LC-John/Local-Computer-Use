@@ -19,6 +19,12 @@ struct TargetWindow {
     let size: [String: Any]?
 }
 
+struct ActionOutcome {
+    let method: String
+    let point: CGPoint?
+    let elementIndex: Int?
+}
+
 func writeJSON(_ value: Any) throws {
     let data = try JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted, .sortedKeys])
     FileHandle.standardOutput.write(data)
@@ -316,6 +322,44 @@ func childElements(_ element: AXUIElement) -> [AXUIElement] {
         }
     }
     return children
+}
+
+func findElementByIndex(
+    _ element: AXUIElement,
+    targetIndex: Int,
+    depth: Int,
+    counter: inout Int,
+    visited: inout Set<CFHashCode>
+) -> AXUIElement? {
+    let hash = CFHash(element)
+    let index = counter
+    counter += 1
+
+    if index == targetIndex {
+        return element
+    }
+    if visited.contains(hash) {
+        return nil
+    }
+    visited.insert(hash)
+
+    if depth >= maxDepth || counter >= maxNodes {
+        return nil
+    }
+
+    for child in childElements(element) {
+        if let found = findElementByIndex(
+            child,
+            targetIndex: targetIndex,
+            depth: depth + 1,
+            counter: &counter,
+            visited: &visited
+        ) {
+            return found
+        }
+    }
+
+    return nil
 }
 
 func readElement(
@@ -693,6 +737,664 @@ func captureWindowScreenshot(app: NSRunningApplication, window: TargetWindow) ->
     ]
 }
 
+func pointDictionary(_ point: CGPoint) -> [String: Any] {
+    [
+        "x": point.x,
+        "y": point.y,
+    ]
+}
+
+func numberFromJSON(_ value: Any?) -> Double? {
+    if let number = value as? NSNumber {
+        return number.doubleValue
+    }
+    if let string = value as? String {
+        return Double(string)
+    }
+    return nil
+}
+
+func intFromJSON(_ value: Any?) -> Int? {
+    if let number = value as? NSNumber {
+        return number.intValue
+    }
+    if let string = value as? String {
+        return Int(string)
+    }
+    return nil
+}
+
+func clickButton(_ value: Any?) -> CGMouseButton {
+    let raw = (value as? String) ?? "left"
+    switch raw {
+    case "right":
+        return .right
+    case "middle":
+        return .center
+    default:
+        return .left
+    }
+}
+
+func mouseTypes(for button: CGMouseButton) -> (down: CGEventType, up: CGEventType) {
+    switch button {
+    case .right:
+        return (.rightMouseDown, .rightMouseUp)
+    case .center:
+        return (.otherMouseDown, .otherMouseUp)
+    default:
+        return (.leftMouseDown, .leftMouseUp)
+    }
+}
+
+func postClick(at point: CGPoint, button: CGMouseButton, clickCount: Int) {
+    let source = CGEventSource(stateID: .hidSystemState)
+    let types = mouseTypes(for: button)
+    let count = max(1, clickCount)
+
+    for clickIndex in 1...count {
+        guard let down = CGEvent(
+            mouseEventSource: source,
+            mouseType: types.down,
+            mouseCursorPosition: point,
+            mouseButton: button
+        ),
+            let up = CGEvent(
+                mouseEventSource: source,
+                mouseType: types.up,
+                mouseCursorPosition: point,
+                mouseButton: button
+            )
+        else {
+            continue
+        }
+        down.setIntegerValueField(.mouseEventClickState, value: Int64(clickIndex))
+        up.setIntegerValueField(.mouseEventClickState, value: Int64(clickIndex))
+        down.post(tap: .cghidEventTap)
+        usleep(35_000)
+        up.post(tap: .cghidEventTap)
+        usleep(75_000)
+    }
+}
+
+func postDrag(from: CGPoint, to: CGPoint) {
+    let source = CGEventSource(stateID: .hidSystemState)
+    guard let down = CGEvent(mouseEventSource: source, mouseType: .leftMouseDown, mouseCursorPosition: from, mouseButton: .left),
+          let drag = CGEvent(mouseEventSource: source, mouseType: .leftMouseDragged, mouseCursorPosition: to, mouseButton: .left),
+          let up = CGEvent(mouseEventSource: source, mouseType: .leftMouseUp, mouseCursorPosition: to, mouseButton: .left)
+    else {
+        return
+    }
+    down.post(tap: .cghidEventTap)
+    usleep(80_000)
+    drag.post(tap: .cghidEventTap)
+    usleep(120_000)
+    up.post(tap: .cghidEventTap)
+    usleep(100_000)
+}
+
+func postScroll(at point: CGPoint?, direction: String, pages: Int) {
+    let source = CGEventSource(stateID: .hidSystemState)
+    let amount = Int32(max(1, pages) * 8)
+    let wheel1: Int32
+    let wheel2: Int32
+    switch direction.lowercased() {
+    case "up":
+        wheel1 = amount
+        wheel2 = 0
+    case "down":
+        wheel1 = -amount
+        wheel2 = 0
+    case "left":
+        wheel1 = 0
+        wheel2 = amount
+    case "right":
+        wheel1 = 0
+        wheel2 = -amount
+    default:
+        wheel1 = 0
+        wheel2 = 0
+    }
+    guard let event = CGEvent(
+        scrollWheelEvent2Source: source,
+        units: .line,
+        wheelCount: 2,
+        wheel1: wheel1,
+        wheel2: wheel2,
+        wheel3: 0
+    ) else {
+        return
+    }
+    if let point {
+        event.location = point
+    }
+    event.post(tap: .cghidEventTap)
+    usleep(120_000)
+}
+
+func activateApp(_ app: NSRunningApplication) {
+    app.activate(options: [.activateIgnoringOtherApps])
+    RunLoop.current.run(mode: .default, before: Date().addingTimeInterval(0.15))
+}
+
+func cgFlags(from modifiers: Set<String>) -> CGEventFlags {
+    var flags = CGEventFlags()
+    if modifiers.contains("shift") {
+        flags.insert(.maskShift)
+    }
+    if modifiers.contains("ctrl") || modifiers.contains("control") {
+        flags.insert(.maskControl)
+    }
+    if modifiers.contains("alt") || modifiers.contains("option") {
+        flags.insert(.maskAlternate)
+    }
+    if modifiers.contains("cmd") || modifiers.contains("command") || modifiers.contains("super") || modifiers.contains("meta") {
+        flags.insert(.maskCommand)
+    }
+    return flags
+}
+
+func keyCode(for rawKey: String) -> CGKeyCode? {
+    let key = rawKey.lowercased()
+    let table: [String: CGKeyCode] = [
+        "a": 0, "s": 1, "d": 2, "f": 3, "h": 4, "g": 5, "z": 6, "x": 7,
+        "c": 8, "v": 9, "b": 11, "q": 12, "w": 13, "e": 14, "r": 15,
+        "y": 16, "t": 17, "1": 18, "2": 19, "3": 20, "4": 21, "6": 22,
+        "5": 23, "=": 24, "+": 24, "9": 25, "7": 26, "-": 27, "8": 28,
+        "0": 29, "]": 30, "o": 31, "u": 32, "[": 33, "i": 34, "p": 35,
+        "return": 36, "enter": 36, "tab": 48, "space": 49, " ": 49,
+        "delete": 51, "backspace": 51, "escape": 53, "esc": 53,
+        "command": 55, "shift": 56, "capslock": 57, "option": 58, "alt": 58,
+        "control": 59, "ctrl": 59, "rightshift": 60, "rightoption": 61,
+        "rightcontrol": 62, "function": 63, "f17": 64, ".": 65, "*": 67,
+        "kp_multiply": 67, "kp+": 69, "kp_plus": 69, "clear": 71,
+        "volumeup": 72, "volumedown": 73, "mute": 74, "kp/": 75,
+        "kp_divide": 75, "kp_enter": 76, "kp-": 78, "kp_minus": 78,
+        "f18": 79, "f19": 80, "kp=": 81, "kp0": 82, "kp1": 83, "kp2": 84,
+        "kp3": 85, "kp4": 86, "kp5": 87, "kp6": 88, "kp7": 89, "f20": 90,
+        "kp8": 91, "kp9": 92, "f5": 96, "f6": 97, "f7": 98, "f3": 99,
+        "f8": 100, "f9": 101, "f11": 103, "f13": 105, "f16": 106,
+        "f14": 107, "f10": 109, "f12": 111, "f15": 113, "help": 114,
+        "home": 115, "pageup": 116, "forwarddelete": 117, "end": 119,
+        "pagedown": 121, "left": 123, "leftarrow": 123, "right": 124,
+        "rightarrow": 124, "down": 125, "downarrow": 125, "up": 126,
+        "uparrow": 126,
+    ]
+    return table[key]
+}
+
+func postKey(code: CGKeyCode, flags: CGEventFlags = []) {
+    let source = CGEventSource(stateID: .hidSystemState)
+    guard let down = CGEvent(keyboardEventSource: source, virtualKey: code, keyDown: true),
+          let up = CGEvent(keyboardEventSource: source, virtualKey: code, keyDown: false)
+    else {
+        return
+    }
+    down.flags = flags
+    up.flags = flags
+    down.post(tap: .cghidEventTap)
+    usleep(35_000)
+    up.post(tap: .cghidEventTap)
+    usleep(60_000)
+}
+
+func postUnicodeText(_ text: String) {
+    let source = CGEventSource(stateID: .hidSystemState)
+    for scalar in text.unicodeScalars {
+        var value = UniChar(scalar.value)
+        guard let down = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: true),
+              let up = CGEvent(keyboardEventSource: source, virtualKey: 0, keyDown: false)
+        else {
+            continue
+        }
+        down.keyboardSetUnicodeString(stringLength: 1, unicodeString: &value)
+        up.keyboardSetUnicodeString(stringLength: 1, unicodeString: &value)
+        down.post(tap: .cghidEventTap)
+        usleep(15_000)
+        up.post(tap: .cghidEventTap)
+        usleep(15_000)
+    }
+}
+
+func parseKeyCombination(_ raw: String) throws -> (key: String, modifiers: Set<String>) {
+    let parts = raw
+        .split(separator: "+")
+        .map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
+        .filter { !$0.isEmpty }
+    guard let key = parts.last else {
+        throw ToolError(code: "invalid_key", message: "Key must not be empty")
+    }
+    return (key: key, modifiers: Set(parts.dropLast().map { $0.lowercased() }))
+}
+
+func elementCenter(_ element: AXUIElement) -> CGPoint? {
+    guard let position = scalarAttribute(element, kAXPositionAttribute) as? [String: Any],
+          let size = scalarAttribute(element, kAXSizeAttribute) as? [String: Any],
+          let x = numberFromJSON(position["x"]),
+          let y = numberFromJSON(position["y"]),
+          let width = numberFromJSON(size["width"]),
+          let height = numberFromJSON(size["height"]),
+          width > 0,
+          height > 0
+    else {
+        return nil
+    }
+
+    return CGPoint(x: x + width / 2, y: y + height / 2)
+}
+
+func screenshotPointToGlobal(_ x: Double, _ y: Double, screenshot: [String: Any]) -> CGPoint? {
+    guard let frame = screenshot["windowFrame"] as? [String: Any],
+          let scale = screenshot["displayScale"] as? [String: Any],
+          let frameX = numberFromJSON(frame["x"]),
+          let frameY = numberFromJSON(frame["y"]),
+          let scaleX = numberFromJSON(scale["x"]),
+          let scaleY = numberFromJSON(scale["y"]),
+          scaleX > 0,
+          scaleY > 0
+    else {
+        return nil
+    }
+
+    let origin = screenshot["imageContentOrigin"] as? [String: Any]
+    let originX = numberFromJSON(origin?["x"]) ?? 0
+    let originY = numberFromJSON(origin?["y"]) ?? 0
+
+    return CGPoint(
+        x: frameX + ((x - originX) / scaleX),
+        y: frameY + ((y - originY) / scaleY)
+    )
+}
+
+func parseActionArguments(_ raw: String) throws -> [String: Any] {
+    guard let data = raw.data(using: .utf8),
+          let parsed = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+    else {
+        throw ToolError(code: "invalid_arguments", message: "Action arguments must be a JSON object")
+    }
+    return parsed
+}
+
+func actionApp(_ args: [String: Any], permissionMessage: String) throws -> NSRunningApplication {
+    guard let appQuery = args["app"] as? String else {
+        throw ToolError(code: "missing_app", message: "Missing required argument: app")
+    }
+    guard AXIsProcessTrusted() else {
+        throw ToolError(code: "accessibility_permission_denied", message: permissionMessage)
+    }
+    let app = try resolveApp(appQuery)
+    activateApp(app)
+    return app
+}
+
+func currentElement(app: NSRunningApplication, rawIndex: Any?) throws -> AXUIElement {
+    guard let elementIndex = intFromJSON(rawIndex) else {
+        throw ToolError(code: "missing_element_index", message: "Missing required argument: element_index")
+    }
+    let targetWindow = focusedWindowOrAppElement(pid: app.processIdentifier)
+    var counter = 0
+    var visited = Set<CFHashCode>()
+    guard let element = findElementByIndex(
+        targetWindow.element,
+        targetIndex: elementIndex,
+        depth: 0,
+        counter: &counter,
+        visited: &visited
+    ) else {
+        throw ToolError(code: "element_not_found", message: "Element index not found: \(elementIndex)")
+    }
+    return element
+}
+
+func actionResult(_ action: String, appQuery: String, app: NSRunningApplication, result: [String: Any]) -> [String: Any] {
+    [
+        "ok": true,
+        "source": "local-macos-accessibility-action",
+        "action": action,
+        "app": [
+            "query": appQuery,
+            "name": app.localizedName ?? "",
+            "bundleIdentifier": app.bundleIdentifier ?? "",
+            "pid": app.processIdentifier,
+        ],
+        "result": result,
+    ]
+}
+
+func appQuery(_ args: [String: Any]) throws -> String {
+    guard let appQuery = args["app"] as? String else {
+        throw ToolError(code: "missing_app", message: "Missing required argument: app")
+    }
+    return appQuery
+}
+
+func performClick(_ rawArguments: String) throws -> [String: Any] {
+    let args = try parseActionArguments(rawArguments)
+    guard let appQuery = args["app"] as? String else {
+        throw ToolError(code: "missing_app", message: "Missing required argument: app")
+    }
+    guard AXIsProcessTrusted() else {
+        throw ToolError(
+            code: "accessibility_permission_denied",
+            message: "Accessibility permission is required to click"
+        )
+    }
+
+    let app = try resolveApp(appQuery)
+    activateApp(app)
+
+    let targetWindow = focusedWindowOrAppElement(pid: app.processIdentifier)
+    let clickCount = intFromJSON(args["click_count"]) ?? 1
+    let button = clickButton(args["mouse_button"])
+    let root = targetWindow.element
+
+    let outcome: ActionOutcome
+    if let rawIndex = args["element_index"], let elementIndex = intFromJSON(rawIndex) {
+        var counter = 0
+        var visited = Set<CFHashCode>()
+        guard let element = findElementByIndex(
+            root,
+            targetIndex: elementIndex,
+            depth: 0,
+            counter: &counter,
+            visited: &visited
+        ) else {
+            throw ToolError(code: "element_not_found", message: "Element index not found: \(elementIndex)")
+        }
+
+        if button == .left && clickCount == 1 && copyActionNames(element).contains(kAXPressAction) {
+            let result = AXUIElementPerformAction(element, kAXPressAction as CFString)
+            if result == .success {
+                outcome = ActionOutcome(method: "ax_press", point: nil, elementIndex: elementIndex)
+            } else if let point = elementCenter(element) {
+                postClick(at: point, button: button, clickCount: clickCount)
+                outcome = ActionOutcome(method: "cg_event_element_center", point: point, elementIndex: elementIndex)
+            } else {
+                throw ToolError(code: "click_failed", message: "AXPress failed and element center is unavailable")
+            }
+        } else if let point = elementCenter(element) {
+            postClick(at: point, button: button, clickCount: clickCount)
+            outcome = ActionOutcome(method: "cg_event_element_center", point: point, elementIndex: elementIndex)
+        } else {
+            throw ToolError(code: "unsupported_element", message: "Element has no AXPress action or usable bounds")
+        }
+    } else if let x = numberFromJSON(args["x"]), let y = numberFromJSON(args["y"]) {
+        let screenshot = captureWindowScreenshot(app: app, window: targetWindow)
+        guard screenshot["status"] as? String == "captured",
+              let point = screenshotPointToGlobal(x, y, screenshot: screenshot)
+        else {
+            throw ToolError(code: "coordinate_mapping_failed", message: "Unable to map screenshot coordinates")
+        }
+        postClick(at: point, button: button, clickCount: clickCount)
+        outcome = ActionOutcome(method: "cg_event_screenshot_coordinate", point: point, elementIndex: nil)
+    } else {
+        throw ToolError(
+            code: "missing_click_target",
+            message: "click requires element_index or both x and y screenshot coordinates"
+        )
+    }
+
+    RunLoop.current.run(mode: .default, before: Date().addingTimeInterval(0.2))
+    return [
+        "ok": true,
+        "source": "local-macos-accessibility-action",
+        "action": "click",
+        "app": [
+            "query": appQuery,
+            "name": app.localizedName ?? "",
+            "bundleIdentifier": app.bundleIdentifier ?? "",
+            "pid": app.processIdentifier,
+        ],
+        "result": [
+            "method": outcome.method,
+            "elementIndex": outcome.elementIndex as Any,
+            "point": outcome.point.map(pointDictionary) as Any,
+            "clickCount": max(1, clickCount),
+            "button": (args["mouse_button"] as? String) ?? "left",
+        ],
+    ]
+}
+
+func performSetValue(_ rawArguments: String) throws -> [String: Any] {
+    let args = try parseActionArguments(rawArguments)
+    let query = try appQuery(args)
+    let app = try actionApp(args, permissionMessage: "Accessibility permission is required to set values")
+    let element = try currentElement(app: app, rawIndex: args["element_index"])
+    guard let value = args["value"] as? String else {
+        throw ToolError(code: "missing_value", message: "Missing required argument: value")
+    }
+    let result = AXUIElementSetAttributeValue(element, kAXValueAttribute as CFString, value as CFTypeRef)
+    guard result == .success else {
+        throw ToolError(code: "set_value_failed", message: "Unable to set AX value: \(result.rawValue)")
+    }
+    return actionResult("set_value", appQuery: query, app: app, result: [
+        "method": "ax_set_value",
+        "value": value,
+    ])
+}
+
+func performSecondaryAction(_ rawArguments: String) throws -> [String: Any] {
+    let args = try parseActionArguments(rawArguments)
+    let query = try appQuery(args)
+    let app = try actionApp(args, permissionMessage: "Accessibility permission is required to perform actions")
+    let element = try currentElement(app: app, rawIndex: args["element_index"])
+    guard let action = args["action"] as? String else {
+        throw ToolError(code: "missing_action", message: "Missing required argument: action")
+    }
+    let available = copyActionNames(element)
+    let matched = available.first { $0 == action || $0.replacingOccurrences(of: "AX", with: "") == action }
+    guard let matched else {
+        throw ToolError(code: "unsupported_action", message: "Unsupported secondary action: \(action)")
+    }
+    let result = AXUIElementPerformAction(element, matched as CFString)
+    guard result == .success else {
+        throw ToolError(code: "secondary_action_failed", message: "Unable to perform action \(matched): \(result.rawValue)")
+    }
+    return actionResult("perform_secondary_action", appQuery: query, app: app, result: [
+        "method": "ax_perform_action",
+        "action": matched,
+    ])
+}
+
+func performScroll(_ rawArguments: String) throws -> [String: Any] {
+    let args = try parseActionArguments(rawArguments)
+    let query = try appQuery(args)
+    let app = try actionApp(args, permissionMessage: "Accessibility permission is required to scroll")
+    let element = try currentElement(app: app, rawIndex: args["element_index"])
+    guard let direction = args["direction"] as? String else {
+        throw ToolError(code: "missing_direction", message: "Missing required argument: direction")
+    }
+    let pages = max(1, intFromJSON(args["pages"]) ?? 1)
+    let action: String
+    switch direction.lowercased() {
+    case "up":
+        action = "AXScrollUpByPage"
+    case "down":
+        action = "AXScrollDownByPage"
+    case "left":
+        action = "AXScrollLeftByPage"
+    case "right":
+        action = "AXScrollRightByPage"
+    default:
+        throw ToolError(code: "unsupported_direction", message: "Unsupported scroll direction: \(direction)")
+    }
+    let center = elementCenter(element)
+    var method = "ax_scroll_action"
+    for _ in 0..<pages {
+        if copyActionNames(element).contains(action) {
+            let result = AXUIElementPerformAction(element, action as CFString)
+            if result == .success {
+                RunLoop.current.run(mode: .default, before: Date().addingTimeInterval(0.1))
+                continue
+            }
+        }
+        postScroll(at: center, direction: direction, pages: 1)
+        method = "cg_event_scroll_wheel"
+    }
+    return actionResult("scroll", appQuery: query, app: app, result: [
+        "method": method,
+        "action": action,
+        "pages": pages,
+    ])
+}
+
+func rangeValue(location: Int, length: Int) -> AXValue? {
+    var range = CFRange(location: location, length: length)
+    return AXValueCreate(.cfRange, &range)
+}
+
+func performSelectText(_ rawArguments: String) throws -> [String: Any] {
+    let args = try parseActionArguments(rawArguments)
+    let query = try appQuery(args)
+    let app = try actionApp(args, permissionMessage: "Accessibility permission is required to select text")
+    let element = try currentElement(app: app, rawIndex: args["element_index"])
+    guard let text = args["text"] as? String else {
+        throw ToolError(code: "missing_text", message: "Missing required argument: text")
+    }
+    let selection = (args["selection"] as? String) ?? "text"
+    let value = (scalarAttribute(element, kAXValueAttribute) as? String) ?? ""
+    guard let range = value.range(of: text) else {
+        throw ToolError(code: "text_not_found", message: "Text not found in element value")
+    }
+    let utf16Start = value.utf16.distance(from: value.utf16.startIndex, to: range.lowerBound.samePosition(in: value.utf16)!)
+    let utf16Length = text.utf16.count
+    let location: Int
+    let length: Int
+    switch selection {
+    case "cursor_before":
+        location = utf16Start
+        length = 0
+    case "cursor_after":
+        location = utf16Start + utf16Length
+        length = 0
+    default:
+        location = utf16Start
+        length = utf16Length
+    }
+    guard let axRange = rangeValue(location: location, length: length) else {
+        throw ToolError(code: "range_create_failed", message: "Unable to create AX range")
+    }
+    let result = AXUIElementSetAttributeValue(element, kAXSelectedTextRangeAttribute as CFString, axRange)
+    guard result == .success else {
+        throw ToolError(code: "select_text_failed", message: "Unable to set selected text range: \(result.rawValue)")
+    }
+    return actionResult("select_text", appQuery: query, app: app, result: [
+        "method": "ax_selected_text_range",
+        "location": location,
+        "length": length,
+        "selection": selection,
+    ])
+}
+
+func performDrag(_ rawArguments: String) throws -> [String: Any] {
+    let args = try parseActionArguments(rawArguments)
+    let query = try appQuery(args)
+    let app = try actionApp(args, permissionMessage: "Accessibility permission is required to drag")
+    guard let fromX = numberFromJSON(args["from_x"]),
+          let fromY = numberFromJSON(args["from_y"]),
+          let toX = numberFromJSON(args["to_x"]),
+          let toY = numberFromJSON(args["to_y"])
+    else {
+        throw ToolError(code: "missing_drag_coordinates", message: "Drag requires from_x, from_y, to_x, and to_y")
+    }
+    let targetWindow = focusedWindowOrAppElement(pid: app.processIdentifier)
+    let screenshot = captureWindowScreenshot(app: app, window: targetWindow)
+    guard screenshot["status"] as? String == "captured",
+          let from = screenshotPointToGlobal(fromX, fromY, screenshot: screenshot),
+          let to = screenshotPointToGlobal(toX, toY, screenshot: screenshot)
+    else {
+        throw ToolError(code: "coordinate_mapping_failed", message: "Unable to map drag screenshot coordinates")
+    }
+    postDrag(from: from, to: to)
+    return actionResult("drag", appQuery: query, app: app, result: [
+        "method": "cg_event_drag",
+        "from": pointDictionary(from),
+        "to": pointDictionary(to),
+    ])
+}
+
+func performTypeText(_ rawArguments: String) throws -> [String: Any] {
+    let args = try parseActionArguments(rawArguments)
+    guard let appQuery = args["app"] as? String else {
+        throw ToolError(code: "missing_app", message: "Missing required argument: app")
+    }
+    guard let text = args["text"] as? String else {
+        throw ToolError(code: "missing_text", message: "Missing required argument: text")
+    }
+    guard AXIsProcessTrusted() else {
+        throw ToolError(
+            code: "accessibility_permission_denied",
+            message: "Accessibility permission is required to type text"
+        )
+    }
+
+    let app = try resolveApp(appQuery)
+    activateApp(app)
+    postUnicodeText(text)
+    RunLoop.current.run(mode: .default, before: Date().addingTimeInterval(0.15))
+
+    return [
+        "ok": true,
+        "source": "local-macos-keyboard-action",
+        "action": "type_text",
+        "app": [
+            "query": appQuery,
+            "name": app.localizedName ?? "",
+            "bundleIdentifier": app.bundleIdentifier ?? "",
+            "pid": app.processIdentifier,
+        ],
+        "result": [
+            "method": "cg_event_unicode_keyboard",
+            "characterCount": text.count,
+        ],
+    ]
+}
+
+func performPressKey(_ rawArguments: String) throws -> [String: Any] {
+    let args = try parseActionArguments(rawArguments)
+    guard let appQuery = args["app"] as? String else {
+        throw ToolError(code: "missing_app", message: "Missing required argument: app")
+    }
+    guard let rawKey = args["key"] as? String else {
+        throw ToolError(code: "missing_key", message: "Missing required argument: key")
+    }
+    guard AXIsProcessTrusted() else {
+        throw ToolError(
+            code: "accessibility_permission_denied",
+            message: "Accessibility permission is required to press keys"
+        )
+    }
+
+    let parsed = try parseKeyCombination(rawKey)
+    guard let code = keyCode(for: parsed.key) else {
+        throw ToolError(code: "unsupported_key", message: "Unsupported key: \(rawKey)")
+    }
+
+    let app = try resolveApp(appQuery)
+    activateApp(app)
+    let flags = cgFlags(from: parsed.modifiers)
+    postKey(code: code, flags: flags)
+    RunLoop.current.run(mode: .default, before: Date().addingTimeInterval(0.15))
+
+    return [
+        "ok": true,
+        "source": "local-macos-keyboard-action",
+        "action": "press_key",
+        "app": [
+            "query": appQuery,
+            "name": app.localizedName ?? "",
+            "bundleIdentifier": app.bundleIdentifier ?? "",
+            "pid": app.processIdentifier,
+        ],
+        "result": [
+            "method": "cg_event_virtual_key",
+            "key": parsed.key,
+            "modifiers": Array(parsed.modifiers).sorted(),
+            "keyCode": code,
+        ],
+    ]
+}
+
 func appState(_ query: String) throws -> [String: Any] {
     guard AXIsProcessTrusted() else {
         throw ToolError(
@@ -749,6 +1451,46 @@ do {
             throw ToolError(code: "missing_app", message: "Missing required argument: app")
         }
         try writeJSON(try appState(args.dropFirst().joined(separator: " ")))
+    case "click":
+        guard args.count >= 2 else {
+            throw ToolError(code: "missing_arguments", message: "Missing click action arguments")
+        }
+        try writeJSON(try performClick(args.dropFirst().joined(separator: " ")))
+    case "type-text":
+        guard args.count >= 2 else {
+            throw ToolError(code: "missing_arguments", message: "Missing type_text action arguments")
+        }
+        try writeJSON(try performTypeText(args.dropFirst().joined(separator: " ")))
+    case "press-key":
+        guard args.count >= 2 else {
+            throw ToolError(code: "missing_arguments", message: "Missing press_key action arguments")
+        }
+        try writeJSON(try performPressKey(args.dropFirst().joined(separator: " ")))
+    case "set-value":
+        guard args.count >= 2 else {
+            throw ToolError(code: "missing_arguments", message: "Missing set_value action arguments")
+        }
+        try writeJSON(try performSetValue(args.dropFirst().joined(separator: " ")))
+    case "perform-secondary-action":
+        guard args.count >= 2 else {
+            throw ToolError(code: "missing_arguments", message: "Missing perform_secondary_action arguments")
+        }
+        try writeJSON(try performSecondaryAction(args.dropFirst().joined(separator: " ")))
+    case "scroll":
+        guard args.count >= 2 else {
+            throw ToolError(code: "missing_arguments", message: "Missing scroll action arguments")
+        }
+        try writeJSON(try performScroll(args.dropFirst().joined(separator: " ")))
+    case "select-text":
+        guard args.count >= 2 else {
+            throw ToolError(code: "missing_arguments", message: "Missing select_text action arguments")
+        }
+        try writeJSON(try performSelectText(args.dropFirst().joined(separator: " ")))
+    case "drag":
+        guard args.count >= 2 else {
+            throw ToolError(code: "missing_arguments", message: "Missing drag action arguments")
+        }
+        try writeJSON(try performDrag(args.dropFirst().joined(separator: " ")))
     default:
         throw ToolError(code: "usage", message: "Unknown command: \(command)")
     }

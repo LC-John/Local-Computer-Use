@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Computer Use Fixture Page</title>
     <style>
       body {
@@ -29,8 +29,9 @@
         This local page is used for browser state-model discovery.
       </p>
       <label for="fixture-input">Fixture input</label>
-      <input id="fixture-input" value="ready">
+      <input id="fixture-input" value="ready" autofocus />
       <button id="fixture-button">Fixture button</button>
+      <p id="fixture-output">Button not clicked.</p>
       <section>
         <h2>Scrollable Content Anchor</h2>
         <p>Alpha Bravo Charlie Delta Echo Foxtrot Golf Hotel India Juliet.</p>
@@ -59,5 +60,29 @@
         <p id="bottom-anchor">Bottom anchor for scroll-state discovery.</p>
       </section>
     </main>
+    <script>
+      const input = document.getElementById("fixture-input");
+      const button = document.getElementById("fixture-button");
+      const output = document.getElementById("fixture-output");
+
+      window.addEventListener("load", () => {
+        setTimeout(() => input.focus(), 50);
+      });
+
+      function syncTitle(prefix) {
+        document.title = `${prefix}: ${input.value}`;
+      }
+
+      function updateOutput(prefix) {
+        output.textContent = `Button clicked: ${input.value}`;
+        syncTitle(prefix);
+      }
+
+      input.addEventListener("input", () => syncTitle("Input"));
+      button.addEventListener("click", () => updateOutput("Button clicked"));
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") updateOutput("Enter submitted");
+      });
+    </script>
   </body>
 </html>

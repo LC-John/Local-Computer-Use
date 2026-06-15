@@ -1,0 +1,83 @@
+{
+  "fixturePath": "/Users/lczhang/Documents/computer-use/.build/m8-textedit-keyboard.txt",
+  "typed": {
+    "action": "type_text",
+    "app": {
+      "bundleIdentifier": "com.apple.TextEdit",
+      "name": "文本编辑",
+      "pid": 22068,
+      "query": "TextEdit"
+    },
+    "ok": true,
+    "result": {
+      "characterCount": 24,
+      "method": "cg_event_unicode_keyboard"
+    },
+    "source": "local-macos-keyboard-action"
+  },
+  "selectAll": {
+    "action": "press_key",
+    "app": {
+      "bundleIdentifier": "com.apple.TextEdit",
+      "name": "文本编辑",
+      "pid": 22068,
+      "query": "TextEdit"
+    },
+    "ok": true,
+    "result": {
+      "key": "a",
+      "keyCode": 0,
+      "method": "cg_event_virtual_key",
+      "modifiers": [
+        "super"
+      ]
+    },
+    "source": "local-macos-keyboard-action"
+  },
+  "deleteSelection": {
+    "action": "press_key",
+    "app": {
+      "bundleIdentifier": "com.apple.TextEdit",
+      "name": "文本编辑",
+      "pid": 22068,
+      "query": "TextEdit"
+    },
+    "ok": true,
+    "result": {
+      "key": "BackSpace",
+      "keyCode": 51,
+      "method": "cg_event_virtual_key",
+      "modifiers": []
+    },
+    "source": "local-macos-keyboard-action"
+  },
+  "replacement": {
+    "action": "type_text",
+    "app": {
+      "bundleIdentifier": "com.apple.TextEdit",
+      "name": "文本编辑",
+      "pid": 22068,
+      "query": "TextEdit"
+    },
+    "ok": true,
+    "result": {
+      "characterCount": 16,
+      "method": "cg_event_unicode_keyboard"
+    },
+    "source": "local-macos-keyboard-action"
+  },
+  "unsupportedKey": {
+    "text": "Unsupported key: NotARealKey",
+    "meta": {
+      "local-computer-use/status": "error",
+      "tool": "press_key",
+      "local-computer-use/errorCode": "unsupported_key"
+    }
+  },
+  "finalTextValues": [
+    "Replacement text",
+    "—",
+    "m8-textedit-keyboard.txt"
+  ],
+  "fileText": ""
+}

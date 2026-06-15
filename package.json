@@ -9,6 +9,10 @@
   "scripts": {
     "start": "node src/server.mjs",
     "probe:local": "node scripts/probe-reimplementation-mcp.mjs",
+    "probe:m8:click": "node scripts/probe-m8-click.mjs",
+    "probe:m8:keyboard": "node scripts/probe-m8-keyboard.mjs",
+    "probe:m8:remaining": "node scripts/probe-m8-remaining-actions.mjs",
+    "probe:m8:chrome-finder": "node scripts/probe-m8-chrome-finder.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },
   "devDependencies": {

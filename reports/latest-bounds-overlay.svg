@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="532" height="836" viewBox="0 0 532 836">
   <title>计算器 bounds overlay</title>
-  <image href="/Users/lczhang/Documents/computer-use/.build/screenshots/计算器-75929-1781495352500.png" x="0" y="0" width="532" height="836" preserveAspectRatio="none"/>
+  <image href="/Users/lczhang/Documents/computer-use/.build/screenshots/计算器-75929-1781505901699.png" x="0" y="0" width="532" height="836" preserveAspectRatio="none"/>
   <g id="ax-bounds">
 <rect x="68.00" y="68.00" width="396.00" height="700.00" fill="none" stroke="#ff3b30" stroke-width="2" opacity="0.85"><title>0: AXWindow main</title></rect>
 <rect x="68.00" y="68.00" width="396.00" height="700.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>1: AXGroup</title></rect>
@@ -10,36 +10,34 @@
 <rect x="68.00" y="68.00" width="396.00" height="700.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>4: AXGroup</title></rect>
 <rect x="68.00" y="142.00" width="396.00" height="628.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>5: AXGroup CalculatorKeypadView</title></rect>
 <rect x="88.00" y="142.00" width="356.00" height="150.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>6: AXGroup</title></rect>
-<rect x="88.00" y="151.00" width="356.00" height="59.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>7: AXScrollArea StandardResultView</title></rect>
-<rect x="322.00" y="154.00" width="122.00" height="52.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>8: AXStaticText ‎18‎÷‎33</title></rect>
-<rect x="88.00" y="208.00" width="356.00" height="84.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>9: AXScrollArea StandardInputView</title></rect>
-<rect x="97.00" y="214.00" width="347.00" height="72.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>10: AXStaticText ‎0.54545455</title></rect>
-<rect x="88.00" y="302.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>11: AXButton AllClear</title></rect>
-<rect x="180.00" y="302.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>12: AXButton Negate</title></rect>
-<rect x="272.00" y="302.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>13: AXButton Percent</title></rect>
-<rect x="364.00" y="302.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>14: AXButton Divide</title></rect>
-<rect x="88.00" y="394.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>15: AXButton Seven</title></rect>
-<rect x="180.00" y="394.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>16: AXButton Eight</title></rect>
-<rect x="272.00" y="394.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>17: AXButton Nine</title></rect>
-<rect x="364.00" y="394.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>18: AXButton Multiply</title></rect>
-<rect x="88.00" y="486.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>19: AXButton Four</title></rect>
-<rect x="180.00" y="486.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>20: AXButton Five</title></rect>
-<rect x="272.00" y="486.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>21: AXButton Six</title></rect>
-<rect x="364.00" y="486.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>22: AXButton Subtract</title></rect>
-<rect x="88.00" y="578.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>23: AXButton One</title></rect>
-<rect x="180.00" y="578.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>24: AXButton Two</title></rect>
-<rect x="272.00" y="578.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>25: AXButton Three</title></rect>
-<rect x="364.00" y="578.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>26: AXButton Add</title></rect>
-<rect x="180.00" y="670.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>27: AXButton Zero</title></rect>
-<rect x="272.00" y="670.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>28: AXButton Decimal</title></rect>
-<rect x="364.00" y="670.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>29: AXButton Equals</title></rect>
-<rect x="88.00" y="670.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>30: AXGroup Mode: basic; unitConversion: false</title></rect>
-<rect x="88.00" y="670.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>31: AXMenuButton calculator.fill</title></rect>
-<rect x="68.00" y="68.00" width="396.00" height="76.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>32: AXToolbar</title></rect>
-<rect x="90.00" y="90.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>33: AXButton</title></rect>
-<rect x="170.00" y="90.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>34: AXButton</title></rect>
-<rect x="172.00" y="90.00" width="28.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>35: AXGroup</title></rect>
-<rect x="172.00" y="90.00" width="28.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>36: AXGroup</title></rect>
-<rect x="130.00" y="90.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>37: AXButton</title></rect>
+<rect x="88.00" y="208.00" width="356.00" height="84.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>7: AXScrollArea StandardInputView</title></rect>
+<rect x="388.00" y="214.00" width="56.00" height="72.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>8: AXStaticText ‎11</title></rect>
+<rect x="88.00" y="302.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>9: AXButton Delete</title></rect>
+<rect x="180.00" y="302.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>10: AXButton Negate</title></rect>
+<rect x="272.00" y="302.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>11: AXButton Percent</title></rect>
+<rect x="364.00" y="302.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>12: AXButton Divide</title></rect>
+<rect x="88.00" y="394.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>13: AXButton Seven</title></rect>
+<rect x="180.00" y="394.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>14: AXButton Eight</title></rect>
+<rect x="272.00" y="394.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>15: AXButton Nine</title></rect>
+<rect x="364.00" y="394.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>16: AXButton Multiply</title></rect>
+<rect x="88.00" y="486.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>17: AXButton Four</title></rect>
+<rect x="180.00" y="486.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>18: AXButton Five</title></rect>
+<rect x="272.00" y="486.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>19: AXButton Six</title></rect>
+<rect x="364.00" y="486.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>20: AXButton Subtract</title></rect>
+<rect x="88.00" y="578.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>21: AXButton One</title></rect>
+<rect x="180.00" y="578.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>22: AXButton Two</title></rect>
+<rect x="272.00" y="578.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>23: AXButton Three</title></rect>
+<rect x="364.00" y="578.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>24: AXButton Add</title></rect>
+<rect x="180.00" y="670.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>25: AXButton Zero</title></rect>
+<rect x="272.00" y="670.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>26: AXButton Decimal</title></rect>
+<rect x="364.00" y="670.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>27: AXButton Equals</title></rect>
+<rect x="88.00" y="670.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>28: AXGroup Mode: basic; unitConversion: false</title></rect>
+<rect x="88.00" y="670.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>29: AXMenuButton calculator.fill</title></rect>
+<rect x="68.00" y="68.00" width="396.00" height="76.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>30: AXToolbar</title></rect>
+<rect x="90.00" y="90.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>31: AXButton</title></rect>
+<rect x="170.00" y="90.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>32: AXButton</title></rect>
+<rect x="172.00" y="90.00" width="28.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>33: AXGroup</title></rect>
+<rect x="172.00" y="90.00" width="28.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>34: AXGroup</title></rect>
+<rect x="130.00" y="90.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>35: AXButton</title></rect>
   </g>
 </svg>

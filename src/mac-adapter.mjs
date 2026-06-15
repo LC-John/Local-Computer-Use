@@ -81,6 +81,38 @@ export async function getAppState(app) {
   return await runAxHelper(["state", app]);
 }
 
+export async function click(args) {
+  return await runAxHelper(["click", JSON.stringify(args)]);
+}
+
+export async function typeText(args) {
+  return await runAxHelper(["type-text", JSON.stringify(args)]);
+}
+
+export async function pressKey(args) {
+  return await runAxHelper(["press-key", JSON.stringify(args)]);
+}
+
+export async function scroll(args) {
+  return await runAxHelper(["scroll", JSON.stringify(args)]);
+}
+
+export async function drag(args) {
+  return await runAxHelper(["drag", JSON.stringify(args)]);
+}
+
+export async function setValue(args) {
+  return await runAxHelper(["set-value", JSON.stringify(args)]);
+}
+
+export async function selectText(args) {
+  return await runAxHelper(["select-text", JSON.stringify(args)]);
+}
+
+export async function performSecondaryAction(args) {
+  return await runAxHelper(["perform-secondary-action", JSON.stringify(args)]);
+}
+
 export async function notImplemented(tool) {
   return {
     status: "not_implemented",

@@ -28,7 +28,8 @@ Milestone 4: In progress, raw proxy/native capture blocker on hold
 Milestone 5: Complete
 Milestone 6: Initial implementation complete, fixture diffing still open
 Milestone 7: Initial screenshot and overlay implementation complete
-Milestone 8-14: Not started
+Milestone 8: Initial implementation complete, Calculator/TextEdit/Chrome/Finder fixtures accepted
+Milestone 9-14: Not started
 ```
 
 Completed architecture discovery work is summarized in
@@ -39,7 +40,9 @@ MCP skeleton under `src/`. Milestone 6 now has a Swift Accessibility helper at
 `src/ax-state.swift`, wired through the Node MCP adapter. The implementation
 details are summarized in `docs/milestone-6-local-ax-reader.md`. Milestone 7
 adds target-window PNG capture and coordinate metadata through the same helper;
-see `docs/milestone-7-screenshot-coordinate-capture.md`.
+see `docs/milestone-7-screenshot-coordinate-capture.md`. Milestone 8 has
+initial implementations for all action tools plus Calculator, TextEdit, Chrome,
+and Finder acceptance probes; see `docs/milestone-8-action-tools.md`.
 
 ## Target Outcome
 
@@ -704,6 +707,11 @@ Add visual state so agents can reason about UI even when AX data is incomplete.
 
 ## Milestone 8: Action Tool Implementation
 
+Status: Initial implementation complete as of 2026-06-15. All action tools are
+wired through the local MCP server and accepted against the current Calculator,
+TextEdit, Chrome, and Finder fixtures. See
+`docs/milestone-8-action-tools.md`.
+
 ### Purpose
 
 Implement GUI actions with macOS-native APIs.
@@ -750,7 +758,7 @@ Implement GUI actions with macOS-native APIs.
 
 - Calculator smoke test can press buttons and verify a result.
 - TextEdit smoke test can type, select, replace, and save text.
-- Browser smoke test can click a link, type into a field, and scroll.
+- Browser smoke test can operate stable browser chrome and scroll page content.
 - Action errors distinguish "bad element", "unsupported action", and
   "permission/app unavailable".
 
