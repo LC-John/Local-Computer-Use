@@ -29,6 +29,6 @@
   },
   "deferred": [
     "Raw native get_app_state payload capture remains partially blocked in this environment.",
-    "Modal, display sleep, and target-window-changed fixtures remain future compatibility checks."
+    "Display sleep and lock-screen fixtures remain manual compatibility checks."
   ]
 }

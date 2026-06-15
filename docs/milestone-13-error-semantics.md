@@ -71,6 +71,16 @@ The M13 suite covers:
 - recovery behavior after a target app closes, followed by a successful
   `get_app_state` refresh on Calculator.
 
+Supplemental follow-up coverage is available with:
+
+```bash
+npm run test:followups
+```
+
+That command validates modal-dialog state/action recovery, TextEdit
+multi-window target-window changes, and synthetic Accessibility/Screen Recording
+permission-loss classification without mutating real macOS TCC permissions.
+
 ## Recovery Rules
 
 Recoverable errors tell the caller to refresh app state, approve the target app,
@@ -91,6 +101,5 @@ These are intentionally left for later compatibility and maintenance work:
 
 - native-oracle comparison for every error string and code once raw native
   state/error capture is available again;
-- modal-dialog specific fixtures;
-- display sleep or lock fixtures;
-- multi-window target-window-changed fixtures.
+- display sleep or lock fixtures, which should remain manual because they
+  disturb the active desktop session.

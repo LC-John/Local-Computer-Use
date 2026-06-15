@@ -80,6 +80,17 @@ native computer-use 1.0.809 / runtime 809
 ```
 
 The matrix records the current fixture gates as M11 passed and M13 passed.
+The supplemental follow-up gate is:
+
+```bash
+npm run test:followups
+```
+
+Current accepted output:
+
+```text
+Local MCP follow-up fixture suite passed.
+```
 
 ## Deferred Gaps
 
@@ -87,8 +98,10 @@ Raw native `get_app_state` payload capture remains partially blocked in this
 environment. The snapshot preserves current timeout/hosted/local fixture
 evidence instead of claiming full native state parity.
 
-Modal-dialog, display sleep or lock, and multi-window target-window-changed
-fixtures remain future maintenance checks.
+Modal-dialog, multi-window target-window-changed, and synthetic permission-loss
+fixtures are now covered by `reports/follow-up-fixtures.json`. Display sleep or
+lock remains a manual maintenance check because it disturbs the active desktop
+session.
 
 ## Recommended Update Flow
 
@@ -99,5 +112,6 @@ change, or permission reset:
 2. Inspect `snapshots/native/<version>/diff-from-previous.md`.
 3. Run `npm run test:m11:fixtures`.
 4. Run `npm run test:m13:negative`.
-5. Update compatibility notes if the native tool catalog, error behavior, or
+5. Run `npm run test:followups`.
+6. Update compatibility notes if the native tool catalog, error behavior, or
    local fixture gates changed.

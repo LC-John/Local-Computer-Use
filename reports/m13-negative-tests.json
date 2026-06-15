@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-15T12:28:54.604Z",
+  "generatedAt": "2026-06-15T13:15:33.599Z",
   "milestone": "M13",
   "backend": "local",
   "scope": "negative error semantics and recoverability",
@@ -128,8 +128,8 @@
       "cleanup": [],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T12:28:46.892Z",
-      "finishedAt": "2026-06-15T12:28:46.947Z"
+      "startedAt": "2026-06-15T13:15:25.605Z",
+      "finishedAt": "2026-06-15T13:15:25.662Z"
     },
     {
       "fixture": "approval-required",
@@ -157,8 +157,8 @@
       "cleanup": [],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T12:28:46.947Z",
-      "finishedAt": "2026-06-15T12:28:47.015Z"
+      "startedAt": "2026-06-15T13:15:25.662Z",
+      "finishedAt": "2026-06-15T13:15:25.735Z"
     },
     {
       "fixture": "permission-classification",
@@ -190,8 +190,8 @@
       "cleanup": [],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T12:28:47.015Z",
-      "finishedAt": "2026-06-15T12:28:47.016Z"
+      "startedAt": "2026-06-15T13:15:25.735Z",
+      "finishedAt": "2026-06-15T13:15:25.736Z"
     },
     {
       "fixture": "action-edge-errors-and-refresh",
@@ -287,8 +287,8 @@
       "cleanup": [],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T12:28:47.016Z",
-      "finishedAt": "2026-06-15T12:28:48.368Z"
+      "startedAt": "2026-06-15T13:15:25.736Z",
+      "finishedAt": "2026-06-15T13:15:27.135Z"
     },
     {
       "fixture": "app-close-recovery",
@@ -312,7 +312,7 @@
           "isHidden": false,
           "name": "文本编辑",
           "path": "/System/Applications/TextEdit.app",
-          "pid": 21996,
+          "pid": 59076,
           "query": "TextEdit"
         },
         "afterCloseError": {
@@ -340,8 +340,8 @@
       ],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T12:28:48.368Z",
-      "finishedAt": "2026-06-15T12:28:54.604Z"
+      "startedAt": "2026-06-15T13:15:27.135Z",
+      "finishedAt": "2026-06-15T13:15:33.599Z"
     }
   ]
 }

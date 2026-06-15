@@ -926,10 +926,10 @@ Continuously compare the replacement against native CUA behavior.
 Status: Complete for the local automated fixture gate as of 2026-06-15. The command
 `npm run test:m11:fixtures` covers all exposed tools at least once across
 Calculator/TextEdit/Chrome/Finder state and action fixtures, plus missing-app,
-denied-app, and malformed-click error behavior. Modal-dialog, multi-window, and
-explicit missing-permission fixtures remain deferred follow-up coverage because
-they are environment-sensitive rather than core local gate blockers; see
-`docs/milestone-11-fixture-test-suite.md`.
+denied-app, and malformed-click error behavior. The supplemental
+`npm run test:followups` gate now covers modal-dialog handling, TextEdit
+multi-window target changes, and synthetic missing-permission classification;
+see `docs/milestone-11-fixture-test-suite.md`.
 
 ### Purpose
 
@@ -1076,6 +1076,10 @@ Make the replacement robust enough for real agent workflows.
   - focus changes;
   - modal appears;
   - display sleeps or locks.
+
+The automated follow-up gate covers modal and target-window-change behavior.
+Display sleep or lock remains a manual maintenance check because it disturbs the
+active desktop session.
 
 ### Feasible Methods
 

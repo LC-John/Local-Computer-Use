@@ -3,9 +3,9 @@
 Date: 2026-06-15
 
 Status: Complete for the local reimplementation's automated fixture gate across
-Calculator, TextEdit, Chrome, Finder, and core policy errors. Modal-dialog,
-multi-window, and explicit missing-permission coverage remain deferred because
-they need more environment-sensitive setup or mockable permission injection.
+Calculator, TextEdit, Chrome, Finder, and core policy errors. A supplemental
+follow-up gate now covers modal-dialog handling, TextEdit multi-window target
+changes, and synthetic missing-permission classification.
 
 ## Purpose
 
@@ -71,17 +71,28 @@ Implemented fixtures:
 
 ## Deferred Follow-Up Coverage
 
-These items are intentionally left as follow-ups rather than M11 blockers
-because they require more environment-sensitive setup or better fixture
-isolation:
+These items are intentionally tracked outside the core M11 gate because they
+require more environment-sensitive setup or better fixture isolation:
 
 - richer browser form assertions beyond the current Chrome autofocus input
   fixture;
 - Finder multi-window or multi-selection behavior beyond the current project
   list fixture;
-- modal dialog handling;
-- explicit missing Accessibility or Screen Recording permission scenarios;
 - CI-compatible subset definition for a GUI-capable runner.
+
+The follow-up command now covers the previously deferred modal dialog,
+multi-window target-window-change, and synthetic missing-permission cases:
+
+```bash
+npm run test:followups
+```
+
+It writes:
+
+```text
+reports/follow-up-fixtures.json
+reports/follow-up-fixtures.jsonl
+```
 
 The existing M8 Chrome/Finder probes and M10 hosted-oracle semantic checks remain
 useful inputs for extending those follow-ups.
@@ -100,4 +111,5 @@ Current accepted output:
 
 ```text
 Local MCP M11 fixture test suite passed.
+Local MCP follow-up fixture suite passed.
 ```

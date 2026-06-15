@@ -420,6 +420,7 @@ async function updateMaintenanceDocs(snapshot) {
     "",
     "- The first M14 snapshot is a baseline for future Codex or Computer Use updates.",
     "- Raw native state capture is still tracked as a deferred gap; existing timeout and hosted/local fixture evidence is copied into each snapshot.",
+    "- Modal, multi-window target-change, and synthetic permission-loss follow-ups are covered by `npm run test:followups`.",
     "",
   ].join("\n");
 
@@ -428,11 +429,11 @@ async function updateMaintenanceDocs(snapshot) {
     "",
     "This matrix records the local replacement's current compatibility target.",
     "",
-    "| Local replacement | Native target | Snapshot | Tool catalog | Fixture gate | Error gate | Notes |",
-    "| --- | --- | --- | --- | --- | --- | --- |",
+    "| Local replacement | Native target | Snapshot | Tool catalog | Fixture gate | Error gate | Follow-up gate | Notes |",
+    "| --- | --- | --- | --- | --- | --- | --- | --- |",
     ...snapshotEntries.map(
       (entry) =>
-        `| 0.1.0 | computer-use ${entry.native.pluginVersion} / runtime ${entry.native.runtimeVersion} | \`${entry.snapshotPath}\` | ${entry.toolCount} tools | M11 passed | M13 passed | Raw native state remains deferred; local M7-M13 behavior is covered by fixture reports. |`,
+        `| 0.1.0 | computer-use ${entry.native.pluginVersion} / runtime ${entry.native.runtimeVersion} | \`${entry.snapshotPath}\` | ${entry.toolCount} tools | M11 passed | M13 passed | follow-ups passed | Raw native state remains deferred; local M7-M14 behavior is covered by fixture reports. |`,
     ),
     "",
   ].join("\n");
@@ -484,7 +485,7 @@ async function main() {
     diff,
     deferred: [
       "Raw native get_app_state payload capture remains partially blocked in this environment.",
-      "Modal, display sleep, and target-window-changed fixtures remain future compatibility checks.",
+      "Display sleep and lock-screen fixtures remain manual compatibility checks.",
     ],
   };
 
