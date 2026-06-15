@@ -1,0 +1,13 @@
+{
+  "id": 2,
+  "jsonrpc": "2.0",
+  "result": {
+    "content": [
+      {
+        "text": "Invalid app: __definitely_missing_app_for_probe__",
+        "type": "text"
+      }
+    ],
+    "isError": true
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "app": {
+      "description": "App name, full app path, or unambiguous bundle identifier",
+      "type": "string"
+    },
+    "text": {
+      "description": "Literal text to type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "app",
+    "text"
+  ],
+  "type": "object"
+}

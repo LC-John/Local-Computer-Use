@@ -1,0 +1,40 @@
+{
+  "note": "Native get_app_state capture remains partially blocked; this index preserves current raw timeout/hosted/local fixture state evidence.",
+  "entries": [
+    {
+      "path": "fixtures/Calculator/basic/codex-hosted-state.md",
+      "sha256": "f004a051c3ff6717bd436ea6368773e9b25568771a6296bea028bee5b94a2a49",
+      "size": 3748
+    },
+    {
+      "path": "fixtures/Calculator/basic/local-m7-state.json",
+      "sha256": "522273e1a48318960128bb0e6f08911bdd1d4cb400b3d9e168a25b5910b7a367",
+      "size": 55560
+    },
+    {
+      "path": "fixtures/Calculator/basic/native-state-timeout.json",
+      "sha256": "408578e8b66c0143217316824e42023d51099f6127708216fc45a1d657d0d2c4",
+      "size": 121
+    },
+    {
+      "path": "fixtures/TextEdit/plain-text/local-m7-state.json",
+      "sha256": "005c2a911cce6f51165125fed2f63fe58106ffbdddef982de688b1a88af57163",
+      "size": 13241
+    },
+    {
+      "path": "fixtures/Chrome/static-page/local-m7-state.json",
+      "sha256": "ea6bc200b990734daeeb1e73e43c0605e226e2b5cf0170738541e32dbe07a35e",
+      "size": 341208
+    },
+    {
+      "path": "fixtures/Finder/project-list/local-m7-state.json",
+      "sha256": "f4ff91b5aa2620f71b9613945c9bf2a2954979ac042e4d39ed30735ce27c3d15",
+      "size": 512511
+    },
+    {
+      "path": "fixtures/__definitely_missing_app_for_probe__/invalid-app/native-state.raw.json",
+      "sha256": "c3c2506e75c29a7671dfbbb5ba557b3161dbbde4c1f63f016df68029e2790fe3",
+      "size": 205
+    }
+  ]
+}

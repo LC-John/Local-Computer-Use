@@ -313,19 +313,23 @@ async function setupTextEditFixture() {
   await mkdir(path.dirname(textEditFixturePath), { recursive: true });
   await execFile("osascript", [
     "-e",
-    'tell application "TextEdit" to close every document saving no',
+    'tell application "TextEdit" to quit saving no',
   ]).catch(() => {});
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    const stillRunning = await execFile("pgrep", ["-x", "TextEdit"])
+      .then(() => true)
+      .catch(() => false);
+    if (!stillRunning) break;
+    await sleep(150);
+  }
   await writeFile(textEditFixturePath, "");
-  await execFile("open", ["-a", "TextEdit", textEditFixturePath]);
   await execFile("osascript", [
     "-e",
     'tell application "TextEdit"',
     "-e",
     "activate",
     "-e",
-    "if (count of documents) = 0 then make new document",
-    "-e",
-    'set text of front document to ""',
+    'make new document with properties {text:""}',
     "-e",
     "end tell",
   ]).catch(() => {});
@@ -335,7 +339,7 @@ async function setupTextEditFixture() {
 async function cleanupTextEditFixture() {
   await execFile("osascript", [
     "-e",
-    'tell application "TextEdit" to close every document saving no',
+    'tell application "TextEdit" to quit saving no',
   ]).catch(() => {});
 }
 

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-15T12:28:37.600Z",
+  "generatedAt": "2026-06-15T12:35:13.540Z",
   "milestone": "M11",
   "backend": "local",
   "scope": "automated core fixture suite",
@@ -101,8 +101,8 @@
       "cleanup": [],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T12:28:10.713Z",
-      "finishedAt": "2026-06-15T12:28:10.965Z"
+      "startedAt": "2026-06-15T12:34:45.230Z",
+      "finishedAt": "2026-06-15T12:34:45.508Z"
     },
     {
       "fixture": "calculator-arithmetic-click",
@@ -200,8 +200,8 @@
       "cleanup": [],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T12:28:10.966Z",
-      "finishedAt": "2026-06-15T12:28:14.593Z"
+      "startedAt": "2026-06-15T12:34:45.508Z",
+      "finishedAt": "2026-06-15T12:34:48.942Z"
     },
     {
       "fixture": "textedit-keyboard-editing",
@@ -225,7 +225,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 21996,
+            "pid": 35570,
             "query": "TextEdit"
           },
           "ok": true,
@@ -235,8 +235,8 @@
             "elementIndex": 2,
             "method": "cg_event_element_center",
             "point": {
-              "x": 536,
-              "y": 313
+              "x": 506,
+              "y": 372
             }
           },
           "source": "local-macos-accessibility-action"
@@ -246,7 +246,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 21996,
+            "pid": 35570,
             "query": "TextEdit"
           },
           "ok": true,
@@ -261,7 +261,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 21996,
+            "pid": 35570,
             "query": "TextEdit"
           },
           "ok": true,
@@ -280,7 +280,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 21996,
+            "pid": 35570,
             "query": "TextEdit"
           },
           "ok": true,
@@ -297,7 +297,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 21996,
+            "pid": 35570,
             "query": "TextEdit"
           },
           "ok": true,
@@ -312,20 +312,28 @@
           "ok": true,
           "bundleIdentifier": "com.apple.TextEdit",
           "screenshotStatus": "captured",
-          "screenshotWidth": 1546,
-          "screenshotHeight": 1090,
+          "screenshotWidth": 1426,
+          "screenshotHeight": 1206,
           "rootRole": "AXWindow",
-          "nodeCount": 14,
-          "indexedNodeCount": 14,
+          "nodeCount": 49,
+          "indexedNodeCount": 49,
           "roleCounts": {
             "AXWindow": 1,
             "AXScrollArea": 1,
             "AXTextArea": 1,
             "AXScrollBar": 2,
-            "AXButton": 3,
-            "AXGroup": 2,
-            "AXMenuButton": 1,
-            "AXImage": 1,
+            "AXRuler": 1,
+            "AXRulerMarker": 15,
+            "AXToolbar": 1,
+            "AXPopUpButton": 3,
+            "AXComboBox": 1,
+            "AXButton": 6,
+            "AXColorWell": 2,
+            "AXGroup": 3,
+            "AXCheckBox": 3,
+            "AXRadioGroup": 1,
+            "AXRadioButton": 4,
+            "AXMenuButton": 2,
             "AXStaticText": 2
           }
         }
@@ -335,8 +343,8 @@
       ],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T12:28:14.593Z",
-      "finishedAt": "2026-06-15T12:28:20.088Z"
+      "startedAt": "2026-06-15T12:34:48.942Z",
+      "finishedAt": "2026-06-15T12:34:55.289Z"
     },
     {
       "fixture": "textedit-rich-actions",
@@ -368,7 +376,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 21996,
+            "pid": 35867,
             "query": "TextEdit"
           },
           "ok": true,
@@ -383,7 +391,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 21996,
+            "pid": 35867,
             "query": "TextEdit"
           },
           "ok": true,
@@ -400,7 +408,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 21996,
+            "pid": 35867,
             "query": "TextEdit"
           },
           "ok": true,
@@ -415,7 +423,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 21996,
+            "pid": 35867,
             "query": "TextEdit"
           },
           "ok": true,
@@ -431,7 +439,7 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 21996,
+            "pid": 35867,
             "query": "TextEdit"
           },
           "ok": true,
@@ -446,31 +454,31 @@
           "app": {
             "bundleIdentifier": "com.apple.TextEdit",
             "name": "文本编辑",
-            "pid": 21996,
+            "pid": 35867,
             "query": "TextEdit"
           },
           "ok": true,
           "result": {
             "from": {
-              "x": 277.6,
-              "y": 92.6
+              "x": 271.6,
+              "y": 156.8
             },
             "method": "cg_event_drag",
             "to": {
-              "x": 568.3,
-              "y": 92.6
+              "x": 535.3,
+              "y": 156.8
             }
           },
           "source": "local-macos-accessibility-action"
         },
         "dragPoints": {
           "from": {
-            "x": 241.20000000000005,
-            "y": 117.19999999999999
+            "x": 229.20000000000005,
+            "y": 245.60000000000002
           },
           "to": {
-            "x": 822.5999999999999,
-            "y": 117.19999999999999
+            "x": 756.5999999999999,
+            "y": 245.60000000000002
           }
         },
         "finalTextPrefix": "alpha BETA gamma\nscroll marker 01\nscroll marker 02\nscroll marker 03\nscroll marker 04\nscroll marker 05\nscroll marker 06\ns",
@@ -478,21 +486,29 @@
           "ok": true,
           "bundleIdentifier": "com.apple.TextEdit",
           "screenshotStatus": "captured",
-          "screenshotWidth": 1546,
-          "screenshotHeight": 1090,
+          "screenshotWidth": 1426,
+          "screenshotHeight": 1206,
           "rootRole": "AXWindow",
-          "nodeCount": 19,
-          "indexedNodeCount": 19,
+          "nodeCount": 55,
+          "indexedNodeCount": 55,
           "roleCounts": {
             "AXWindow": 1,
             "AXScrollArea": 1,
             "AXTextArea": 1,
             "AXScrollBar": 2,
             "AXValueIndicator": 1,
-            "AXButton": 7,
-            "AXGroup": 2,
-            "AXMenuButton": 1,
-            "AXImage": 1,
+            "AXButton": 10,
+            "AXRuler": 1,
+            "AXRulerMarker": 16,
+            "AXToolbar": 1,
+            "AXPopUpButton": 3,
+            "AXComboBox": 1,
+            "AXColorWell": 2,
+            "AXGroup": 3,
+            "AXCheckBox": 3,
+            "AXRadioGroup": 1,
+            "AXRadioButton": 4,
+            "AXMenuButton": 2,
             "AXStaticText": 2
           }
         }
@@ -502,8 +518,8 @@
       ],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T12:28:20.213Z",
-      "finishedAt": "2026-06-15T12:28:25.127Z"
+      "startedAt": "2026-06-15T12:34:55.411Z",
+      "finishedAt": "2026-06-15T12:35:01.398Z"
     },
     {
       "fixture": "chrome-browser-page-actions",
@@ -601,7 +617,7 @@
         },
         "beforeClick": {
           "tabCount": 1,
-          "activeUrl": "file://fixtures/Chrome/static-page/index.html?m11=1781526490659"
+          "activeUrl": "file://fixtures/Chrome/static-page/index.html?m11=1781526885175"
         },
         "afterClick": {
           "tabCount": 2,
@@ -650,8 +666,8 @@
       ],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T12:28:25.243Z",
-      "finishedAt": "2026-06-15T12:28:33.903Z"
+      "startedAt": "2026-06-15T12:35:01.508Z",
+      "finishedAt": "2026-06-15T12:35:09.933Z"
     },
     {
       "fixture": "finder-project-list-actions",
@@ -766,8 +782,8 @@
       ],
       "diffs": [],
       "status": "passed",
-      "startedAt": "2026-06-15T12:28:34.033Z",
-      "finishedAt": "2026-06-15T12:28:37.047Z"
+      "startedAt": "2026-06-15T12:35:10.062Z",
+      "finishedAt": "2026-06-15T12:35:12.988Z"
     }
   ]
 }

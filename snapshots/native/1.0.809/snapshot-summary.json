@@ -1,0 +1,34 @@
+{
+  "capturedAt": "2026-06-15T12:35:21.298Z",
+  "snapshotPath": "snapshots/native/1.0.809",
+  "native": {
+    "pluginRoot": "/Users/lczhang/.codex/plugins/cache/openai-bundled/computer-use/1.0.809",
+    "runtimeRoot": "/Users/lczhang/.codex/computer-use",
+    "pluginName": "computer-use",
+    "pluginVersion": "1.0.809",
+    "runtimeVersion": "809"
+  },
+  "protocolArtifacts": [
+    "initialize-response.json",
+    "tools-list.json",
+    "tool-coverage.md",
+    "error-catalog.md",
+    "error-catalog.raw.json",
+    "stderr.log",
+    "schemas/"
+  ],
+  "toolCount": 10,
+  "stateSnapshotCount": 7,
+  "binaryCount": 4,
+  "diff": {
+    "currentVersion": "1.0.809",
+    "previousVersion": null,
+    "status": "baseline",
+    "changeCount": 0,
+    "changes": []
+  },
+  "deferred": [
+    "Raw native get_app_state payload capture remains partially blocked in this environment.",
+    "Modal, display sleep, and target-window-changed fixtures remain future compatibility checks."
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "app": "Calculator",
+  "caseName": "basic",
+  "timeoutMs": 60000,
+  "error": "Timed out waiting for response id 2"
+}

@@ -36,7 +36,7 @@ Milestone 10.3: Hosted oracle semantic diff complete for Calculator/TextEdit/Chr
 Milestone 11: Complete for local automated fixture gate
 Milestone 12: Complete
 Milestone 13: Complete for local error semantics baseline
-Milestone 14: Not started
+Milestone 14: Complete for first native-version tracking baseline
 ```
 
 Completed architecture discovery work is summarized in
@@ -62,6 +62,8 @@ Milestone 12 adds and locally installs a distinct `local-computer-use` Codex
 plugin bundle; see `docs/milestone-12-codex-plugin-packaging.md`. Milestone 13
 adds the local error model, stable error metadata, negative tests, and
 coordinate safety checks; see `docs/milestone-13-error-semantics.md`.
+Milestone 14 adds a repeatable native snapshot system, native version changelog,
+and compatibility matrix; see `docs/milestone-14-version-tracking.md`.
 
 ## Target Outcome
 
@@ -1093,6 +1095,12 @@ Make the replacement robust enough for real agent workflows.
 - Overly generic errors make autonomous recovery difficult.
 
 ## Milestone 14: Version Tracking and Maintenance
+
+Status: Complete for the first native-version tracking baseline as of
+2026-06-15. The command `npm run snapshot:m14:native` captures native Computer
+Use `1.0.809` into `snapshots/native/1.0.809`, writes a diff baseline, and
+updates `docs/native-version-changelog.md` plus `docs/compatibility-matrix.md`.
+See `docs/milestone-14-version-tracking.md`.
 
 ### Purpose
 
