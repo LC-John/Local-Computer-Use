@@ -78,3 +78,27 @@ blocked if matching native safety behavior is a project goal.
 
 Rationale: GUI automation can affect state outside the repository and browser
 sessions may already be authenticated.
+
+## D-008: Treat Local `list_apps` as User-Facing App Discovery
+
+Status: Accepted
+
+Decision: The local reimplementation should return user-facing applications
+from `list_apps`, not every helper, daemon, agent, or XPC process visible to
+`NSWorkspace`.
+
+Rationale: Hosted Computer Use presents an app-oriented list that agents can
+reason about. Raw process listings include many implementation details such as
+helper apps and services that are poor interaction targets.
+
+## D-009: Keep Screenshot Capture in Milestone 7
+
+Status: Accepted
+
+Decision: Milestone 6 should stop at running-app discovery and Accessibility
+tree capture. Window screenshots, screenshot dimensions, display scale, and
+coordinate alignment are Milestone 7 work.
+
+Rationale: AX state and visual capture have different permission requirements
+and failure modes. Keeping them separate makes verification and permission
+debugging clearer.

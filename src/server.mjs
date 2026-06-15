@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { listApps, notImplemented } from "./mac-adapter.mjs";
+import { getAppState, listApps, notImplemented } from "./mac-adapter.mjs";
 import {
   findTool,
   loadNativeToolCatalog,
@@ -55,6 +55,26 @@ function toolResultError(id, text, metadata = {}) {
   };
 }
 
+function toolResultSuccess(id, text, metadata = {}) {
+  return {
+    jsonrpc: "2.0",
+    id,
+    result: {
+      _meta: {
+        "local-computer-use/status": "implemented",
+        ...metadata,
+      },
+      content: [
+        {
+          type: "text",
+          text,
+        },
+      ],
+      isError: false,
+    },
+  };
+}
+
 function handleInitialize(id, params = {}) {
   initialized = true;
   return {
@@ -102,12 +122,18 @@ async function handleToolsCall(id, params = {}) {
 
   if (name === "list_apps") {
     const apps = await listApps();
+    if (apps.error) {
+      return toolResultError(id, apps.error.message, {
+        tool: name,
+        "local-computer-use/errorCode": apps.error.code,
+      });
+    }
     return {
       jsonrpc: "2.0",
       id,
       result: {
         _meta: {
-          "local-computer-use/status": "stub",
+          "local-computer-use/status": "implemented",
         },
         content: [
           {
@@ -118,6 +144,21 @@ async function handleToolsCall(id, params = {}) {
         isError: false,
       },
     };
+  }
+
+  if (name === "get_app_state") {
+    const state = await getAppState(args.app);
+    if (!state.ok) {
+      return toolResultError(id, state.error?.message || "Unable to read app state", {
+        tool: name,
+        "local-computer-use/status": "error",
+        "local-computer-use/errorCode": state.error?.code || "unknown",
+      });
+    }
+    return toolResultSuccess(id, JSON.stringify(state), {
+      tool: name,
+      "local-computer-use/source": state.source,
+    });
   }
 
   const result = await notImplemented(name);

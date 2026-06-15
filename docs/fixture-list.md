@@ -38,6 +38,18 @@ Expected observations:
 - Numeric buttons are visible in state.
 - Screenshot is nonblank and corresponds to Calculator.
 
+Current artifact directory:
+
+```text
+fixtures/Calculator/basic/
+```
+
+Current local reimplementation status:
+
+- `LOCAL_CUA_PROBE_APP=Calculator npm run probe:local` verifies local app
+  resolution and AX tree capture.
+- Native-hosted fixture comparison remains open.
+
 ### TextEdit: Plain Text Document
 
 Purpose: Validate editable text areas, focus state, typing targets, and AX value
@@ -64,6 +76,11 @@ Current artifact directory:
 ```text
 fixtures/TextEdit/plain-text/
 ```
+
+Current local reimplementation status:
+
+- Local AX reader support is implemented through `get_app_state`.
+- Fixture-specific hosted/native diffing remains open.
 
 ### Safari or Chrome: Static Page
 
@@ -92,6 +109,12 @@ Current artifact directory:
 fixtures/Chrome/static-page/
 ```
 
+Current local reimplementation status:
+
+- Local AX reader support is implemented through `get_app_state`.
+- Browser AX trees can be noisy because tabs and page content are both exposed.
+- Fixture-specific hosted/native diffing remains open.
+
 ### Finder: Simple Folder Window
 
 Purpose: Validate list/grid controls, selection state, file item labels, and
@@ -117,6 +140,11 @@ Current artifact directory:
 ```text
 fixtures/Finder/project-list/
 ```
+
+Current local reimplementation status:
+
+- Local AX reader support is implemented through `get_app_state`.
+- Fixture-specific hosted/native diffing remains open.
 
 ## Phase 2: Safe Action Fixtures
 

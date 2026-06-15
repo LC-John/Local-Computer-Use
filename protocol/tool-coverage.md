@@ -8,7 +8,7 @@ real desktop.
 
 | Tool | Schema captured | Missing required | Invalid params | Minimal read-only call | Valid action call | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| `list_apps` | yes | n/a | timeout | timeout | n/a | Read-only tool; valid minimal call may be safe in Milestone 3. |
+| `list_apps` | yes | n/a | raw stdio timeout | raw stdio timeout; hosted success later observed | n/a | Supported read-only tool. Raw direct probing timed out, but Codex-hosted `mcp__computer_use.list_apps` later returned successfully after restart. |
 | `get_app_state` | yes | yes | yes | not run | n/a | Read-only tool; valid minimal call may be safe in Milestone 3. |
 | `click` | yes | yes | yes | not run | deferred | Valid action behavior deferred to fixture/action milestones. |
 | `perform_secondary_action` | yes | yes | yes | not run | deferred | Valid action behavior deferred to fixture/action milestones. |

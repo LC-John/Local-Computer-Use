@@ -67,5 +67,9 @@ Valid action behavior is deferred to fixture-based milestones.
   `isError: true` rather than a JSON-RPC-level error.
 - Unknown tool names return a tool result error with text beginning
   `Unknown tool:`.
-- Direct `list_apps` `tools/call` probes timed out in this environment even
-  with a 20 second timeout. The schema was still captured from `tools/list`.
+- Direct `list_apps` `tools/call` probes timed out in this raw stdio probe
+  environment even with a 20 second timeout. The schema was still captured from
+  `tools/list`.
+- Later Codex-hosted `mcp__computer_use.list_apps` calls returned successfully
+  after restarting Codex, so the timeout is tracked as a direct-probe
+  hosted-context difference rather than a missing or unsupported native tool.

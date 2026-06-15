@@ -1,10 +1,14 @@
 # Computer Use State Model Discovery
 
 Date: 2026-06-12
+Updated: 2026-06-15
 
 Status: In progress, with raw native/proxy capture on hold. Codex-hosted state
 capture works for Calculator, TextEdit, Chrome, and Finder fixtures; direct
 stdio MCP probing and proxied hosted probing still time out after app approval.
+Milestone 6 now has an initial local macOS Accessibility reader that returns
+filtered `list_apps` output and a bounded JSON AX tree through the
+reimplementation MCP server.
 
 This document tracks Milestone 4: discovery of the observable shape and
 semantics of `get_app_state`.
@@ -62,7 +66,9 @@ currently does not return in the direct probe environment. The successful hosted
 calls indicate that the remaining direct-probe blocker is likely a Codex-hosted
 Computer Use app approval/session context that raw stdio probing does not fully
 emulate. Hosted Computer Use is now usable as the successful state oracle for
-Milestone 4 fixture discovery.
+Milestone 4 fixture discovery. The local Milestone 6 AX reader is a
+reimplementation path, not raw native CUA capture; it should be compared against
+the hosted fixture observations before claiming closer compatibility.
 
 ## Known MCP-Level Contract
 
@@ -122,6 +128,36 @@ The model still needs more fixtures to document:
 - element bounds and coordinate system;
 - error states for app unavailable, permission missing, and window unavailable.
 - repeated-capture element-index stability for unchanged layouts.
+
+## Local Reimplementation State Reader
+
+The initial Milestone 6 reader is implemented in `src/ax-state.swift` and wired
+through `src/mac-adapter.mjs` and `src/server.mjs`. A more focused
+implementation note is available in `docs/milestone-6-local-ax-reader.md`.
+
+Current behavior:
+
+- `list_apps` returns filtered user-facing running app metadata from
+  `NSWorkspace`, excluding helper, daemon, and XPC-style applications.
+- `get_app_state` resolves app name, bundle identifier, app path, executable
+  path, frontmost app aliases, and app bundle basename such as `Calculator`.
+- If an app is not running, the resolver tries known app bundle locations under
+  `/Applications` and `/System/Applications` before returning `Invalid app`.
+- The state payload includes app metadata, focused or first window title, a
+  bounded AX tree, node indexes, role/subrole/title/value/description/help,
+  enabled/focused/selected flags, position, size, actions, and available AX
+  attributes.
+- Screenshot capture and native CUA screenshot encoding are still out of scope
+  for this milestone and remain in the Milestone 7 area.
+- Native-style `list_apps` recent-app usage metadata is still out of scope for
+  the current local implementation.
+
+Validation:
+
+```bash
+npm run probe:local
+LOCAL_CUA_PROBE_APP=Calculator npm run probe:local
+```
 
 ## Fixture Plan
 

@@ -6,7 +6,7 @@ import path from "node:path";
 
 const serverPath = path.resolve("src/server.mjs");
 const outDir = path.resolve("reports");
-const requestTimeoutMs = Number(process.env.LOCAL_CUA_PROBE_TIMEOUT_MS || 5000);
+const requestTimeoutMs = Number(process.env.LOCAL_CUA_PROBE_TIMEOUT_MS || 20000);
 const samples = [];
 
 function record(entry) {
@@ -107,10 +107,10 @@ async function main() {
       name: "list_apps",
       arguments: {},
     });
-    const stubState = await server.request(4, "tools/call", {
+    const appState = await server.request(4, "tools/call", {
       name: "get_app_state",
       arguments: {
-        app: "Calculator",
+        app: process.env.LOCAL_CUA_PROBE_APP || "frontmost",
       },
     });
 
@@ -119,7 +119,7 @@ async function main() {
       toolCount: toolsList.result?.tools?.length || 0,
       toolNames: (toolsList.result?.tools || []).map((tool) => tool.name),
       listApps,
-      stubState,
+      appState,
     };
 
     await writeFile(
@@ -130,11 +130,15 @@ async function main() {
     if (report.toolCount !== 10) {
       throw new Error(`Expected 10 tools, got ${report.toolCount}`);
     }
-    if (!stubState.result?.isError) {
-      throw new Error("Expected get_app_state skeleton call to be a tool result error");
+    if (appState.result?.isError) {
+      throw new Error(`Expected get_app_state to succeed: ${appState.result.content?.[0]?.text}`);
+    }
+    const parsedState = JSON.parse(appState.result?.content?.[0]?.text || "{}");
+    if (!parsedState.tree || !parsedState.app) {
+      throw new Error("Expected get_app_state to return app metadata and an AX tree");
     }
 
-    console.log("Local MCP skeleton probe passed.");
+    console.log("Local MCP AX state probe passed.");
   } finally {
     server.child.stdin.end();
     server.child.kill("SIGTERM");

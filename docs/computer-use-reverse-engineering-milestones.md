@@ -1,6 +1,7 @@
 # Computer Use Reverse Engineering and Reimplementation Milestones
 
 Date: 2026-06-12
+Updated: 2026-06-15
 
 This document defines a practical milestone plan for reverse engineering and
 reimplementing a Computer Use-like local MCP server. The intended approach is
@@ -14,8 +15,10 @@ boundaries.
 
 ## Current Progress
 
-As of 2026-06-12, this project is holding the remaining raw native state-capture
-investigation and moving into the minimal reimplementation skeleton.
+As of 2026-06-15, this project is holding the remaining raw native
+state-capture investigation, has a working local macOS Accessibility reader,
+and is ready to proceed to screenshot/coordinate capture after the current
+documentation and implementation checkpoint is committed.
 
 ```text
 Milestone 0: Complete
@@ -24,14 +27,17 @@ Milestone 2: Complete
 Milestone 3: Complete
 Milestone 4: In progress, raw proxy/native capture blocker on hold
 Milestone 5: Complete
-Milestone 6-14: Not started
+Milestone 6: Initial implementation complete, fixture diffing still open
+Milestone 7-14: Not started
 ```
 
 Completed architecture discovery work is summarized in
 `docs/computer-use-architecture-report.md`. Completed MCP protocol discovery
-work is recorded under `protocol/`. Milestone 4 state model discovery is now in
-progress and tracked in `STATE_MODEL.md`. Milestone 5 has a local Node.js MCP
-skeleton under `src/`.
+work is recorded under `protocol/`. Milestone 4 state model discovery remains
+partially open and tracked in `STATE_MODEL.md`. Milestone 5 has a local Node.js
+MCP skeleton under `src/`. Milestone 6 now has a Swift Accessibility helper at
+`src/ax-state.swift`, wired through the Node MCP adapter. The implementation
+details are summarized in `docs/milestone-6-local-ax-reader.md`.
 
 ## Target Outcome
 
@@ -319,7 +325,12 @@ type_text
 Valid action calls remain intentionally deferred to later fixture milestones
 because they operate the real desktop. Direct `list_apps` `tools/call` probes
 timed out in this environment, and that behavior is recorded in
-`protocol/error-catalog.md`.
+`protocol/error-catalog.md`. That timeout is a direct raw-stdio probing
+limitation, not evidence that `list_apps` is absent or unusable: later
+Codex-hosted `mcp__computer_use.list_apps` calls returned successfully after
+the Codex app was restarted. Compatibility work should therefore treat
+`list_apps` as a supported read-only tool while keeping the raw direct-probe
+timeout as an unresolved hosted-context difference.
 
 ### Purpose
 
@@ -548,6 +559,15 @@ reports/local-mcp-skeleton-probe.jsonl
 
 ## Milestone 6: macOS Accessibility State Reader
 
+Status: Initial implementation complete as of 2026-06-15; fixture diffing
+against hosted native Computer Use remains open. A Swift helper at
+`src/ax-state.swift` can list filtered user-facing running apps, resolve app
+names/bundle IDs/paths, launch known app bundles when needed, and return a
+bounded AX tree for `get_app_state`. `npm run probe:local` verifies the local
+MCP path against a readable app, and
+`LOCAL_CUA_PROBE_APP=Calculator npm run probe:local` verifies the Calculator
+fixture path. See `docs/milestone-6-local-ax-reader.md`.
+
 ### Purpose
 
 Implement the core of `get_app_state`: app/window discovery and AX tree reading.
@@ -592,16 +612,23 @@ src/app-resolve.swift
 
 ### Verification Goals
 
-- Calculator state includes buttons with stable indexes and labels.
-- TextEdit state includes editable text areas.
+- Calculator state includes buttons with stable indexes and labels. Initial
+  local AX tree capture is working; fixture diffing against native CUA remains.
+- TextEdit state includes editable text areas. Local AX reader support is
+  implemented; fixture-specific diffing remains.
 - Chrome state includes address bar or page controls where AX exposes them.
-- Permission errors are clear and machine-readable.
+  Local AX reader support is implemented; browser-specific diffing remains.
+- Permission errors are clear and machine-readable for missing Accessibility
+  permission and helper failures.
 
 ### Deliverables
 
-- AX state helper.
-- State normalization layer.
-- Fixture comparisons against native CUA.
+- AX state helper. Initial implementation complete in `src/ax-state.swift`.
+- State normalization layer. Initial bounded JSON normalization is implemented
+  for role/title/value/description/position/size/actions/children.
+- Local `list_apps` implementation. Initial filtered running-app output is
+  implemented; native-style recent-app usage metadata remains open.
+- Fixture comparisons against native CUA remain open.
 
 ### Risks and Notes
 
