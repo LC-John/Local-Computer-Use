@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1458" height="1002" viewBox="0 0 1458 1002">
+  <title>文本编辑 bounds overlay</title>
+  <image href="local-m7-screenshot.png" x="0" y="0" width="1458" height="1002" preserveAspectRatio="none"/>
+  <g id="ax-bounds">
+<rect x="68.00" y="68.00" width="1322.00" height="866.00" fill="none" stroke="#ff3b30" stroke-width="2" opacity="0.85"><title>0: AXWindow _NS:34</title></rect>
+<rect x="68.00" y="124.00" width="1322.00" height="810.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>1: AXScrollArea _NS:8</title></rect>
+<rect x="68.00" y="124.00" width="1292.00" height="780.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>2: AXTextArea First Text View</title></rect>
+<rect x="66.00" y="902.00" width="1296.00" height="34.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>3: AXScrollBar _NS:24</title></rect>
+<rect x="1358.00" y="122.00" width="34.00" height="784.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>4: AXScrollBar _NS:27</title></rect>
+<rect x="80.00" y="80.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>5: AXButton</title></rect>
+<rect x="160.00" y="80.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>6: AXButton</title></rect>
+<rect x="162.00" y="80.00" width="28.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>7: AXGroup</title></rect>
+<rect x="162.00" y="80.00" width="28.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>8: AXGroup</title></rect>
+<rect x="120.00" y="80.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>9: AXButton</title></rect>
+<rect x="816.00" y="76.00" width="24.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>10: AXMenuButton 文稿操作</title></rect>
+<rect x="638.00" y="76.00" width="36.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>11: AXImage source.txt</title></rect>
+<rect x="676.00" y="78.00" width="142.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>12: AXStaticText source.txt</title></rect>
+  </g>
+</svg>

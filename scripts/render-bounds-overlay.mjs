@@ -3,8 +3,12 @@
 import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-const reportPath = path.resolve(process.argv[2] || "reports/local-mcp-skeleton-probe.json");
-const outputPath = path.resolve(process.argv[3] || "reports/latest-bounds-overlay.svg");
+const reportPath = path.resolve(
+  process.argv[2] || "reports/local-mcp-skeleton-probe.json",
+);
+const outputPath = path.resolve(
+  process.argv[3] || "reports/latest-bounds-overlay.svg",
+);
 
 function escapeXml(value) {
   return String(value ?? "")
@@ -31,13 +35,23 @@ function collectOverlayRects(state) {
   const screenshot = state.screenshot;
   const frame = screenshot.windowFrame;
   const scale = screenshot.displayScale;
+  const contentOrigin = screenshot.imageContentOrigin || {};
   const frameX = toFiniteNumber(frame?.x);
   const frameY = toFiniteNumber(frame?.y);
   const scaleX = toFiniteNumber(scale?.x);
   const scaleY = toFiniteNumber(scale?.y);
+  const originX = toFiniteNumber(contentOrigin.x) ?? 0;
+  const originY = toFiniteNumber(contentOrigin.y) ?? 0;
 
-  if (frameX === null || frameY === null || scaleX === null || scaleY === null) {
-    throw new Error("Screenshot metadata is missing windowFrame or displayScale");
+  if (
+    frameX === null ||
+    frameY === null ||
+    scaleX === null ||
+    scaleY === null
+  ) {
+    throw new Error(
+      "Screenshot metadata is missing windowFrame or displayScale",
+    );
   }
 
   const rects = [];
@@ -52,9 +66,10 @@ function collectOverlayRects(state) {
     const mapped = {
       index: node.index,
       role: node.role || "",
-      label: node.identifier || node.description || node.title || node.value || "",
-      x: (x - frameX) * scaleX,
-      y: (y - frameY) * scaleY,
+      label:
+        node.identifier || node.description || node.title || node.value || "",
+      x: (x - frameX) * scaleX + originX,
+      y: (y - frameY) * scaleY + originY,
       width: width * scaleX,
       height: height * scaleY,
     };
@@ -83,7 +98,9 @@ async function main() {
 
   const state = JSON.parse(rawState);
   if (state.screenshot?.status !== "captured") {
-    throw new Error(`Screenshot was not captured: ${JSON.stringify(state.screenshot)}`);
+    throw new Error(
+      `Screenshot was not captured: ${JSON.stringify(state.screenshot)}`,
+    );
   }
   await stat(state.screenshot.path);
 

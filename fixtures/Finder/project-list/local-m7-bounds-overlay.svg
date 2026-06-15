@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1976" height="1008" viewBox="0 0 1976 1008">
+  <title>访达 bounds overlay</title>
+  <image href="local-m7-screenshot.png" x="0" y="0" width="1976" height="1008" preserveAspectRatio="none"/>
+  <g id="ax-bounds">
+<rect x="68.00" y="68.00" width="1840.00" height="872.00" fill="none" stroke="#ff3b30" stroke-width="2" opacity="0.85"><title>0: AXWindow FinderWindow</title></rect>
+<rect x="68.00" y="68.00" width="1840.00" height="872.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>1: AXSplitGroup</title></rect>
+<rect x="68.00" y="172.00" width="352.00" height="768.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>2: AXScrollArea _NS:61</title></rect>
+<rect x="66.00" y="170.00" width="326.00" height="1486.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>3: AXOutline _NS:8</title></rect>
+<rect x="68.00" y="172.00" width="322.00" height="38.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>4: AXRow</title></rect>
+<rect x="88.00" y="172.00" width="282.00" height="38.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>5: AXCell</title></rect>
+<rect x="98.00" y="170.00" width="286.00" height="42.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>6: AXStaticText xSidebarHeader</title></rect>
+<rect x="68.00" y="210.00" width="322.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>7: AXRow</title></rect>
+<rect x="88.00" y="210.00" width="282.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>8: AXCell</title></rect>
+<rect x="146.00" y="220.00" width="210.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>9: AXStaticText 最近使用</title></rect>
+<rect x="103.00" y="228.00" width="34.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>10: AXImage 时钟</title></rect>
+<rect x="68.00" y="266.00" width="322.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>11: AXRow</title></rect>
+<rect x="88.00" y="266.00" width="282.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>12: AXCell</title></rect>
+<rect x="146.00" y="276.00" width="210.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>13: AXStaticText 应用程序</title></rect>
+<rect x="101.00" y="284.00" width="37.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>14: AXImage</title></rect>
+<rect x="68.00" y="322.00" width="322.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>15: AXRow</title></rect>
+<rect x="88.00" y="322.00" width="282.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>16: AXCell</title></rect>
+<rect x="146.00" y="332.00" width="210.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>17: AXStaticText 桌面</title></rect>
+<rect x="100.00" y="340.00" width="40.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>18: AXImage</title></rect>
+<rect x="68.00" y="378.00" width="322.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>19: AXRow</title></rect>
+<rect x="88.00" y="378.00" width="282.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>20: AXCell</title></rect>
+<rect x="146.00" y="388.00" width="210.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>21: AXStaticText 文稿</title></rect>
+<rect x="104.00" y="396.00" width="32.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>22: AXImage 文稿</title></rect>
+<rect x="68.00" y="434.00" width="322.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>23: AXRow</title></rect>
+<rect x="88.00" y="434.00" width="282.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>24: AXCell</title></rect>
+<rect x="146.00" y="444.00" width="210.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>25: AXStaticText 下载</title></rect>
+<rect x="103.00" y="452.00" width="34.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>26: AXImage 箭头向下圆圈</title></rect>
+<rect x="68.00" y="490.00" width="322.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>27: AXRow</title></rect>
+<rect x="88.00" y="490.00" width="282.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>28: AXCell</title></rect>
+<rect x="146.00" y="500.00" width="210.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>29: AXStaticText 图片</title></rect>
+<rect x="100.00" y="508.00" width="40.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>30: AXImage 照片</title></rect>
+<rect x="68.00" y="572.00" width="322.00" height="38.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>31: AXRow</title></rect>
+<rect x="88.00" y="572.00" width="282.00" height="38.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>32: AXCell</title></rect>
+<rect x="98.00" y="570.00" width="286.00" height="42.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>33: AXStaticText xSidebarHeader</title></rect>
+<rect x="68.00" y="610.00" width="322.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>34: AXRow</title></rect>
+<rect x="88.00" y="610.00" width="282.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>35: AXCell</title></rect>
+<rect x="146.00" y="620.00" width="172.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>36: AXStaticText iCloud云盘</title></rect>
+<rect x="100.00" y="628.00" width="40.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>37: AXImage iCloud</title></rect>
+<rect x="318.00" y="618.00" width="40.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>38: AXButton</title></rect>
+<rect x="68.00" y="666.00" width="322.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>39: AXRow</title></rect>
+<rect x="88.00" y="666.00" width="282.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>40: AXCell</title></rect>
+<rect x="146.00" y="676.00" width="210.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>41: AXStaticText 共享</title></rect>
+<rect x="98.00" y="684.00" width="39.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>42: AXImage 共享文件夹</title></rect>
+<rect x="68.00" y="748.00" width="322.00" height="38.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>43: AXRow</title></rect>
+<rect x="88.00" y="748.00" width="282.00" height="38.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>44: AXCell</title></rect>
+<rect x="98.00" y="746.00" width="286.00" height="42.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>45: AXStaticText xSidebarHeader</title></rect>
+<rect x="68.00" y="786.00" width="322.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>46: AXRow</title></rect>
+<rect x="88.00" y="786.00" width="282.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>47: AXCell</title></rect>
+<rect x="146.00" y="796.00" width="172.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>48: AXStaticText Codex Installer</title></rect>
+<rect x="100.00" y="804.00" width="40.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>49: AXImage</title></rect>
+<rect x="322.00" y="804.00" width="29.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>50: AXButton 推出</title></rect>
+<rect x="68.00" y="842.00" width="322.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>51: AXRow</title></rect>
+<rect x="88.00" y="842.00" width="282.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>52: AXCell</title></rect>
+<rect x="146.00" y="852.00" width="172.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>53: AXStaticText Verdent Dev 2.3.0-dev.11-arm64</title></rect>
+<rect x="100.00" y="860.00" width="40.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>54: AXImage</title></rect>
+<rect x="322.00" y="860.00" width="29.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>55: AXButton 推出</title></rect>
+<rect x="68.00" y="898.00" width="322.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>56: AXRow</title></rect>
+<rect x="88.00" y="898.00" width="282.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>57: AXCell</title></rect>
+<rect x="146.00" y="908.00" width="172.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>58: AXStaticText Docker</title></rect>
+<rect x="100.00" y="916.00" width="40.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>59: AXImage</title></rect>
+<rect x="322.00" y="916.00" width="29.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>60: AXButton 推出</title></rect>
+<rect x="68.00" y="954.00" width="322.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>61: AXRow</title></rect>
+<rect x="88.00" y="954.00" width="282.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>62: AXCell</title></rect>
+<rect x="146.00" y="964.00" width="172.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>63: AXStaticText Cursor Installer</title></rect>
+<rect x="100.00" y="972.00" width="40.00" height="22.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>64: AXImage</title></rect>
+<rect x="568.00" y="956.00" width="39.00" height="34.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>65: AXButton 推出</title></rect>
+<rect x="88.00" y="172.00" width="282.00" height="1482.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>110: AXColumn AutomaticTableColumnIdentifier.0</title></rect>
+<rect x="388.00" y="170.00" width="34.00" height="772.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>137: AXScrollBar _NS:70</title></rect>
+<rect x="390.00" y="176.00" width="30.00" height="393.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>138: AXValueIndicator</title></rect>
+<rect x="390.00" y="570.00" width="30.00" height="370.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>141: AXButton</title></rect>
+<rect x="390.00" y="172.00" width="30.00" height="4.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>142: AXButton</title></rect>
+<rect x="420.00" y="172.00" width="2.00" height="768.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>143: AXSplitter 176</title></rect>
+<rect x="422.00" y="68.00" width="1486.00" height="872.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>144: AXSplitGroup</title></rect>
+<rect x="422.00" y="172.00" width="1486.00" height="768.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>145: AXScrollArea _NS:188</title></rect>
+<rect x="420.00" y="170.00" width="1490.00" height="772.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>146: AXOutline ListView</title></rect>
+<rect x="422.00" y="182.00" width="1486.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>147: AXRow</title></rect>
+<rect x="422.00" y="182.00" width="1486.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>148: AXCell</title></rect>
+<rect x="514.00" y="182.00" width="48.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>149: AXStaticText 名称</title></rect>
+<rect x="1092.00" y="190.00" width="23.00" height="20.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>150: AXImage 向上移动</title></rect>
+<rect x="1142.00" y="182.00" width="92.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>151: AXStaticText 修改日期</title></rect>
+<rect x="1464.00" y="182.00" width="48.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>152: AXStaticText 大小</title></rect>
+<rect x="1658.00" y="182.00" width="48.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>153: AXStaticText 种类</title></rect>
+<rect x="422.00" y="182.00" width="1486.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>154: AXCell</title></rect>
+<rect x="422.00" y="182.00" width="1486.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>160: AXCell</title></rect>
+<rect x="422.00" y="182.00" width="1486.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>166: AXCell</title></rect>
+<rect x="422.00" y="238.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>172: AXRow</title></rect>
+<rect x="474.00" y="238.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>173: AXCell</title></rect>
+<rect x="474.00" y="242.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>174: AXImage</title></rect>
+<rect x="514.00" y="240.00" width="216.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>175: AXTextField 2d-game-starter</title></rect>
+<rect x="444.00" y="236.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>176: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="238.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>177: AXCell</title></rect>
+<rect x="1142.00" y="240.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>178: AXStaticText 2026年6月11日 15:20</title></rect>
+<rect x="1452.00" y="238.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>179: AXCell</title></rect>
+<rect x="1606.00" y="240.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>180: AXStaticText --</title></rect>
+<rect x="1646.00" y="238.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>181: AXCell</title></rect>
+<rect x="1658.00" y="240.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>182: AXStaticText 文件夹</title></rect>
+<rect x="422.00" y="278.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>183: AXRow</title></rect>
+<rect x="474.00" y="278.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>184: AXCell</title></rect>
+<rect x="474.00" y="282.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>185: AXImage</title></rect>
+<rect x="514.00" y="280.00" width="290.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>186: AXTextField architecture-showcase</title></rect>
+<rect x="444.00" y="276.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>187: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="278.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>188: AXCell</title></rect>
+<rect x="1142.00" y="280.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>189: AXStaticText 2026年6月11日 15:14</title></rect>
+<rect x="1452.00" y="278.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>190: AXCell</title></rect>
+<rect x="1606.00" y="280.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>191: AXStaticText --</title></rect>
+<rect x="1646.00" y="278.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>192: AXCell</title></rect>
+<rect x="1658.00" y="280.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>193: AXStaticText 文件夹</title></rect>
+<rect x="422.00" y="318.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>194: AXRow</title></rect>
+<rect x="474.00" y="318.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>195: AXCell</title></rect>
+<rect x="474.00" y="322.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>196: AXImage</title></rect>
+<rect x="514.00" y="320.00" width="194.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>197: AXTextField azuree-fashion</title></rect>
+<rect x="444.00" y="316.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>198: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="318.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>199: AXCell</title></rect>
+<rect x="1142.00" y="320.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>200: AXStaticText 2026年6月11日 15:14</title></rect>
+<rect x="1452.00" y="318.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>201: AXCell</title></rect>
+<rect x="1606.00" y="320.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>202: AXStaticText --</title></rect>
+<rect x="1646.00" y="318.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>203: AXCell</title></rect>
+<rect x="1658.00" y="320.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>204: AXStaticText 文件夹</title></rect>
+<rect x="422.00" y="358.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>205: AXRow</title></rect>
+<rect x="474.00" y="358.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>206: AXCell</title></rect>
+<rect x="474.00" y="362.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>207: AXImage</title></rect>
+<rect x="514.00" y="360.00" width="224.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>208: AXTextField crumb-and-moss</title></rect>
+<rect x="444.00" y="356.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>209: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="358.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>210: AXCell</title></rect>
+<rect x="1142.00" y="360.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>211: AXStaticText 2026年6月11日 15:14</title></rect>
+<rect x="1452.00" y="358.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>212: AXCell</title></rect>
+<rect x="1606.00" y="360.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>213: AXStaticText --</title></rect>
+<rect x="1646.00" y="358.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>214: AXCell</title></rect>
+<rect x="1658.00" y="360.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>215: AXStaticText 文件夹</title></rect>
+<rect x="422.00" y="398.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>216: AXRow</title></rect>
+<rect x="474.00" y="398.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>217: AXCell</title></rect>
+<rect x="474.00" y="402.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>218: AXImage</title></rect>
+<rect x="514.00" y="400.00" width="190.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>219: AXTextField french-fashion</title></rect>
+<rect x="444.00" y="396.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>220: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="398.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>221: AXCell</title></rect>
+<rect x="1142.00" y="400.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>222: AXStaticText 2026年6月11日 15:14</title></rect>
+<rect x="1452.00" y="398.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>223: AXCell</title></rect>
+<rect x="1606.00" y="400.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>224: AXStaticText --</title></rect>
+<rect x="1646.00" y="398.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>225: AXCell</title></rect>
+<rect x="1658.00" y="400.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>226: AXStaticText 文件夹</title></rect>
+<rect x="422.00" y="438.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>227: AXRow</title></rect>
+<rect x="474.00" y="438.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>228: AXCell</title></rect>
+<rect x="474.00" y="442.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>229: AXImage</title></rect>
+<rect x="514.00" y="440.00" width="208.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>230: AXTextField frontend-starter</title></rect>
+<rect x="444.00" y="436.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>231: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="438.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>232: AXCell</title></rect>
+<rect x="1142.00" y="440.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>233: AXStaticText 2026年6月11日 15:14</title></rect>
+<rect x="1452.00" y="438.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>234: AXCell</title></rect>
+<rect x="1606.00" y="440.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>235: AXStaticText --</title></rect>
+<rect x="1646.00" y="438.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>236: AXCell</title></rect>
+<rect x="1658.00" y="440.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>237: AXStaticText 文件夹</title></rect>
+<rect x="422.00" y="478.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>238: AXRow</title></rect>
+<rect x="474.00" y="478.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>239: AXCell</title></rect>
+<rect x="474.00" y="482.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>240: AXImage</title></rect>
+<rect x="514.00" y="480.00" width="206.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>241: AXTextField hallowen-studio</title></rect>
+<rect x="444.00" y="476.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>242: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="478.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>243: AXCell</title></rect>
+<rect x="1142.00" y="480.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>244: AXStaticText 2026年6月11日 15:14</title></rect>
+<rect x="1452.00" y="478.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>245: AXCell</title></rect>
+<rect x="1606.00" y="480.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>246: AXStaticText --</title></rect>
+<rect x="1646.00" y="478.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>247: AXCell</title></rect>
+<rect x="1658.00" y="480.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>248: AXStaticText 文件夹</title></rect>
+<rect x="422.00" y="518.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>249: AXRow</title></rect>
+<rect x="474.00" y="518.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>250: AXCell</title></rect>
+<rect x="474.00" y="522.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>251: AXImage</title></rect>
+<rect x="514.00" y="520.00" width="254.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>252: AXTextField japanese-hair-salon</title></rect>
+<rect x="444.00" y="516.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>253: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="518.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>254: AXCell</title></rect>
+<rect x="1142.00" y="520.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>255: AXStaticText 2026年6月11日 15:14</title></rect>
+<rect x="1452.00" y="518.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>256: AXCell</title></rect>
+<rect x="1606.00" y="520.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>257: AXStaticText --</title></rect>
+<rect x="1646.00" y="518.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>258: AXCell</title></rect>
+<rect x="1658.00" y="520.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>259: AXStaticText 文件夹</title></rect>
+<rect x="422.00" y="558.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>260: AXRow</title></rect>
+<rect x="474.00" y="558.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>261: AXCell</title></rect>
+<rect x="474.00" y="562.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>262: AXImage</title></rect>
+<rect x="514.00" y="560.00" width="192.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>263: AXTextField just-game-min</title></rect>
+<rect x="444.00" y="556.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>264: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="558.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>265: AXCell</title></rect>
+<rect x="1142.00" y="560.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>266: AXStaticText 2026年6月11日 15:14</title></rect>
+<rect x="1452.00" y="558.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>267: AXCell</title></rect>
+<rect x="1606.00" y="560.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>268: AXStaticText --</title></rect>
+<rect x="1646.00" y="558.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>269: AXCell</title></rect>
+<rect x="1658.00" y="560.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>270: AXStaticText 文件夹</title></rect>
+<rect x="422.00" y="598.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>271: AXRow</title></rect>
+<rect x="474.00" y="598.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>272: AXCell</title></rect>
+<rect x="474.00" y="602.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>273: AXImage</title></rect>
+<rect x="514.00" y="600.00" width="160.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>274: AXTextField mystic-tarot</title></rect>
+<rect x="444.00" y="596.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>275: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="598.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>276: AXCell</title></rect>
+<rect x="1142.00" y="600.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>277: AXStaticText 2026年6月11日 15:14</title></rect>
+<rect x="1452.00" y="598.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>278: AXCell</title></rect>
+<rect x="1606.00" y="600.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>279: AXStaticText --</title></rect>
+<rect x="1646.00" y="598.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>280: AXCell</title></rect>
+<rect x="1658.00" y="600.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>281: AXStaticText 文件夹</title></rect>
+<rect x="422.00" y="638.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>282: AXRow</title></rect>
+<rect x="474.00" y="638.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>283: AXCell</title></rect>
+<rect x="474.00" y="642.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>284: AXImage</title></rect>
+<rect x="514.00" y="640.00" width="156.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>285: AXTextField snow-game</title></rect>
+<rect x="444.00" y="636.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>286: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="638.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>287: AXCell</title></rect>
+<rect x="1142.00" y="640.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>288: AXStaticText 2026年6月11日 15:14</title></rect>
+<rect x="1452.00" y="638.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>289: AXCell</title></rect>
+<rect x="1606.00" y="640.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>290: AXStaticText --</title></rect>
+<rect x="1646.00" y="638.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>291: AXCell</title></rect>
+<rect x="1658.00" y="640.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>292: AXStaticText 文件夹</title></rect>
+<rect x="422.00" y="678.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>293: AXRow</title></rect>
+<rect x="474.00" y="678.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>294: AXCell</title></rect>
+<rect x="474.00" y="682.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>295: AXImage</title></rect>
+<rect x="514.00" y="680.00" width="218.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>296: AXTextField studio-flow-saas</title></rect>
+<rect x="444.00" y="676.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>297: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="678.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>298: AXCell</title></rect>
+<rect x="1142.00" y="680.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>299: AXStaticText 2026年6月11日 15:14</title></rect>
+<rect x="1452.00" y="678.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>300: AXCell</title></rect>
+<rect x="1606.00" y="680.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>301: AXStaticText --</title></rect>
+<rect x="1646.00" y="678.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>302: AXCell</title></rect>
+<rect x="1658.00" y="680.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>303: AXStaticText 文件夹</title></rect>
+<rect x="422.00" y="718.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>304: AXRow</title></rect>
+<rect x="474.00" y="718.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>305: AXCell</title></rect>
+<rect x="474.00" y="722.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>306: AXImage</title></rect>
+<rect x="514.00" y="720.00" width="210.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>307: AXTextField traffic-simulator</title></rect>
+<rect x="444.00" y="716.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>308: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="718.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>309: AXCell</title></rect>
+<rect x="1142.00" y="720.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>310: AXStaticText 2026年6月11日 15:20</title></rect>
+<rect x="1452.00" y="718.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>311: AXCell</title></rect>
+<rect x="1606.00" y="720.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>312: AXStaticText --</title></rect>
+<rect x="1646.00" y="718.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>313: AXCell</title></rect>
+<rect x="1658.00" y="720.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>314: AXStaticText 文件夹</title></rect>
+<rect x="422.00" y="758.00" width="1486.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>315: AXRow</title></rect>
+<rect x="474.00" y="758.00" width="684.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>316: AXCell</title></rect>
+<rect x="474.00" y="762.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>317: AXImage</title></rect>
+<rect x="514.00" y="760.00" width="86.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>318: AXTextField velore</title></rect>
+<rect x="444.00" y="756.00" width="30.00" height="44.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>319: AXDisclosureTriangle NSOutlineViewDisclosureButtonKey</title></rect>
+<rect x="1130.00" y="758.00" width="322.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>320: AXCell</title></rect>
+<rect x="1142.00" y="760.00" width="298.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>321: AXStaticText 2026年6月11日 15:14</title></rect>
+<rect x="1452.00" y="758.00" width="194.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>322: AXCell</title></rect>
+<rect x="1606.00" y="760.00" width="30.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>323: AXStaticText --</title></rect>
+<rect x="1646.00" y="758.00" width="230.00" height="40.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>324: AXCell</title></rect>
+<rect x="1658.00" y="760.00" width="82.00" height="36.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>325: AXStaticText 文件夹</title></rect>
+<rect x="442.00" y="172.00" width="688.00" height="768.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>326: AXColumn name</title></rect>
+<rect x="1130.00" y="172.00" width="322.00" height="768.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>342: AXColumn dateModified</title></rect>
+<rect x="1452.00" y="172.00" width="194.00" height="768.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>358: AXColumn size</title></rect>
+<rect x="1646.00" y="172.00" width="242.00" height="768.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>374: AXColumn kind</title></rect>
+<rect x="442.00" y="172.00" width="688.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>391: AXButton 名称</title></rect>
+<rect x="1130.00" y="172.00" width="322.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>392: AXButton 修改日期</title></rect>
+<rect x="1452.00" y="172.00" width="194.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>393: AXButton 大小</title></rect>
+<rect x="1646.00" y="172.00" width="242.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>394: AXButton 种类</title></rect>
+<rect x="68.00" y="68.00" width="1840.00" height="104.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>395: AXToolbar</title></rect>
+<rect x="438.00" y="68.00" width="152.00" height="104.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>396: AXGroup</title></rect>
+<rect x="444.00" y="90.00" width="140.00" height="60.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>397: AXGroup _NS:51</title></rect>
+<rect x="434.00" y="80.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>398: AXButton 返回</title></rect>
+<rect x="514.00" y="80.00" width="80.00" height="80.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>399: AXButton 前进</title></rect>
+<rect x="1208.00" y="68.00" width="118.00" height="104.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>400: AXGroup</title></rect>
+<rect x="1214.00" y="90.00" width="106.00" height="60.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>401: AXPopUpButton 为列表</title></rect>
+<rect x="1374.00" y="68.00" width="120.00" height="104.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>402: AXMenuButton 群组</title></rect>
+<rect x="1380.00" y="90.00" width="108.00" height="60.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>403: AXMenuButton _NS:179</title></rect>
+<rect x="1494.00" y="68.00" width="74.00" height="104.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>404: AXButton 共享</title></rect>
+<rect x="1568.00" y="68.00" width="82.00" height="104.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>405: AXButton 添加标签</title></rect>
+<rect x="1650.00" y="68.00" width="116.00" height="104.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>406: AXMenuButton 操作</title></rect>
+<rect x="1656.00" y="90.00" width="104.00" height="60.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>407: AXMenuButton _NS:33</title></rect>
+<rect x="1814.00" y="68.00" width="78.00" height="104.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>408: AXGroup</title></rect>
+<rect x="1821.00" y="90.00" width="65.00" height="60.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>409: AXButton 搜索</title></rect>
+<rect x="104.00" y="104.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>410: AXButton</title></rect>
+<rect x="184.00" y="104.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>411: AXButton</title></rect>
+<rect x="186.00" y="104.00" width="28.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>412: AXGroup</title></rect>
+<rect x="186.00" y="104.00" width="28.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>413: AXGroup</title></rect>
+<rect x="144.00" y="104.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>414: AXButton</title></rect>
+<rect x="590.00" y="68.00" width="618.00" height="104.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>415: AXStaticText templates</title></rect>
+  </g>
+</svg>

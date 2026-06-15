@@ -80,6 +80,8 @@ fixtures/TextEdit/plain-text/
 Current local reimplementation status:
 
 - Local AX reader support is implemented through `get_app_state`.
+- Local M7 screenshot and bounds overlay artifacts are captured in this fixture
+  directory.
 - Fixture-specific hosted/native diffing remains open.
 
 ### Safari or Chrome: Static Page
@@ -113,6 +115,8 @@ Current local reimplementation status:
 
 - Local AX reader support is implemented through `get_app_state`.
 - Browser AX trees can be noisy because tabs and page content are both exposed.
+- Local M7 screenshot and bounds overlay artifacts are captured in this fixture
+  directory against the deterministic static page.
 - Fixture-specific hosted/native diffing remains open.
 
 ### Finder: Simple Folder Window
@@ -144,6 +148,8 @@ fixtures/Finder/project-list/
 Current local reimplementation status:
 
 - Local AX reader support is implemented through `get_app_state`.
+- Local M7 screenshot and bounds overlay artifacts are captured in this fixture
+  directory.
 - Fixture-specific hosted/native diffing remains open.
 
 ## Phase 2: Safe Action Fixtures

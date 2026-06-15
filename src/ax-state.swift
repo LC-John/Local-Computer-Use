@@ -450,6 +450,82 @@ func rectFromWindowBounds(_ value: Any?) -> CGRect? {
     )
 }
 
+func intersectionArea(_ first: CGRect, _ second: CGRect) -> CGFloat {
+    let intersection = first.intersection(second)
+    if intersection.isNull || intersection.isEmpty {
+        return 0
+    }
+    return intersection.width * intersection.height
+}
+
+func displayScaleForWindow(_ windowBounds: CGRect?) -> [String: Any] {
+    guard let windowBounds else {
+        return [
+            "x": 0,
+            "y": 0,
+            "source": "unavailable",
+        ]
+    }
+
+    var count: UInt32 = 0
+    guard CGGetOnlineDisplayList(0, nil, &count) == .success, count > 0 else {
+        return [
+            "x": 0,
+            "y": 0,
+            "source": "online_display_unavailable",
+        ]
+    }
+
+    var displays = Array(repeating: CGDirectDisplayID(), count: Int(count))
+    guard CGGetOnlineDisplayList(count, &displays, &count) == .success else {
+        return [
+            "x": 0,
+            "y": 0,
+            "source": "online_display_unavailable",
+        ]
+    }
+
+    let bestDisplay = displays
+        .map { display -> (display: CGDirectDisplayID, bounds: CGRect, area: CGFloat) in
+            let bounds = CGDisplayBounds(display)
+            return (display, bounds, intersectionArea(windowBounds, bounds))
+        }
+        .max { lhs, rhs in lhs.area < rhs.area }
+
+    guard let selected = bestDisplay, selected.bounds.width > 0, selected.bounds.height > 0 else {
+        return [
+            "x": 0,
+            "y": 0,
+            "source": "display_match_unavailable",
+        ]
+    }
+
+    let matchedScreen = NSScreen.screens.first { screen in
+        guard let number = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber else {
+            return false
+        }
+        return number.uint32Value == selected.display
+    }
+    if let matchedScreen {
+        let scale = matchedScreen.backingScaleFactor
+        return [
+            "x": scale,
+            "y": scale,
+            "source": "ns_screen_backing_scale_factor",
+            "displayID": selected.display,
+            "displayBounds": rectDictionary(selected.bounds),
+        ]
+    }
+
+    return [
+        "x": CGFloat(CGDisplayPixelsWide(selected.display)) / selected.bounds.width,
+        "y": CGFloat(CGDisplayPixelsHigh(selected.display)) / selected.bounds.height,
+        "source": "core_graphics_display_fallback",
+        "displayID": selected.display,
+        "displayBounds": rectDictionary(selected.bounds),
+    ]
+}
+
 func windowInfoDictionaries(pid: pid_t) -> [[String: Any]] {
     guard let raw = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID),
           let windows = raw as? [[String: Any]]
@@ -579,8 +655,15 @@ func captureWindowScreenshot(app: NSRunningApplication, window: TargetWindow) ->
     let dimensions = imageDimensions(url) ?? (0, 0)
     let pixelWidth = dimensions.width
     let pixelHeight = dimensions.height
-    let scaleX = bounds?.width ?? 0 > 0 ? CGFloat(pixelWidth) / (bounds?.width ?? 1) : 0
-    let scaleY = bounds?.height ?? 0 > 0 ? CGFloat(pixelHeight) / (bounds?.height ?? 1) : 0
+    let captureScaleX = bounds?.width ?? 0 > 0 ? CGFloat(pixelWidth) / (bounds?.width ?? 1) : 0
+    let captureScaleY = bounds?.height ?? 0 > 0 ? CGFloat(pixelHeight) / (bounds?.height ?? 1) : 0
+    let displayScale = displayScaleForWindow(bounds)
+    let displayScaleX = displayScale["x"] as? CGFloat ?? 0
+    let displayScaleY = displayScale["y"] as? CGFloat ?? 0
+    let contentPixelWidth = (bounds?.width ?? 0) * displayScaleX
+    let contentPixelHeight = (bounds?.height ?? 0) * displayScaleY
+    let contentOriginX = max(0, (CGFloat(pixelWidth) - contentPixelWidth) / 2)
+    let contentOriginY = max(0, (CGFloat(pixelHeight) - contentPixelHeight) / 2)
 
     return [
         "status": "captured",
@@ -590,9 +673,17 @@ func captureWindowScreenshot(app: NSRunningApplication, window: TargetWindow) ->
         "width": pixelWidth,
         "height": pixelHeight,
         "windowFrame": bounds.map(rectDictionary) ?? [:],
-        "displayScale": [
-            "x": scaleX,
-            "y": scaleY,
+        "displayScale": displayScale,
+        "imageContentOrigin": [
+            "x": contentOriginX,
+            "y": contentOriginY,
+            "source": "centered_window_frame_within_screencapture_image",
+        ],
+        "captureScaleEstimate": [
+            "x": captureScaleX,
+            "y": captureScaleY,
+            "source": "screenshot_pixels_divided_by_window_frame",
+            "note": "May include window shadow or capture padding from screencapture -l",
         ],
         "coordinateSystem": [
             "windowFrame": "global_screen_points",

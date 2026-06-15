@@ -40,7 +40,7 @@ Observed state-model details:
 - DOM-visible content is represented as AX text, heading, input, and button
   nodes.
 - The fixture input appears as `文本栏 (settable, string) Fixture input,
-  Value: ready`.
+Value: ready`.
 - The selected browser tab is represented as a settable boolean tab node.
 - Existing Chrome profile tabs are included in the hosted state payload; notes
   intentionally omit that full tab list because it is unrelated to the fixture.
@@ -71,3 +71,26 @@ image payload is viewport-oriented.
 `screencapture`, not extracted from the hosted Computer Use image payload. They
 are full-display PNGs used only as visual evidence for the top and scrolled
 fixture window states.
+
+## Local M7 Reimplementation Capture
+
+`LOCAL_CUA_PROBE_APP='Google Chrome' npm run probe:local` passed on 2026-06-15
+and was saved with:
+
+```bash
+node scripts/save-m7-fixture.mjs reports/local-mcp-skeleton-probe.json fixtures/Chrome/static-page
+```
+
+Artifacts:
+
+```text
+local-m7-state.json
+local-m7-screenshot.png
+local-m7-bounds-overlay.svg
+```
+
+Manual visual review confirmed that `local-m7-screenshot.png` is nonblank and
+shows the deterministic `index.html` page above. The state payload title is
+`Computer Use Fixture Page - Google Chrome - huangzhao`, and the AX tree
+includes `Computer Use Fixture Page`, validating Chrome screenshot capture,
+scale metadata, and AX overlay generation against the intended fixture page.

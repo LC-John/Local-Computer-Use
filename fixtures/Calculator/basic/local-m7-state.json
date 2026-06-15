@@ -15,18 +15,37 @@
   },
   "ok": true,
   "screenshot": {
+    "captureScaleEstimate": {
+      "note": "May include window shadow or capture padding from screencapture -l",
+      "source": "screenshot_pixels_divided_by_window_frame",
+      "x": 2.686868686868687,
+      "y": 2.388571428571429
+    },
     "coordinateSystem": {
       "origin": "top_left",
       "screenshot": "image_pixels",
       "windowFrame": "global_screen_points"
     },
     "displayScale": {
-      "x": 2.686868686868687,
-      "y": 2.388571428571429
+      "displayBounds": {
+        "height": 1280,
+        "width": 1920,
+        "x": 0,
+        "y": 0
+      },
+      "displayID": 1,
+      "source": "ns_screen_backing_scale_factor",
+      "x": 2,
+      "y": 2
     },
     "encoding": "png_file",
     "height": 836,
-    "path": "/Users/lczhang/Documents/computer-use/fixtures/Calculator/basic/local-m7-screenshot.png",
+    "imageContentOrigin": {
+      "source": "centered_window_frame_within_screencapture_image",
+      "x": 68,
+      "y": 68
+    },
+    "path": "/Users/lczhang/Documents/computer-use/.build/screenshots/计算器-75929-1781495231400.png",
     "status": "captured",
     "width": 532,
     "windowFrame": {
@@ -35,7 +54,8 @@
       "x": 330,
       "y": 696
     },
-    "windowID": 75929
+    "windowID": 75929,
+    "fixturePath": "/Users/lczhang/Documents/computer-use/fixtures/Calculator/basic/local-m7-screenshot.png"
   },
   "source": "local-macos-accessibility",
   "tree": {

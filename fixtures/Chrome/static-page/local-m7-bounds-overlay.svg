@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="3662" height="2520" viewBox="0 0 3662 2520">
+  <title>Google Chrome bounds overlay</title>
+  <image href="local-m7-screenshot.png" x="0" y="0" width="3662" height="2520" preserveAspectRatio="none"/>
+  <g id="ax-bounds">
+<rect x="112.00" y="112.00" width="3438.00" height="2296.00" fill="none" stroke="#ff3b30" stroke-width="2" opacity="0.85"><title>0: AXWindow Computer Use Fixture Page - Google Chrome - huangzhao</title></rect>
+<rect x="112.00" y="112.00" width="3438.00" height="2296.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>1: AXGroup Computer Use Fixture Page - Google Chrome - huangzhao</title></rect>
+<rect x="112.00" y="112.00" width="3438.00" height="2296.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>2: AXGroup</title></rect>
+<rect x="112.00" y="112.00" width="3438.00" height="2296.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>3: AXGroup</title></rect>
+<rect x="112.00" y="112.00" width="3438.00" height="2296.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>4: AXGroup</title></rect>
+<rect x="112.00" y="192.00" width="3438.00" height="92.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>5: AXGroup</title></rect>
+<rect x="112.00" y="192.00" width="3438.00" height="92.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>6: AXToolbar</title></rect>
+<rect x="122.00" y="204.00" width="68.00" height="68.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>7: AXButton 返回</title></rect>
+<rect x="194.00" y="204.00" width="68.00" height="68.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>8: AXButton 前进</title></rect>
+<rect x="266.00" y="204.00" width="68.00" height="68.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>9: AXButton 重新加载</title></rect>
+<rect x="352.00" y="204.00" width="2662.00" height="68.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>10: AXGroup</title></rect>
+<rect x="362.00" y="214.00" width="112.00" height="48.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>11: AXPopUpButton 文件</title></rect>
+<rect x="490.00" y="214.00" width="2372.00" height="48.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>12: AXTextField 地址和搜索栏</title></rect>
+<rect x="2878.00" y="214.00" width="112.00" height="48.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>13: AXGroup</title></rect>
+<rect x="2878.00" y="214.00" width="48.00" height="48.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>14: AXButton 翻译</title></rect>
+<rect x="2942.00" y="214.00" width="48.00" height="48.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>15: AXButton 为此标签页添加书签</title></rect>
+<rect x="3032.00" y="204.00" width="68.00" height="68.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>17: AXGroup</title></rect>
+<rect x="3032.00" y="204.00" width="68.00" height="68.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>18: AXPopUpButton 扩展程序</title></rect>
+<rect x="3118.00" y="222.00" width="4.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>19: AXGroup</title></rect>
+<rect x="3140.00" y="204.00" width="68.00" height="68.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>20: AXButton huangzhao</title></rect>
+<rect x="3218.00" y="204.00" width="320.00" height="68.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>21: AXPopUpButton 有新版 Chrome 可用</title></rect>
+<rect x="112.00" y="284.00" width="3438.00" height="2124.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>22: AXGroup</title></rect>
+<rect x="112.00" y="284.00" width="3438.00" height="2124.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>23: AXGroup</title></rect>
+<rect x="112.00" y="286.00" width="3438.00" height="2122.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>24: AXGroup</title></rect>
+<rect x="112.00" y="286.00" width="3438.00" height="2122.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>25: AXWebArea Computer Use Fixture Page</title></rect>
+<rect x="192.00" y="366.00" width="1440.00" height="2042.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>26: AXGroup</title></rect>
+<rect x="112.00" y="284.00" width="3438.00" height="2.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>27: AXGroup</title></rect>
+<rect x="276.00" y="112.00" width="3274.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>28: AXTabGroup</title></rect>
+<rect x="276.00" y="112.00" width="3054.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>29: AXGroup</title></rect>
+<rect x="276.00" y="112.00" width="3054.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>30: AXGroup</title></rect>
+<rect x="276.00" y="112.00" width="86.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>31: AXRadioButton Echo uuidgen 输出 - 内存用量 - 707 MB</title></rect>
+<rect x="326.00" y="112.00" width="86.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>32: AXRadioButton APEX-SWE - 内存用量 - 184 MB</title></rect>
+<rect x="376.00" y="112.00" width="86.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>33: AXRadioButton Hippocratic AI Announces AI Front Door : One AI-Powered Entry Point for All of Healthcare</title></rect>
+<rect x="426.00" y="112.00" width="86.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>34: AXRadioButton codeck-frontend/claude-code</title></rect>
+<rect x="476.00" y="112.00" width="86.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>35: AXRadioButton feat: support skill(name) filtering in --allowed-tools by zhanghuangzhao_codeck · Pull Request #187 · codeck-frontend/verdent-agent</title></rect>
+<rect x="526.00" y="112.00" width="86.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>36: AXRadioButton K8s评测结果 - 飞书云文档</title></rect>
+<rect x="576.00" y="112.00" width="86.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>37: AXRadioButton Evaluating Skills</title></rect>
+<rect x="626.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>38: AXRadioButton Proxy 使用指南🧭 - 飞书云文档 - 内存用量 - 666 MB</title></rect>
+<rect x="674.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>39: AXRadioButton neo-swe-bench-cli/entryscripts/run_ts_agent.sh at main · codeck-algorithm/neo-swe-bench-cli</title></rect>
+<rect x="722.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>40: AXRadioButton 算法team todos - 飞书云文档 - 内存用量 - 669 MB</title></rect>
+<rect x="770.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>41: AXRadioButton Pull requests · codeck-frontend/verdent-agent</title></rect>
+<rect x="818.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>42: AXRadioButton Members - verdent | Modal</title></rect>
+<rect x="866.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>43: AXRadioButton ProgramBench: Can Language Models Rebuild Programs From Scratch?</title></rect>
+<rect x="914.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>44: AXRadioButton browser-use/browser-use: 🌐 Make websites accessible for AI agents. Automate tasks online with ease.</title></rect>
+<rect x="962.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>45: AXRadioButton Verdent AI</title></rect>
+<rect x="1010.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>46: AXRadioButton EvoClaw: Evaluating AI Agents on Continuous Software Evolution - 内存用量 - 507 MB</title></rect>
+<rect x="1058.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>47: AXRadioButton DeepSeek_V4.pdf</title></rect>
+<rect x="1106.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>48: AXRadioButton prod_trace - LangSmith - 内存用量 - 285 MB</title></rect>
+<rect x="1154.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>49: AXRadioButton HavoAI — Pay per request AI development IDE</title></rect>
+<rect x="1202.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>50: AXRadioButton verdent-builtin-skills/builtin-skills/verdent-image-cli at main · codeck-agent-skills/verdent-builtin-skills - 内存用量 - 322 MB</title></rect>
+<rect x="1250.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>51: AXRadioButton test: fix 10 failing provider tests for Bun-compat proxy refactor by zhanghuangzhao_codeck · Pull Request #5815 · codeck-frontend/verdent-deck</title></rect>
+<rect x="1298.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>52: AXRadioButton 新标签页</title></rect>
+<rect x="1346.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>53: AXRadioButton verdent-builtin-skills/builtin-skills/verdent-image-cli at main · codeck-agent-skills/verdent-builtin-skills</title></rect>
+<rect x="1394.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>54: AXRadioButton fenji_trace - LangSmith - 内存用量 - 371 MB</title></rect>
+<rect x="1442.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>55: AXRadioButton feat(cli): add OTel trace reporting for headless CLI runs by liruifeng_codeck · Pull Request #5902 · codeck-frontend/verdent-deck</title></rect>
+<rect x="1490.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>56: AXRadioButton 测评design - 飞书云文档 - 内存用量 - 501 MB</title></rect>
+<rect x="1538.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>57: AXRadioButton ELF: Embedded Language Flows</title></rect>
+<rect x="1586.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>58: AXRadioButton Apps - verdent | Modal - 内存用量 - 198 MB</title></rect>
+<rect x="1634.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>59: AXRadioButton VER-5802 Manager创建新Worker时重复派发General子任务</title></rect>
+<rect x="1682.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>60: AXRadioButton Verdent Eval Platform - 内存用量 - 155 MB</title></rect>
+<rect x="1730.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>61: AXRadioButton fenji_trace - LangSmith - 内存用量 - 403 MB</title></rect>
+<rect x="1778.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>62: AXRadioButton datacurve-ai/pier: Harbor-compatible framework for evaluating coding agents in sandboxed environments</title></rect>
+<rect x="1826.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>63: AXRadioButton deep-swe/tasks/abs-module-cache-flags/environment/Dockerfile at main · datacurve-ai/deep-swe</title></rect>
+<rect x="1874.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>64: AXRadioButton Verdent Eval Platform - 内存用量 - 27.4 MB</title></rect>
+<rect x="1922.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>65: AXRadioButton 前端还原效果评测规则 - 飞书云文档 - 内存用量 - 580 MB</title></rect>
+<rect x="1970.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>66: AXRadioButton Verdent Eval Platform - 内存用量 - 119 MB</title></rect>
+<rect x="2018.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>67: AXRadioButton feat: add human eval scoring by zhanghuangzhao_codeck · Pull Request #131 · codeck-backend/verdent-evaluation</title></rect>
+<rect x="2066.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>68: AXRadioButton VER-6103 fork后会话历史丢失</title></rect>
+<rect x="2114.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>69: AXRadioButton prod_trace - LangSmith - 内存用量 - 324 MB</title></rect>
+<rect x="2162.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>70: AXRadioButton Proxy 使用指南🧭 - 飞书云文档 - 内存用量 - 549 MB</title></rect>
+<rect x="2210.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>71: AXRadioButton Verdent Eval Platform - 内存用量 - 183 MB</title></rect>
+<rect x="2258.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>72: AXRadioButton verdent-eval/design_eval_20260604_0654_fb926f6d/attempt1/ayda-ai/workspace.tar.gz - S3 存储桶 verdent.tech 中的对象 | S3 | us-east-1</title></rect>
+<rect x="2306.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>73: AXRadioButton goharbor/harbor: An open source trusted cloud native registry project that stores, signs, and scans content.</title></rect>
+<rect x="2354.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>74: AXRadioButton Terminal-Bench 2.1</title></rect>
+<rect x="2402.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>75: AXRadioButton Verdent Eval Platform - 内存用量 - 166 MB</title></rect>
+<rect x="2450.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>76: AXRadioButton codeck-agent-skills/verdent-builtin-templates at frontend-starter</title></rect>
+<rect x="2498.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>77: AXRadioButton Remix of Architect Portfolio Website Template - Lovable - 内存用量 - 228 MB</title></rect>
+<rect x="2546.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>78: AXRadioButton 收件箱 (861) - zhanghuangzhao@gmail.com - Gmail - 内存用量 - 328 MB</title></rect>
+<rect x="2594.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>79: AXRadioButton Verdent Eval Platform - 内存用量 - 123 MB</title></rect>
+<rect x="2642.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>80: AXRadioButton 算法team todos - 飞书云文档 - 内存用量 - 597 MB</title></rect>
+<rect x="2690.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>81: AXRadioButton Verdent Eval Platform</title></rect>
+<rect x="2738.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>82: AXRadioButton codeck-frontend/verdent-deck at feat/api_product_in_deck</title></rect>
+<rect x="2786.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>83: AXRadioButton SWE-Marathon: Can Agents Autonomously Complete Ultra-Long-Horizon Software Work?</title></rect>
+<rect x="2834.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>84: AXRadioButton Verdent Eval Platform</title></rect>
+<rect x="2882.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>85: AXRadioButton Proxy 使用指南🧭 - 飞书云文档 - 内存用量 - 756 MB</title></rect>
+<rect x="2930.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>86: AXRadioButton Computer Use Fixture Page</title></rect>
+<rect x="2978.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>87: AXRadioButton Verdent Eval Platform - 内存用量 - 118 MB</title></rect>
+<rect x="3026.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>88: AXRadioButton feat: gate BYOK base URL and advisor config by zhanghuangzhao_codeck · Pull Request #8109 · codeck-frontend/verdent-deck</title></rect>
+<rect x="3074.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>89: AXRadioButton 账户 | AWS access portal</title></rect>
+<rect x="3122.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>90: AXRadioButton 北京大学邮件系统</title></rect>
+<rect x="3170.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>91: AXRadioButton GitHub</title></rect>
+<rect x="3218.00" y="112.00" width="112.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>92: AXRadioButton Computer Use Fixture Page</title></rect>
+<rect x="3246.00" y="124.00" width="56.00" height="56.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>93: AXButton 关闭</title></rect>
+<rect x="276.00" y="112.00" width="3054.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>94: AXGroup</title></rect>
+<rect x="3318.00" y="112.00" width="56.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>95: AXButton 新标签页</title></rect>
+<rect x="3398.00" y="112.00" width="84.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>96: AXGroup</title></rect>
+<rect x="3482.00" y="112.00" width="56.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>97: AXGroup</title></rect>
+<rect x="3482.00" y="112.00" width="56.00" height="82.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>98: AXPopUpButton 搜索标签页</title></rect>
+<rect x="150.00" y="137.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>100: AXButton</title></rect>
+<rect x="230.00" y="137.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>101: AXButton</title></rect>
+<rect x="232.00" y="137.00" width="28.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>102: AXGroup</title></rect>
+<rect x="232.00" y="138.00" width="28.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>103: AXGroup</title></rect>
+<rect x="190.00" y="137.00" width="32.00" height="32.00" fill="none" stroke="#0a84ff" stroke-width="2" opacity="0.85"><title>104: AXButton</title></rect>
+  </g>
+</svg>

@@ -51,3 +51,24 @@ Representative list excerpt:
 `screenshot.png` was captured with local `screencapture`, not extracted from the
 hosted Computer Use image payload. It is a full-display PNG used only as visual
 evidence for the fixture window.
+
+## Local M7 Reimplementation Capture
+
+`LOCAL_CUA_PROBE_APP=Finder npm run probe:local` passed on 2026-06-15 and was
+saved with:
+
+```bash
+node scripts/save-m7-fixture.mjs reports/local-mcp-skeleton-probe.json fixtures/Finder/project-list
+```
+
+Artifacts:
+
+```text
+local-m7-state.json
+local-m7-screenshot.png
+local-m7-bounds-overlay.svg
+```
+
+The local resolver accepted the English app request and resolved the localized
+app name `访达`. Manual visual review confirmed that
+`local-m7-screenshot.png` is nonblank and shows a Finder list-view window.

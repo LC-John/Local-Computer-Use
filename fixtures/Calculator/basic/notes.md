@@ -76,7 +76,7 @@ screenshot, and an AX-bounds overlay:
 
 ```bash
 LOCAL_CUA_PROBE_APP=Calculator npm run probe:local
-npm run overlay:latest
+node scripts/save-m7-fixture.mjs reports/local-mcp-skeleton-probe.json fixtures/Calculator/basic
 ```
 
 Current local M7 fixture files:
