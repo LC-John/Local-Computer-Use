@@ -1,0 +1,6 @@
+{
+  "app": "/System/Applications/Calculator.app",
+  "caseName": "m4-app-path",
+  "timeoutMs": 30000,
+  "error": "Timed out waiting for response id 2"
+}

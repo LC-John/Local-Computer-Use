@@ -42,14 +42,15 @@ Milestone 14: Complete for first native-version tracking baseline
 Completed architecture discovery work is summarized in
 `docs/computer-use-architecture-report.md`. Completed MCP protocol discovery
 work is recorded under `protocol/`. Milestone 4 state model discovery remains
-partially open and tracked in `STATE_MODEL.md`. Milestone 5 has a local Node.js
-MCP skeleton under `src/`. Milestone 6 now has a Swift Accessibility helper at
-`src/ax-state.swift`, wired through the Node MCP adapter. The implementation
-details are summarized in `docs/milestone-6-local-ax-reader.md`. Milestone 7
-adds target-window PNG capture and coordinate metadata through the same helper;
-see `docs/milestone-7-screenshot-coordinate-capture.md`. Milestone 8 has
-initial implementations for all action tools plus Calculator, TextEdit, Chrome,
-and Finder acceptance probes; see `docs/milestone-8-action-tools.md`.
+partially open and tracked in `STATE_MODEL.md`; the latest closure attempt is
+recorded in `docs/milestone-4-closure-attempt.md`. Milestone 5 has a local
+Node.js MCP skeleton under `src/`. Milestone 6 now has a Swift Accessibility
+helper at `src/ax-state.swift`, wired through the Node MCP adapter. The
+implementation details are summarized in `docs/milestone-6-local-ax-reader.md`.
+Milestone 7 adds target-window PNG capture and coordinate metadata through the
+same helper; see `docs/milestone-7-screenshot-coordinate-capture.md`. Milestone
+8 has initial implementations for all action tools plus Calculator, TextEdit,
+Chrome, and Finder acceptance probes; see `docs/milestone-8-action-tools.md`.
 Milestone 9 adds resolved app identity, app policy, persisted approvals, manual
 approval CLI, and permission checks before native helper execution; see
 `docs/milestone-9-permission-approval-model.md`.
@@ -437,6 +438,11 @@ Discover the observable MCP contract exposed by the native Computer Use client.
   running service.
 
 ## Milestone 4: State Model Discovery
+
+Status: In progress. A 2026-06-15 closure attempt reconfirmed that official
+hosted Computer Use state capture works, but raw native/proxy `get_app_state`
+still times out after app approval for app name, bundle identifier, and app path
+inputs. See `docs/milestone-4-closure-attempt.md`.
 
 ### Purpose
 

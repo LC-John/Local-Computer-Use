@@ -1,0 +1,6 @@
+{
+  "app": "Calculator",
+  "caseName": "m4-after-cleanup",
+  "timeoutMs": 45000,
+  "error": "Timed out waiting for response id 2"
+}

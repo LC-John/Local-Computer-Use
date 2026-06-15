@@ -1,0 +1,6 @@
+{
+  "app": "com.apple.calculator",
+  "caseName": "m4-bundle-id",
+  "timeoutMs": 30000,
+  "error": "Timed out waiting for response id 2"
+}

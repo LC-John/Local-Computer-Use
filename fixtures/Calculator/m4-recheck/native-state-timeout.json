@@ -1,0 +1,6 @@
+{
+  "app": "Calculator",
+  "caseName": "m4-recheck",
+  "timeoutMs": 90000,
+  "error": "Timed out waiting for response id 2"
+}

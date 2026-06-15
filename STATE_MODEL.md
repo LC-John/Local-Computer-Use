@@ -11,6 +11,14 @@ filtered `list_apps` output and a bounded JSON AX tree through the
 reimplementation MCP server. Milestone 7 adds local target-window screenshot
 capture and coordinate metadata to the same `get_app_state` payload.
 
+Latest M4 closure attempt: 2026-06-15. Direct native `get_app_state` was
+retried with app name, bundle identifier, and app path variants after cleaning
+stale orphan proxy/client processes; all variants still timed out after
+elicitation approval. The official hosted Computer Use tool returned Calculator
+state successfully in the same Codex context, while the proxy-hosted tool still
+timed out. See `docs/milestone-4-closure-attempt.md` and
+`reports/m4-closure-attempt.json`.
+
 This document tracks Milestone 4: discovery of the observable shape and
 semantics of `get_app_state`.
 

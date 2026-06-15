@@ -1,0 +1,6 @@
+{"timestamp":"2026-06-15T12:54:21.032Z","phase":"request","request":{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"native-state-probe","version":"0.1.0"}}}}
+{"timestamp":"2026-06-15T12:54:21.139Z","phase":"response","response":{"id":1,"jsonrpc":"2.0","result":{"capabilities":{"tools":{"listChanged":false}},"protocolVersion":"2025-03-26","serverInfo":{"name":"Computer Use","version":"d10a51766bb4d162ef1eed308e86a0f8f3816fb860896cb92c18e6de998142af"}}}}
+{"timestamp":"2026-06-15T12:54:21.139Z","phase":"request","request":{"jsonrpc":"2.0","method":"notifications/initialized"}}
+{"timestamp":"2026-06-15T12:54:21.139Z","phase":"request","request":{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"get_app_state","arguments":{"app":"com.apple.calculator"}}}}
+{"timestamp":"2026-06-15T12:54:21.213Z","phase":"response","response":{"id":"040F626E-536E-4639-9981-B50F7ABE2EAC","jsonrpc":"2.0","method":"elicitation/create","params":{"_meta":{"persist":["always"]},"message":"Allow Codex to use Calculator?","requestedSchema":{"properties":{},"type":"object"}}}}
+{"timestamp":"2026-06-15T12:54:51.152Z","phase":"probe_error","message":"Timed out waiting for response id 2"}
