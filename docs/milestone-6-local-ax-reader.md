@@ -3,7 +3,7 @@
 Date: 2026-06-15
 
 Status: Initial implementation complete; fixture diffing against hosted native
-Computer Use remains open.
+Computer Use remains open. Screenshot capture was added later in Milestone 7.
 
 This document summarizes the local reimplementation work completed for
 Milestone 6. The goal of this milestone is to make the local MCP server return
@@ -146,7 +146,8 @@ Local MCP AX state probe passed.
 
 ## Known Gaps
 
-- Screenshot capture is not implemented yet; it belongs to Milestone 7.
+- Screenshot capture is outside the Milestone 6 AX reader boundary and is
+  documented separately in `docs/milestone-7-screenshot-coordinate-capture.md`.
 - Native Computer Use screenshot encoding is still unknown.
 - Local `list_apps` does not yet include native-style last-used dates or usage
   counts.

@@ -1,6 +1,8 @@
 import AppKit
 import ApplicationServices
 import Foundation
+import ImageIO
+import UniformTypeIdentifiers
 
 let maxDepth = 9
 let maxNodes = 1200
@@ -10,10 +12,30 @@ struct ToolError: Error {
     let message: String
 }
 
+struct TargetWindow {
+    let element: AXUIElement
+    let title: String?
+    let position: [String: Any]?
+    let size: [String: Any]?
+}
+
 func writeJSON(_ value: Any) throws {
     let data = try JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted, .sortedKeys])
     FileHandle.standardOutput.write(data)
     FileHandle.standardOutput.write(Data("\n".utf8))
+}
+
+func sanitizeFilenamePart(_ value: String) -> String {
+    let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "-_."))
+    let scalars = value.unicodeScalars.map { scalar -> Character in
+        allowed.contains(scalar) ? Character(scalar) : "-"
+    }
+    let collapsed = String(scalars).replacingOccurrences(
+        of: "-+",
+        with: "-",
+        options: .regularExpression
+    )
+    return String(collapsed.prefix(80)).trimmingCharacters(in: CharacterSet(charactersIn: "-"))
 }
 
 func fail(_ code: String, _ message: String, status: Int32 = 1) -> Never {
@@ -364,24 +386,220 @@ func readElement(
     return node
 }
 
-func focusedWindowOrAppElement(pid: pid_t) -> (AXUIElement, String?) {
+func focusedWindowOrAppElement(pid: pid_t) -> TargetWindow {
     let appElement = AXUIElementCreateApplication(pid)
     if let focusedWindow = copyAttribute(appElement, kAXFocusedWindowAttribute),
        CFGetTypeID(focusedWindow) == AXUIElementGetTypeID()
     {
-        let title = scalarAttribute(focusedWindow as! AXUIElement, kAXTitleAttribute) as? String
-        return (focusedWindow as! AXUIElement, title)
+        let element = focusedWindow as! AXUIElement
+        let title = scalarAttribute(element, kAXTitleAttribute) as? String
+        return TargetWindow(
+            element: element,
+            title: title,
+            position: scalarAttribute(element, kAXPositionAttribute) as? [String: Any],
+            size: scalarAttribute(element, kAXSizeAttribute) as? [String: Any]
+        )
     }
 
     if let rawWindows = copyAttribute(appElement, kAXWindowsAttribute),
        let windows = rawWindows as? [AnyObject],
        let firstWindow = windows.first(where: { CFGetTypeID($0) == AXUIElementGetTypeID() })
     {
-        let title = scalarAttribute(firstWindow as! AXUIElement, kAXTitleAttribute) as? String
-        return (firstWindow as! AXUIElement, title)
+        let element = firstWindow as! AXUIElement
+        let title = scalarAttribute(element, kAXTitleAttribute) as? String
+        return TargetWindow(
+            element: element,
+            title: title,
+            position: scalarAttribute(element, kAXPositionAttribute) as? [String: Any],
+            size: scalarAttribute(element, kAXSizeAttribute) as? [String: Any]
+        )
     }
 
-    return (appElement, nil)
+    return TargetWindow(
+        element: appElement,
+        title: nil,
+        position: scalarAttribute(appElement, kAXPositionAttribute) as? [String: Any],
+        size: scalarAttribute(appElement, kAXSizeAttribute) as? [String: Any]
+    )
+}
+
+func rectDictionary(_ rect: CGRect) -> [String: Any] {
+    [
+        "x": rect.origin.x,
+        "y": rect.origin.y,
+        "width": rect.size.width,
+        "height": rect.size.height,
+    ]
+}
+
+func rectFromWindowBounds(_ value: Any?) -> CGRect? {
+    guard let dictionary = value as? [String: Any],
+          let x = dictionary["X"] as? NSNumber,
+          let y = dictionary["Y"] as? NSNumber,
+          let width = dictionary["Width"] as? NSNumber,
+          let height = dictionary["Height"] as? NSNumber
+    else {
+        return nil
+    }
+
+    return CGRect(
+        x: CGFloat(truncating: x),
+        y: CGFloat(truncating: y),
+        width: CGFloat(truncating: width),
+        height: CGFloat(truncating: height)
+    )
+}
+
+func windowInfoDictionaries(pid: pid_t) -> [[String: Any]] {
+    guard let raw = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID),
+          let windows = raw as? [[String: Any]]
+    else {
+        return []
+    }
+
+    return windows.filter { info in
+        guard let ownerPID = info[kCGWindowOwnerPID as String] as? NSNumber,
+              ownerPID.int32Value == pid,
+              let layer = info[kCGWindowLayer as String] as? NSNumber,
+              layer.intValue == 0,
+              let bounds = rectFromWindowBounds(info[kCGWindowBounds as String]),
+              bounds.width > 0,
+              bounds.height > 0
+        else {
+            return false
+        }
+        return true
+    }
+}
+
+func bestWindowInfo(pid: pid_t, title: String?) -> [String: Any]? {
+    let windows = windowInfoDictionaries(pid: pid)
+    guard !windows.isEmpty else {
+        return nil
+    }
+
+    if let title, !title.isEmpty {
+        if let exact = windows.first(where: {
+            ($0[kCGWindowName as String] as? String) == title
+        }) {
+            return exact
+        }
+        if let fuzzy = windows.first(where: {
+            guard let name = $0[kCGWindowName as String] as? String else {
+                return false
+            }
+            return name.contains(title) || title.contains(name)
+        }) {
+            return fuzzy
+        }
+    }
+
+    return windows.first
+}
+
+func runScreenshotCommand(windowID: CGWindowID, outputURL: URL) -> Bool {
+    let process = Process()
+    process.executableURL = URL(fileURLWithPath: "/usr/sbin/screencapture")
+    process.arguments = [
+        "-x",
+        "-l",
+        String(windowID),
+        outputURL.path,
+    ]
+
+    do {
+        try process.run()
+        process.waitUntilExit()
+        return process.terminationStatus == 0 &&
+            FileManager.default.fileExists(atPath: outputURL.path)
+    } catch {
+        return false
+    }
+}
+
+func imageDimensions(_ url: URL) -> (width: Int, height: Int)? {
+    guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
+          let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
+          let width = properties[kCGImagePropertyPixelWidth as String] as? NSNumber,
+          let height = properties[kCGImagePropertyPixelHeight as String] as? NSNumber
+    else {
+        return nil
+    }
+
+    return (width.intValue, height.intValue)
+}
+
+func captureWindowScreenshot(app: NSRunningApplication, window: TargetWindow) -> [String: Any] {
+    guard let info = bestWindowInfo(pid: app.processIdentifier, title: window.title),
+          let windowNumber = info[kCGWindowNumber as String] as? NSNumber
+    else {
+        return [
+            "status": "unavailable",
+            "error": [
+                "code": "window_not_found",
+                "message": "No on-screen window was found for screenshot capture",
+            ],
+        ]
+    }
+
+    let windowID = CGWindowID(truncating: windowNumber)
+    let screenshotDir = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+        .appendingPathComponent(".build", isDirectory: true)
+        .appendingPathComponent("screenshots", isDirectory: true)
+    do {
+        try FileManager.default.createDirectory(at: screenshotDir, withIntermediateDirectories: true)
+    } catch {
+        return [
+            "status": "unavailable",
+            "windowID": windowID,
+            "error": [
+                "code": "screenshot_directory_failed",
+                "message": error.localizedDescription,
+            ],
+        ]
+    }
+
+    let appName = sanitizeFilenamePart(app.localizedName ?? app.bundleIdentifier ?? "app")
+    let timestamp = Int(Date().timeIntervalSince1970 * 1000)
+    let filename = "\(appName)-\(windowID)-\(timestamp).png"
+    let url = screenshotDir.appendingPathComponent(filename)
+
+    guard runScreenshotCommand(windowID: windowID, outputURL: url) else {
+        return [
+            "status": "unavailable",
+            "windowID": windowID,
+            "error": [
+                "code": "screenshot_capture_failed",
+                "message": "Unable to capture window PNG; Screen Recording permission may be required",
+            ],
+        ]
+    }
+
+    let bounds = rectFromWindowBounds(info[kCGWindowBounds as String])
+    let dimensions = imageDimensions(url) ?? (0, 0)
+    let pixelWidth = dimensions.width
+    let pixelHeight = dimensions.height
+    let scaleX = bounds?.width ?? 0 > 0 ? CGFloat(pixelWidth) / (bounds?.width ?? 1) : 0
+    let scaleY = bounds?.height ?? 0 > 0 ? CGFloat(pixelHeight) / (bounds?.height ?? 1) : 0
+
+    return [
+        "status": "captured",
+        "path": url.path,
+        "encoding": "png_file",
+        "windowID": windowID,
+        "width": pixelWidth,
+        "height": pixelHeight,
+        "windowFrame": bounds.map(rectDictionary) ?? [:],
+        "displayScale": [
+            "x": scaleX,
+            "y": scaleY,
+        ],
+        "coordinateSystem": [
+            "windowFrame": "global_screen_points",
+            "screenshot": "image_pixels",
+            "origin": "top_left",
+        ],
+    ]
 }
 
 func appState(_ query: String) throws -> [String: Any] {
@@ -393,10 +611,11 @@ func appState(_ query: String) throws -> [String: Any] {
     }
 
     let app = try resolveApp(query)
-    let (rootElement, windowTitle) = focusedWindowOrAppElement(pid: app.processIdentifier)
+    let targetWindow = focusedWindowOrAppElement(pid: app.processIdentifier)
     var counter = 0
     var visited = Set<CFHashCode>()
-    let tree = readElement(rootElement, depth: 0, counter: &counter, visited: &visited)
+    let tree = readElement(targetWindow.element, depth: 0, counter: &counter, visited: &visited)
+    let screenshot = captureWindowScreenshot(app: app, window: targetWindow)
 
     return [
         "ok": true,
@@ -411,8 +630,11 @@ func appState(_ query: String) throws -> [String: Any] {
             "isHidden": app.isHidden,
         ],
         "window": [
-            "title": windowTitle ?? "",
+            "title": targetWindow.title ?? "",
+            "position": targetWindow.position ?? [:],
+            "size": targetWindow.size ?? [:],
         ],
+        "screenshot": screenshot,
         "limits": [
             "maxDepth": maxDepth,
             "maxNodes": maxNodes,

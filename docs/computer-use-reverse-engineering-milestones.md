@@ -17,8 +17,7 @@ boundaries.
 
 As of 2026-06-15, this project is holding the remaining raw native
 state-capture investigation, has a working local macOS Accessibility reader,
-and is ready to proceed to screenshot/coordinate capture after the current
-documentation and implementation checkpoint is committed.
+and has an initial local screenshot/coordinate capture path.
 
 ```text
 Milestone 0: Complete
@@ -28,7 +27,8 @@ Milestone 3: Complete
 Milestone 4: In progress, raw proxy/native capture blocker on hold
 Milestone 5: Complete
 Milestone 6: Initial implementation complete, fixture diffing still open
-Milestone 7-14: Not started
+Milestone 7: Initial implementation complete, overlay/coordinate validation open
+Milestone 8-14: Not started
 ```
 
 Completed architecture discovery work is summarized in
@@ -37,7 +37,9 @@ work is recorded under `protocol/`. Milestone 4 state model discovery remains
 partially open and tracked in `STATE_MODEL.md`. Milestone 5 has a local Node.js
 MCP skeleton under `src/`. Milestone 6 now has a Swift Accessibility helper at
 `src/ax-state.swift`, wired through the Node MCP adapter. The implementation
-details are summarized in `docs/milestone-6-local-ax-reader.md`.
+details are summarized in `docs/milestone-6-local-ax-reader.md`. Milestone 7
+adds target-window PNG capture and coordinate metadata through the same helper;
+see `docs/milestone-7-screenshot-coordinate-capture.md`.
 
 ## Target Outcome
 
@@ -638,21 +640,31 @@ src/app-resolve.swift
 
 ## Milestone 7: Screenshot and Coordinate Capture
 
+Status: Initial implementation complete as of 2026-06-15; overlay tooling,
+multi-display validation, and click-coordinate validation remain open.
+`get_app_state` now includes a `screenshot` object with a PNG file path,
+dimensions, CoreGraphics window ID, window frame, display-scale estimate, and
+coordinate-system notes. See
+`docs/milestone-7-screenshot-coordinate-capture.md`.
+
 ### Purpose
 
 Add visual state so agents can reason about UI even when AX data is incomplete.
 
 ### Work Items
 
-- Capture target window screenshot.
+- Capture target window screenshot. Initial implementation complete via
+  `/usr/sbin/screencapture -x -l <windowID>`.
 - Capture metadata:
-  - screenshot width and height;
-  - window frame;
-  - display scale;
-  - screen origin;
-  - app/window identifier.
+  - screenshot width and height; initial implementation complete.
+  - window frame; initial implementation complete from CoreGraphics window
+    bounds.
+  - display scale; initial estimate complete from screenshot pixels divided by
+    window-frame points.
+  - screen origin; documented as top-left for current payload.
+  - app/window identifier; initial `windowID` included.
 - Decide output encoding:
-  - file path;
+  - file path; initial implementation complete under `.build/screenshots/`.
   - base64 image;
   - binary MCP content if supported.
 - Align screenshot coordinates with element bounds.
@@ -667,14 +679,16 @@ Add visual state so agents can reason about UI even when AX data is incomplete.
 ### Verification Goals
 
 - Returned screenshot is nonblank and corresponds to the target app/window.
+  Initial probe verifies PNG existence, header, and positive dimensions.
 - Clicking by returned coordinates lands at the intended visual point.
 - Element bounds overlay correctly on screenshots.
 - Retina scaling does not produce off-by-two coordinate bugs.
 
 ### Deliverables
 
-- `src/window-screenshot.swift`
-- Screenshot metadata schema.
+- Screenshot capture path. Initial implementation is in `src/ax-state.swift`.
+- Screenshot metadata schema. Initial JSON object returned under
+  `get_app_state.screenshot`.
 - Overlay/debug tool for element bounds.
 
 ### Risks and Notes

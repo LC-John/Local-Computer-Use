@@ -8,7 +8,8 @@ capture works for Calculator, TextEdit, Chrome, and Finder fixtures; direct
 stdio MCP probing and proxied hosted probing still time out after app approval.
 Milestone 6 now has an initial local macOS Accessibility reader that returns
 filtered `list_apps` output and a bounded JSON AX tree through the
-reimplementation MCP server.
+reimplementation MCP server. Milestone 7 adds local target-window screenshot
+capture and coordinate metadata to the same `get_app_state` payload.
 
 This document tracks Milestone 4: discovery of the observable shape and
 semantics of `get_app_state`.
@@ -147,8 +148,9 @@ Current behavior:
   bounded AX tree, node indexes, role/subrole/title/value/description/help,
   enabled/focused/selected flags, position, size, actions, and available AX
   attributes.
-- Screenshot capture and native CUA screenshot encoding are still out of scope
-  for this milestone and remain in the Milestone 7 area.
+- Screenshot capture is now implemented in the local reimplementation path via
+  `.build/screenshots/*.png`, but native CUA screenshot encoding is still
+  unknown.
 - Native-style `list_apps` recent-app usage metadata is still out of scope for
   the current local implementation.
 
@@ -158,6 +160,30 @@ Validation:
 npm run probe:local
 LOCAL_CUA_PROBE_APP=Calculator npm run probe:local
 ```
+
+## Local Screenshot and Coordinate Metadata
+
+The initial Milestone 7 path is implemented in `src/ax-state.swift`; details are
+recorded in `docs/milestone-7-screenshot-coordinate-capture.md`.
+
+Current behavior:
+
+- `get_app_state` includes a `screenshot` object.
+- Screenshot files are saved as PNGs under `.build/screenshots/`.
+- The payload records screenshot pixel width and height.
+- The payload records the matched CoreGraphics `windowID`.
+- The payload records CoreGraphics window bounds as `windowFrame`.
+- The payload estimates `displayScale` from screenshot pixels and window-frame
+  points.
+- If screenshot capture fails, `screenshot.status` is `unavailable` and AX state
+  still returns.
+
+Current gaps:
+
+- Native CUA screenshot content encoding remains unknown.
+- Overlay validation for AX bounds against screenshot pixels remains open.
+- Multi-display and mixed-scale fixtures remain open.
+- Click-by-coordinate validation remains Milestone 8 work.
 
 ## Fixture Plan
 

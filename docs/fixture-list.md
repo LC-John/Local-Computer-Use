@@ -47,7 +47,7 @@ fixtures/Calculator/basic/
 Current local reimplementation status:
 
 - `LOCAL_CUA_PROBE_APP=Calculator npm run probe:local` verifies local app
-  resolution and AX tree capture.
+  resolution, AX tree capture, and screenshot file capture.
 - Native-hosted fixture comparison remains open.
 
 ### TextEdit: Plain Text Document

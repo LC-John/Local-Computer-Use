@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { spawn } from "node:child_process";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const serverPath = path.resolve("src/server.mjs");
@@ -137,8 +137,31 @@ async function main() {
     if (!parsedState.tree || !parsedState.app) {
       throw new Error("Expected get_app_state to return app metadata and an AX tree");
     }
+    if (parsedState.screenshot?.status !== "captured") {
+      throw new Error(
+        `Expected get_app_state to capture a screenshot: ${JSON.stringify(
+          parsedState.screenshot,
+        )}`,
+      );
+    }
+    if (!parsedState.screenshot.path) {
+      throw new Error("Expected captured screenshot to include a file path");
+    }
+    if (parsedState.screenshot.width <= 0 || parsedState.screenshot.height <= 0) {
+      throw new Error("Expected captured screenshot to include positive dimensions");
+    }
+    await stat(parsedState.screenshot.path);
+    const header = await readFile(parsedState.screenshot.path, { encoding: null });
+    if (
+      header[0] !== 0x89 ||
+      header[1] !== 0x50 ||
+      header[2] !== 0x4e ||
+      header[3] !== 0x47
+    ) {
+      throw new Error("Expected captured screenshot to be a PNG file");
+    }
 
-    console.log("Local MCP AX state probe passed.");
+    console.log("Local MCP AX screenshot probe passed.");
   } finally {
     server.child.stdin.end();
     server.child.kill("SIGTERM");

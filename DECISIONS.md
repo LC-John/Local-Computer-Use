@@ -102,3 +102,14 @@ coordinate alignment are Milestone 7 work.
 Rationale: AX state and visual capture have different permission requirements
 and failure modes. Keeping them separate makes verification and permission
 debugging clearer.
+
+## D-010: Return Local Screenshots by File Path First
+
+Status: Accepted
+
+Decision: The first local screenshot implementation returns PNG file paths under
+`.build/screenshots/` instead of inline base64 or MCP image content.
+
+Rationale: File paths are simple to verify locally, avoid large JSON-RPC text
+payloads, and provide a stable bridge for fixture images and overlay tooling.
+Inline image content can be added later if a Codex MCP client requires it.
