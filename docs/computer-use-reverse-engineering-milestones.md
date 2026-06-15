@@ -30,7 +30,9 @@ Milestone 6: Initial implementation complete, fixture diffing still open
 Milestone 7: Initial screenshot and overlay implementation complete
 Milestone 8: Initial implementation complete, Calculator/TextEdit/Chrome/Finder fixtures accepted
 Milestone 9: Complete for local reimplementation
-Milestone 10: Initial local fixture diff harness complete
+Milestone 10.1: Local fixture diff harness complete
+Milestone 10.2: Hosted context emulation probe complete, native state gap still open
+Milestone 10.3: Native-vs-local diff deferred
 Milestone 11-14: Not started
 ```
 
@@ -48,8 +50,8 @@ and Finder acceptance probes; see `docs/milestone-8-action-tools.md`.
 Milestone 9 adds resolved app identity, app policy, persisted approvals, manual
 approval CLI, and permission checks before native helper execution; see
 `docs/milestone-9-permission-approval-model.md`.
-Milestone 10 adds a local fixture diff harness with native backend follow-up
-deferred by the raw native/proxy capture blocker; see
+Milestone 10 is now split into M10.1 local fixture diff, M10.2 hosted-context
+emulation, and M10.3 native-vs-local diff; see
 `docs/milestone-10-diff-harness.md`.
 
 ## Target Outcome
@@ -842,12 +844,15 @@ denied = ["Terminal", "Codex"]
 
 ## Milestone 10: Native-vs-Reimplementation Diff Harness
 
-Status: Initial local fixture diff harness complete as of 2026-06-15. A single
-command, `npm run diff:m10:local`, now compares local MCP tool names, Calculator
-state semantics, and structured error behavior against stable expectations.
-Native-vs-local state diffing remains deferred until raw native/proxy
-`get_app_state` capture can return successfully after app approval. See
-`docs/milestone-10-diff-harness.md`.
+Status: Split into M10.1/M10.2/M10.3 as of 2026-06-15. M10.1 is complete:
+`npm run diff:m10:local` compares local MCP tool names, Calculator state
+semantics, and structured error behavior against stable expectations. M10.2 now
+has a probe: `npm run probe:m10:host` replays hosted MCP context against the
+native client and confirms that hosted initialize/tools metadata is not enough
+to make real-app native state capture return. M10.3 native-vs-local state
+diffing remains deferred until raw native/proxy `get_app_state` capture can
+return successfully after app approval, or until a Codex-hosted oracle fixture
+flow is adopted. See `docs/milestone-10-diff-harness.md`.
 
 ### Purpose
 

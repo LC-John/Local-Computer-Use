@@ -248,6 +248,35 @@ provide:
 - coordinate-system metadata;
 - a reusable direct stdio invocation that returns successful state.
 
+## M10.2 Hosted-Context Replay Result
+
+Updated: 2026-06-15
+
+`npm run probe:m10:host` now automates the hosted-context replay check. It reads
+the latest usable `computer-use-proxy` capture, extracts Codex-hosted
+`initialize`, `tools/list`, and resource request shapes, then starts native
+`SkyComputerUseClient mcp` with the hosted plugin cwd.
+
+Current result:
+
+```text
+M10.2 native host-context probe reproduced the native state gap.
+```
+
+The replay confirms:
+
+- hosted `initialize` with protocol `2025-06-18` and elicitation capabilities
+  succeeds;
+- hosted-style `tools/list` succeeds;
+- hosted resource requests return the same unsupported-method JSON-RPC errors;
+- invalid-app `get_app_state` returns a native tool error;
+- `get_app_state(Calculator)` triggers `elicitation/create`, the probe accepts
+  it, and the real-app state call still times out.
+
+This narrows the missing context: the blocker is not only protocol version,
+client info, elicitation capability advertisement, hosted cwd, tools/list
+metadata, or the basic elicitation accept response.
+
 Follow-up proxy testing showed that a fresh Codex app thread can load the
 `computer-use-proxy` plugin and call `get_app_state(Calculator)`, but the proxied
 official client still timed out after app approval. The captured hosted request

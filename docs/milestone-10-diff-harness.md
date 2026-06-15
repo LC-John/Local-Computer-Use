@@ -2,9 +2,75 @@
 
 Date: 2026-06-15
 
-Status: Initial local fixture diff harness complete. Native-vs-local state
-diffing remains deferred until raw native/proxy `get_app_state` capture can
-return successfully after app approval.
+Status: M10.1 local fixture diff harness complete. M10.2 hosted-context
+emulation probe complete, with the native real-app state gap reproduced and
+documented. M10.3 native-vs-local state diffing remains deferred until raw
+native/proxy `get_app_state` capture can return successfully after app
+approval, or until the project adopts a Codex-hosted oracle fixture path.
+
+## Split Milestones
+
+### M10.1 Local Fixture Diff
+
+Status: Complete.
+
+The local backend produces stable semantic fixture reports and catches local
+regressions without depending on native Computer Use state capture.
+
+### M10.2 Hosted Context Emulation
+
+Status: Probe complete, native state gap still open.
+
+Goal: replay the closest observed Codex-hosted MCP context against the native
+Computer Use client, identify what is still missing, and determine whether the
+native backend can become a reliable oracle.
+
+Run:
+
+```bash
+npm run probe:m10:host
+```
+
+The probe:
+
+- reads the latest usable `computer-use-proxy` hosted capture;
+- extracts hosted `initialize`, `tools/list`, and resource request shapes;
+- starts native `SkyComputerUseClient mcp` with the hosted plugin cwd;
+- replays the hosted initialization and metadata shape;
+- checks `tools/list`, resource method behavior, invalid-app `get_app_state`,
+  and real-app `get_app_state(Calculator)`;
+- writes a report describing whether the native state gap remains.
+
+Reports:
+
+```text
+reports/m10-host-context-probe.json
+reports/m10-host-context-probe.jsonl
+```
+
+Current accepted result:
+
+```text
+M10.2 native host-context probe reproduced the native state gap.
+```
+
+The report confirms:
+
+- hosted `initialize` parameters can be replayed directly;
+- native `tools/list` succeeds with hosted `_meta.progressToken`;
+- hosted resource/list calls still return expected `-32601` unsupported-method
+  errors;
+- invalid-app `get_app_state` returns the expected native tool error;
+- real-app `get_app_state(Calculator)` triggers `elicitation/create`, accepts
+  successfully, and then times out without returning a state payload.
+
+### M10.3 Native-vs-Local Diff
+
+Status: Deferred.
+
+This becomes actionable when a future M10.2 follow-up can obtain a successful
+native real-app state payload, or when the project adopts a Codex-hosted oracle
+fixture flow instead of raw native stdio/proxy capture.
 
 ## Implemented Components
 
