@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-15T09:26:50.825Z",
+  "generatedAt": "2026-06-15T09:36:26.566Z",
   "milestone": "M10.2",
   "clientPath": "/Users/lczhang/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient",
   "hostedCwd": "/Users/lczhang/.codex/plugins/cache/openai-bundled/computer-use/1.0.809",
   "hostedContext": {
-    "capturePath": "captures/computer-use-proxy/2026-06-15T09-21-15.009Z-17465.jsonl",
+    "capturePath": "captures/computer-use-proxy/2026-06-15T09-33-39.409Z-25626.jsonl",
     "initializeParams": {
       "protocolVersion": "2025-06-18",
       "capabilities": {
@@ -45,19 +45,19 @@
     },
     "resourceMethods": [
       {
-        "method": "resources/templates/list",
-        "response": {
-          "status": "jsonrpc_error",
-          "code": -32601,
-          "message": "Method not found: Unknown method: resources/templates/list"
-        }
-      },
-      {
         "method": "resources/list",
         "response": {
           "status": "jsonrpc_error",
           "code": -32601,
           "message": "Method not found: Unknown method: resources/list"
+        }
+      },
+      {
+        "method": "resources/templates/list",
+        "response": {
+          "status": "jsonrpc_error",
+          "code": -32601,
+          "message": "Method not found: Unknown method: resources/templates/list"
         }
       }
     ],
