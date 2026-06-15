@@ -34,7 +34,7 @@ Milestone 10.1: Local fixture diff harness complete
 Milestone 10.2: Hosted context emulation probe complete, native state gap still open
 Milestone 10.3: Hosted oracle semantic diff complete for Calculator/TextEdit/Chrome/Finder, raw native-vs-local diff deferred
 Milestone 11: Complete for local automated fixture gate
-Milestone 12: Repo-local plugin bundle implemented and validated
+Milestone 12: Complete for local Codex installation
 Milestone 13-14: Not started
 ```
 
@@ -57,8 +57,8 @@ emulation, and M10.3 oracle-vs-local diff; see
 `docs/milestone-10-diff-harness.md`. Milestone 11 has a local fixture test
 runner covering every exposed tool across Calculator, TextEdit, Chrome, Finder,
 and core policy errors; see `docs/milestone-11-fixture-test-suite.md`.
-Milestone 12 adds a distinct `local-computer-use` Codex plugin bundle; see
-`docs/milestone-12-codex-plugin-packaging.md`.
+Milestone 12 adds and locally installs a distinct `local-computer-use` Codex
+plugin bundle; see `docs/milestone-12-codex-plugin-packaging.md`.
 
 ## Target Outcome
 
@@ -973,11 +973,12 @@ Turn exploratory behavior into repeatable tests.
 
 ## Milestone 12: Codex Plugin Packaging
 
-Status: Repo-local plugin bundle implemented and validated as of 2026-06-15.
-The bundle uses the distinct plugin name `local-computer-use`, points
-`.codex-plugin/plugin.json` at `./.mcp.json` and `./skills/`, and starts the
-local MCP server through `node src/server.mjs` with plugin-root cwd. Codex host
-installation and new-thread smoke testing remain manual follow-up; see
+Status: Complete for local Codex installation as of 2026-06-15. The bundle uses
+the distinct plugin name `local-computer-use`, points
+`.codex-plugin/plugin.json` at `./.mcp.json` and `./skills/`, starts the local
+MCP server through `node src/server.mjs` with plugin-root cwd, is listed in the
+personal marketplace, and is installed/enabled in Codex. Fresh-thread tool
+exposure and transcript capture remain practical follow-up checks; see
 `docs/milestone-12-codex-plugin-packaging.md`.
 
 ### Purpose
