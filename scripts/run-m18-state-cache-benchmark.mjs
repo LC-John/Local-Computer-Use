@@ -33,11 +33,17 @@ function nodeCount(state) {
   return count;
 }
 
-async function timedState(client) {
+async function timedState(client, stateArgs = {}) {
   const started = performance.now();
-  const state = parseToolText(await client.callTool("get_app_state", { app }));
+  const state = parseToolText(
+    await client.callTool("get_app_state", {
+      app,
+      ...stateArgs,
+    }),
+  );
   return {
     durationMs: round(performance.now() - started),
+    stateMode: state.state?.mode || "full",
     screenshotCache: state.screenshot?.cache?.status || null,
     screenshotPath: state.screenshot?.path || null,
     screenshotStatus: state.screenshot?.status || null,
@@ -58,7 +64,7 @@ function summarize(samples) {
   };
 }
 
-async function runMode(mode) {
+async function runMode(mode, stateArgs = {}, label = mode) {
   const client = createLocalMcpClient({
     env: {
       LOCAL_CUA_SCREENSHOT_CACHE: mode === "cache-on" ? "1" : "0",
@@ -76,16 +82,16 @@ async function runMode(mode) {
     for (let index = 0; index < repetitions; index += 1) {
       samples.push({
         iteration: index + 1,
-        ...(await timedState(client)),
+        ...(await timedState(client, stateArgs)),
       });
     }
   } finally {
     await client.close({
-      jsonlPath: path.join(outDir, `m18-state-cache-benchmark-${mode}.jsonl`),
+      jsonlPath: path.join(outDir, `m18-state-cache-benchmark-${label}.jsonl`),
     });
   }
   return {
-    mode,
+    mode: label,
     summary: summarize(samples),
     samples,
   };
@@ -93,8 +99,22 @@ async function runMode(mode) {
 
 async function main() {
   await mkdir(outDir, { recursive: true });
-  const cacheOn = await runMode("cache-on");
-  const cacheOff = await runMode("cache-off");
+  const cacheOn = await runMode("cache-on", {
+    includeScreenshot: true,
+    stateMode: "full",
+  }, "cache-on-full-screenshot");
+  const cacheOff = await runMode("cache-off", {
+    includeScreenshot: true,
+    stateMode: "full",
+  }, "cache-off-full-screenshot");
+  const fullNoScreenshot = await runMode("cache-on", {
+    includeScreenshot: false,
+    stateMode: "full",
+  }, "cache-on-full-no-screenshot");
+  const focusedNoScreenshot = await runMode("cache-on", {
+    includeScreenshot: false,
+    stateMode: "focused",
+  }, "cache-on-focused-no-screenshot");
   const report = {
     ok: true,
     generatedAt: new Date().toISOString(),
@@ -108,10 +128,14 @@ async function main() {
       cacheOffP95Ms: cacheOff.summary.p95DurationMs,
       cacheOnHits: cacheOn.summary.hitCount,
       cacheOffHits: cacheOff.summary.hitCount,
+      fullNoScreenshotP50Ms: fullNoScreenshot.summary.p50DurationMs,
+      focusedNoScreenshotP50Ms: focusedNoScreenshot.summary.p50DurationMs,
     },
     runs: {
       cacheOn,
       cacheOff,
+      fullNoScreenshot,
+      focusedNoScreenshot,
     },
   };
   await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);

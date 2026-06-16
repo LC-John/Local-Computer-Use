@@ -2,9 +2,9 @@
 
 Date: 2026-06-16
 
-Status: Complete for the first M18 slice. The implementation adds a same-window
-screenshot cache for repeated `get_app_state` calls without changing the MCP
-tool schema.
+Status: Complete for the first M18 slice and state-mode follow-up. The
+implementation adds a same-window screenshot cache plus opt-in lighter
+`get_app_state` reads.
 
 ## Purpose
 
@@ -42,8 +42,21 @@ screenshot.cache.ageMs
 screenshot.cache.ttlMs
 ```
 
-AX tree traversal still runs on every state read in this first M18 slice. That
-keeps state freshness conservative while proving the screenshot cache boundary.
+`get_app_state` also accepts two optional local extension arguments:
+
+```text
+includeScreenshot = true | false
+stateMode = full | visible | focused
+```
+
+The default remains `includeScreenshot=true` and `stateMode=full`, preserving the
+native-compatible behavior. `includeScreenshot=false` returns
+`screenshot.status=skipped` and avoids Screen Recording permission checks for
+AX-only state reads. `visible` and `focused` use shallower AX traversal limits to
+reduce payload and latency.
+
+AX tree traversal still runs fresh on every state read. M18 reduces capture and
+payload cost without reusing stale AX tree objects as state.
 
 ## Benchmark
 
@@ -65,12 +78,29 @@ reports/m18-state-cache-benchmark-cache-off.jsonl
 Latest local result:
 
 ```text
-cache-on p50=192.46ms, hits=5/6
-cache-off p50=372.64ms, hits=0/6
+cache-on full screenshot p50=197.51ms, hits=5/6
+cache-off full screenshot p50=333.39ms, hits=0/6
+full no screenshot p50=180.76ms
+focused no screenshot p50=20.71ms
 ```
 
-The cache-on run had one noisy p95 outlier at 3153.56ms, so the accepted result
-is a p50 warm-read improvement rather than a tail-latency claim.
+The cache-on run had one noisy p95 outlier at 1960.2ms, so the accepted
+screenshot-cache result is a p50 warm-read improvement rather than a
+tail-latency claim.
+
+Run:
+
+```bash
+npm run probe:m18:state-modes
+```
+
+Latest local result:
+
+```text
+full=68 nodes
+visible=12 nodes
+focused=8 nodes
+```
 
 ## Validation
 
@@ -78,6 +108,7 @@ Run:
 
 ```bash
 npm run probe:m18:cache-invalidation
+npm run probe:m18:state-modes
 npm run probe:local
 npm run test:m11:fixtures
 npm run test:m13:negative
@@ -89,6 +120,8 @@ Accepted local results on 2026-06-16:
 - `benchmark:m18:state`: passed with screenshot hits enabled and disabled runs.
 - `probe:m18:cache-invalidation`: passed, proving a moved Calculator window
   invalidates the cached screenshot.
+- `probe:m18:state-modes`: passed, proving schema exposure, screenshot skipping,
+  and reduced tree sizes for `visible` and `focused`.
 - `probe:local`: passed.
 - `test:m11:fixtures`: passed.
 - `test:m13:negative`: passed.
@@ -99,7 +132,7 @@ Accepted local results on 2026-06-16:
 This M18 slice intentionally avoids deeper incremental AX-tree caching. Later
 state work can still add:
 
-- state-read modes such as full, visible, focused, and changed-only;
 - cached AX trees with event or freshness invalidation;
+- changed-only reads with a stable tree hash or revision marker;
 - payload pruning for very large app trees;
 - overlay validation that explicitly checks cached and freshly captured images.

@@ -470,7 +470,9 @@ func readElement(
     depth: Int,
     counter: inout Int,
     visited: inout Set<CFHashCode>,
-    elementCache: inout [Int: AXUIElement]
+    elementCache: inout [Int: AXUIElement],
+    maxDepthLimit: Int = maxDepth,
+    maxNodesLimit: Int = maxNodes
 ) -> [String: Any] {
     let hash = CFHash(element)
     let index = counter
@@ -519,20 +521,22 @@ func readElement(
         node["availableAttributes"] = attributeNames
     }
 
-    if depth < maxDepth && counter < maxNodes {
+    if depth < maxDepthLimit && counter < maxNodesLimit {
         let children = childElements(element)
         if !children.isEmpty {
-            node["children"] = children.prefix(max(0, maxNodes - counter)).map {
+            node["children"] = children.prefix(max(0, maxNodesLimit - counter)).map {
                 readElement(
                     $0,
                     depth: depth + 1,
                     counter: &counter,
                     visited: &visited,
-                    elementCache: &elementCache
+                    elementCache: &elementCache,
+                    maxDepthLimit: maxDepthLimit,
+                    maxNodesLimit: maxNodesLimit
                 )
             }
         }
-    } else if depth >= maxDepth {
+    } else if depth >= maxDepthLimit {
         node["truncated"] = "max_depth"
     } else {
         node["truncated"] = "max_nodes"
@@ -1554,7 +1558,61 @@ func performPressKey(_ rawArguments: String) throws -> [String: Any] {
     ]
 }
 
-func appState(_ query: String) throws -> [String: Any] {
+func stateLimits(for mode: String) -> (maxDepth: Int, maxNodes: Int) {
+    switch mode {
+    case "focused":
+        return (2, 120)
+    case "visible":
+        return (4, 400)
+    default:
+        return (maxDepth, maxNodes)
+    }
+}
+
+func normalizedStateMode(_ rawMode: Any?) throws -> String {
+    let mode = ((rawMode as? String) ?? "full").trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    if ["full", "visible", "focused"].contains(mode) {
+        return mode
+    }
+    throw ToolError(
+        code: "invalid_argument_value",
+        message: "stateMode must be one of: full, visible, focused"
+    )
+}
+
+func boolOption(_ value: Any?, default defaultValue: Bool) throws -> Bool {
+    guard let value else {
+        return defaultValue
+    }
+    if let bool = value as? Bool {
+        return bool
+    }
+    if let string = value as? String {
+        switch string.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+        case "true", "1", "yes":
+            return true
+        case "false", "0", "no":
+            return false
+        default:
+            break
+        }
+    }
+    throw ToolError(code: "invalid_argument_type", message: "includeScreenshot must be a boolean")
+}
+
+func appStateFromJSON(_ rawArguments: String) throws -> [String: Any] {
+    let args = try parseActionArguments(rawArguments)
+    guard let appQuery = args["app"] as? String else {
+        throw ToolError(code: "missing_app", message: "Missing required argument: app")
+    }
+    return try appState(
+        appQuery,
+        stateMode: normalizedStateMode(args["stateMode"]),
+        includeScreenshot: boolOption(args["includeScreenshot"], default: true)
+    )
+}
+
+func appState(_ query: String, stateMode: String = "full", includeScreenshot: Bool = true) throws -> [String: Any] {
     guard AXIsProcessTrusted() else {
         throw ToolError(
             code: "accessibility_permission_denied",
@@ -1567,23 +1625,35 @@ func appState(_ query: String) throws -> [String: Any] {
     var counter = 0
     var visited = Set<CFHashCode>()
     var elementCache: [Int: AXUIElement] = [:]
+    let limits = stateLimits(for: stateMode)
     let tree = readElement(
         targetWindow.element,
         depth: 0,
         counter: &counter,
         visited: &visited,
-        elementCache: &elementCache
+        elementCache: &elementCache,
+        maxDepthLimit: limits.maxDepth,
+        maxNodesLimit: limits.maxNodes
     )
     recentElementCache = ElementCache(
         pid: app.processIdentifier,
         windowSignature: windowSignature(targetWindow),
         elements: elementCache
     )
-    let screenshot = captureWindowScreenshot(app: app, window: targetWindow)
+    let screenshot: [String: Any] = includeScreenshot
+        ? captureWindowScreenshot(app: app, window: targetWindow)
+        : [
+            "status": "skipped",
+            "reason": "includeScreenshot_false",
+        ]
 
     return [
         "ok": true,
         "source": "local-macos-accessibility",
+        "state": [
+            "mode": stateMode,
+            "includeScreenshot": includeScreenshot,
+        ],
         "app": [
             "query": query,
             "name": app.localizedName ?? "",
@@ -1600,8 +1670,8 @@ func appState(_ query: String) throws -> [String: Any] {
         ],
         "screenshot": screenshot,
         "limits": [
-            "maxDepth": maxDepth,
-            "maxNodes": maxNodes,
+            "maxDepth": limits.maxDepth,
+            "maxNodes": limits.maxNodes,
             "returnedNodes": counter,
         ],
         "tree": tree,
@@ -1624,6 +1694,11 @@ func runCommand(_ command: String, _ args: [String]) throws -> Any {
             throw ToolError(code: "missing_app", message: "Missing required argument: app")
         }
         return try appState(args.dropFirst().joined(separator: " "))
+    case "state-json":
+        guard args.count >= 2 else {
+            throw ToolError(code: "missing_arguments", message: "Missing state arguments")
+        }
+        return try appStateFromJSON(args.dropFirst().joined(separator: " "))
     case "click":
         guard args.count >= 2 else {
             throw ToolError(code: "missing_arguments", message: "Missing click action arguments")

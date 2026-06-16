@@ -140,17 +140,21 @@ Acceptance:
 
 Goal: reduce expensive full state reads.
 
-Status: initial screenshot-cache slice complete as of 2026-06-16. Repeated
-Calculator `get_app_state` improved from cache-off p50 372.64ms to cache-on p50
-192.46ms with 5/6 screenshot cache hits. One cache-on p95 outlier was observed,
-so the accepted claim is p50 warm-read improvement only.
+Status: screenshot-cache and state-mode slices complete as of 2026-06-16.
+Repeated Calculator `get_app_state` improved from cache-off full screenshot p50
+333.39ms to cache-on full screenshot p50 197.51ms with 5/6 screenshot cache
+hits. `focused` no-screenshot reads reached p50 20.71ms with 8 returned nodes.
+One cache-on p95 outlier was observed, so the screenshot-cache claim remains p50
+warm-read improvement only.
 
 Scope:
 
 - done: cache the most recent screenshot by app/window identity and bounds;
 - done: expose screenshot freshness metadata in state payloads;
 - done: invalidate screenshot cache on window changes;
-- future: add state modes such as full, visible, focused, and changed-only;
+- done: add state modes `full`, `visible`, and `focused`;
+- done: allow `includeScreenshot=false` for AX-only state reads;
+- future: add changed-only reads with stable freshness metadata;
 - future: cache AX trees with app/window identity and freshness metadata;
 - future: keep overlay validation working for cached and fresh screenshots;
 - future: cap large AX payloads with documented pruning rules.
@@ -159,7 +163,9 @@ Acceptance:
 
 - repeated warm state reads improve at p50 with cache enabled;
 - cached screenshots are not reused after target-window changes;
-- state payloads expose freshness metadata.
+- state payloads expose freshness metadata;
+- lighter state modes reduce payload size and latency without changing the
+  default full state behavior.
 
 ## Recommended Order
 

@@ -527,7 +527,7 @@ export function permissionErrorForTool(
   }
 
   const needsScreenRecording =
-    toolName === "get_app_state" ||
+    (toolName === "get_app_state" && args.includeScreenshot !== false) ||
     toolName === "drag" ||
     (toolName === "click" && args.x !== undefined && args.y !== undefined);
 

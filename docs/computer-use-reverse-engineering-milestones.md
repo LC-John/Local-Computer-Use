@@ -40,7 +40,7 @@ Milestone 14: Complete for first native-version tracking baseline
 Milestone 15: Initial performance baseline complete
 Milestone 16: Complete for initial persistent helper service
 Milestone 17: Complete for initial fast action path and policy cache
-Milestone 18: Complete for initial same-window screenshot cache
+Milestone 18: Complete for screenshot cache and state modes
 ```
 
 Completed architecture discovery work is summarized in
@@ -1306,9 +1306,10 @@ has a valid element index or coordinate from a recent state read.
 
 ## Milestone 18: Incremental State and Screenshot Cache
 
-Status: Complete for the first M18 slice as of 2026-06-16. The implementation
-adds a same-window screenshot cache for repeated `get_app_state` calls while
-keeping AX tree traversal fresh on every read. See
+Status: Complete for the screenshot-cache and state-mode slices as of
+2026-06-16. The implementation adds a same-window screenshot cache for repeated
+`get_app_state` calls, opt-in screenshot skipping, and shallower `stateMode`
+reads while keeping AX tree traversal fresh on every read. See
 `docs/milestone-18-incremental-state-screenshot-cache.md`.
 
 ### Purpose
@@ -1325,30 +1326,39 @@ every action.
 - Done: expose `screenshot.cache.status`, `ageMs`, and `ttlMs` metadata.
 - Done: support `LOCAL_CUA_SCREENSHOT_CACHE=0` and
   `LOCAL_CUA_SCREENSHOT_CACHE_TTL_MS`.
+- Done: add `includeScreenshot=false` for AX-only state reads.
+- Done: add `stateMode=full|visible|focused` with conservative traversal
+  limits.
 - Done: keep the default behavior compatible with existing fixture expectations.
-- Future: add optional state-read modes such as full, visible, focused, and
-  changed-only.
 - Future: cache recent AX trees with app/window identity and invalidation
   metadata.
+- Future: add changed-only reads with a stable tree hash or revision marker.
 - Future: add payload-size limits and pruning rules for large AX trees.
 
 ### Verification Results
 
 - Calculator repeated `get_app_state` warm reads improved at p50:
-  cache-on 192.46ms with 5/6 hits, cache-off 372.64ms with 0/6 hits.
+  cache-on full screenshot 197.51ms with 5/6 hits, cache-off full screenshot
+  333.39ms with 0/6 hits.
+- Calculator `focused` no-screenshot reads reached p50 20.71ms with 8 returned
+  nodes, compared with 68 nodes for full state.
 - `probe:m18:cache-invalidation` verified cached screenshots are not reused after
   a target-window bounds change.
+- `probe:m18:state-modes` verified schema exposure, screenshot skipping, and
+  reduced tree sizes for `visible` and `focused`.
 - `probe:local`, `test:m11:fixtures`, `test:m13:negative`, and
   `test:followups` passed after the cache change.
-- The cache-on p95 run had one noisy 3153.56ms outlier, so M18 only claims p50
-  warm-read improvement.
+- The cache-on p95 run had one noisy 1960.2ms outlier, so M18 only claims p50
+  warm-read improvement for screenshot caching.
 
 ### Deliverables
 
 - Screenshot freshness model.
+- State detail modes and screenshot skipping.
 - M18 benchmark and invalidation probe.
+- M18 state-mode probe.
 - Updated milestone docs.
-- Incremental AX tree modes remain future work.
+- Incremental cached AX tree reuse remains future work.
 
 ### Risks and Notes
 

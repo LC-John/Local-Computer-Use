@@ -43,7 +43,28 @@ const appIdentityCache = new Map();
 const approvalDecisionCache = new Map();
 
 async function loadTools() {
-  tools = await loadNativeToolCatalog();
+  tools = (await loadNativeToolCatalog()).map((tool) => {
+    if (tool.name !== "get_app_state") return tool;
+    return {
+      ...tool,
+      inputSchema: {
+        ...tool.inputSchema,
+        properties: {
+          ...(tool.inputSchema?.properties || {}),
+          includeScreenshot: {
+            description: "Whether to capture or reuse a screenshot. Defaults to true.",
+            type: "boolean",
+          },
+          stateMode: {
+            description:
+              "State detail mode. full preserves the native-compatible tree; visible and focused return shallower trees.",
+            enum: ["full", "visible", "focused"],
+            type: "string",
+          },
+        },
+      },
+    };
+  });
   appPolicy = await loadAppPolicy();
 }
 
@@ -409,7 +430,7 @@ async function handleToolsCall(id, params = {}) {
 
   if (name === "get_app_state") {
     const adapterStarted = performance.now();
-    const state = await getAppState(args.app);
+    const state = await getAppState(args);
     const adapterDurationMs = durationMs(adapterStarted);
     if (!state.ok) {
       return toolResultError(

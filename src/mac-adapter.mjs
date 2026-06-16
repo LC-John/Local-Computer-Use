@@ -239,8 +239,8 @@ export async function listApps() {
   return result.apps;
 }
 
-export async function getAppState(app) {
-  return await runAxHelper(["state", app]);
+export async function getAppState(args) {
+  return await runAxHelper(["state-json", JSON.stringify(args)]);
 }
 
 export async function checkPermissions() {
