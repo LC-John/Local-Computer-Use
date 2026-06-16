@@ -21,6 +21,7 @@
     "test:followups": "node scripts/run-followup-fixtures.mjs",
     "snapshot:m14:native": "node scripts/capture-m14-version-snapshot.mjs",
     "baseline:m15:performance": "node scripts/run-m15-performance-baseline.mjs",
+    "probe:m16:oneshot": "LOCAL_CUA_HELPER_MODE=oneshot node scripts/probe-reimplementation-mcp.mjs",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },

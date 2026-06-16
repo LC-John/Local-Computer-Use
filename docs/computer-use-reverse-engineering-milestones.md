@@ -38,7 +38,7 @@ Milestone 12: Complete
 Milestone 13: Complete for local error semantics baseline
 Milestone 14: Complete for first native-version tracking baseline
 Milestone 15: Initial performance baseline complete
-Milestone 16: Planned, long-lived helper service
+Milestone 16: In progress, persistent helper path implemented
 Milestone 17: Planned, fast action path and policy cache
 Milestone 18: Planned, incremental state and screenshot cache
 ```
@@ -73,7 +73,8 @@ Milestones 15-18 turn the current working implementation into a smoother
 interactive tool by measuring latency, replacing per-call helper startup with a
 long-lived helper process, reducing duplicate policy/app-resolution work, and
 making state and screenshot capture incremental where possible; see
-`docs/milestone-15-performance-roadmap.md`.
+`docs/milestone-15-performance-roadmap.md`. Milestone 16 has an initial
+persistent helper implementation; see `docs/milestone-16-long-lived-helper.md`.
 
 ## Target Outcome
 
@@ -1213,7 +1214,10 @@ defines the latency budget and shows which part of that path dominates.
 
 ## Milestone 16: Long-Lived Helper Service
 
-Status: Planned as of 2026-06-16.
+Status: In progress as of 2026-06-16. The initial persistent helper protocol and
+Node adapter connection manager are implemented, with one-shot fallback still
+available through `LOCAL_CUA_HELPER_MODE=oneshot`. See
+`docs/milestone-16-long-lived-helper.md`.
 
 ### Purpose
 

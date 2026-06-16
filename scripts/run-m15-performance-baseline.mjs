@@ -45,6 +45,7 @@ function summarizeState(state) {
     if (node.role) roleCounts[node.role] = (roleCounts[node.role] || 0) + 1;
   });
   return {
+    helperMode: state.helperMode || null,
     appName: state.app?.name || null,
     bundleIdentifier: state.app?.bundleIdentifier || null,
     windowTitle: state.window?.title || null,

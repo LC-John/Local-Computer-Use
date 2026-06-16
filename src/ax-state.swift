@@ -31,6 +31,12 @@ func writeJSON(_ value: Any) throws {
     FileHandle.standardOutput.write(Data("\n".utf8))
 }
 
+func writeJSONLine(_ value: Any) throws {
+    let data = try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys])
+    FileHandle.standardOutput.write(data)
+    FileHandle.standardOutput.write(Data("\n".utf8))
+}
+
 func sanitizeFilenamePart(_ value: String) -> String {
     let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: "-_."))
     let scalars = value.unicodeScalars.map { scalar -> Character in
@@ -1514,70 +1520,130 @@ func appState(_ query: String) throws -> [String: Any] {
     ]
 }
 
-let args = Array(CommandLine.arguments.dropFirst())
-guard let command = args.first else {
-    fail("usage", "Usage: ax-state.swift <list-apps|state> [app]")
-}
-
-do {
+func runCommand(_ command: String, _ args: [String]) throws -> Any {
     switch command {
     case "permissions":
-        try writeJSON(permissionState())
+        return permissionState()
     case "app-identity":
         guard args.count >= 2 else {
             throw ToolError(code: "missing_app", message: "Missing required argument: app")
         }
-        try writeJSON(try appIdentity(args.dropFirst().joined(separator: " ")))
+        return try appIdentity(args.dropFirst().joined(separator: " "))
     case "list-apps":
-        try writeJSON(["ok": true, "apps": runningApps()])
+        return ["ok": true, "apps": runningApps()]
     case "state":
         guard args.count >= 2 else {
             throw ToolError(code: "missing_app", message: "Missing required argument: app")
         }
-        try writeJSON(try appState(args.dropFirst().joined(separator: " ")))
+        return try appState(args.dropFirst().joined(separator: " "))
     case "click":
         guard args.count >= 2 else {
             throw ToolError(code: "missing_arguments", message: "Missing click action arguments")
         }
-        try writeJSON(try performClick(args.dropFirst().joined(separator: " ")))
+        return try performClick(args.dropFirst().joined(separator: " "))
     case "type-text":
         guard args.count >= 2 else {
             throw ToolError(code: "missing_arguments", message: "Missing type_text action arguments")
         }
-        try writeJSON(try performTypeText(args.dropFirst().joined(separator: " ")))
+        return try performTypeText(args.dropFirst().joined(separator: " "))
     case "press-key":
         guard args.count >= 2 else {
             throw ToolError(code: "missing_arguments", message: "Missing press_key action arguments")
         }
-        try writeJSON(try performPressKey(args.dropFirst().joined(separator: " ")))
+        return try performPressKey(args.dropFirst().joined(separator: " "))
     case "set-value":
         guard args.count >= 2 else {
             throw ToolError(code: "missing_arguments", message: "Missing set_value action arguments")
         }
-        try writeJSON(try performSetValue(args.dropFirst().joined(separator: " ")))
+        return try performSetValue(args.dropFirst().joined(separator: " "))
     case "perform-secondary-action":
         guard args.count >= 2 else {
             throw ToolError(code: "missing_arguments", message: "Missing perform_secondary_action arguments")
         }
-        try writeJSON(try performSecondaryAction(args.dropFirst().joined(separator: " ")))
+        return try performSecondaryAction(args.dropFirst().joined(separator: " "))
     case "scroll":
         guard args.count >= 2 else {
             throw ToolError(code: "missing_arguments", message: "Missing scroll action arguments")
         }
-        try writeJSON(try performScroll(args.dropFirst().joined(separator: " ")))
+        return try performScroll(args.dropFirst().joined(separator: " "))
     case "select-text":
         guard args.count >= 2 else {
             throw ToolError(code: "missing_arguments", message: "Missing select_text action arguments")
         }
-        try writeJSON(try performSelectText(args.dropFirst().joined(separator: " ")))
+        return try performSelectText(args.dropFirst().joined(separator: " "))
     case "drag":
         guard args.count >= 2 else {
             throw ToolError(code: "missing_arguments", message: "Missing drag action arguments")
         }
-        try writeJSON(try performDrag(args.dropFirst().joined(separator: " ")))
+        return try performDrag(args.dropFirst().joined(separator: " "))
     default:
         throw ToolError(code: "usage", message: "Unknown command: \(command)")
     }
+}
+
+func requestID(from data: Data) -> Any {
+    let parsed = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
+    return parsed?["id"] ?? NSNull()
+}
+
+func runServeMode() {
+    while let line = readLine(strippingNewline: true) {
+        guard let data = line.data(using: .utf8) else {
+            continue
+        }
+
+        do {
+            guard let request = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                throw ToolError(code: "invalid_arguments", message: "Helper request must be a JSON object")
+            }
+            let id = request["id"] ?? NSNull()
+            guard let command = request["command"] as? String else {
+                throw ToolError(code: "missing_command", message: "Helper request is missing command")
+            }
+            if command == "shutdown" {
+                try writeJSONLine(["id": id, "result": ["ok": true]])
+                return
+            }
+            let arguments = (request["arguments"] as? [String]) ?? []
+            try writeJSONLine(["id": id, "result": try runCommand(command, [command] + arguments)])
+        } catch let error as ToolError {
+            try? writeJSONLine([
+                "id": requestID(from: data),
+                "result": [
+                    "ok": false,
+                    "error": [
+                        "code": error.code,
+                        "message": error.message,
+                    ],
+                ],
+            ])
+        } catch {
+            try? writeJSONLine([
+                "id": requestID(from: data),
+                "result": [
+                    "ok": false,
+                    "error": [
+                        "code": "internal_error",
+                        "message": error.localizedDescription,
+                    ],
+                ],
+            ])
+        }
+    }
+}
+
+let args = Array(CommandLine.arguments.dropFirst())
+guard let command = args.first else {
+    fail("usage", "Usage: ax-state.swift <list-apps|state|serve> [app]")
+}
+
+if command == "serve" {
+    runServeMode()
+    exit(0)
+}
+
+do {
+    try writeJSON(try runCommand(command, args))
 } catch let error as ToolError {
     fail(error.code, error.message)
 } catch {
