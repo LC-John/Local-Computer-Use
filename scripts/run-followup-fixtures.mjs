@@ -195,11 +195,19 @@ async function setupTextEditMultiWindow() {
 async function raiseTextEditWindow(title) {
   await execFile("osascript", [
     "-e",
-    'tell application "TextEdit"',
+    'tell application "System Events"',
     "-e",
-    `set index of window "${title}" to 1`,
+    'tell process "TextEdit"',
     "-e",
-    "activate",
+    "set frontmost to true",
+    "-e",
+    `set targetWindow to first window whose name contains "${title}"`,
+    "-e",
+    'perform action "AXRaise" of targetWindow',
+    "-e",
+    'set value of attribute "AXMain" of targetWindow to true',
+    "-e",
+    "end tell",
     "-e",
     "end tell",
   ]);

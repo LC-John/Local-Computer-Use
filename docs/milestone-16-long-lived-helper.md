@@ -2,10 +2,10 @@
 
 Date: 2026-06-16
 
-Status: Initial implementation complete. The Node adapter now starts the Swift
-Accessibility helper in a persistent `serve` mode by default, sends helper
-requests over JSONL, and falls back to the previous one-shot execution path if
-the persistent helper fails.
+Status: Complete for the initial persistent-helper milestone as of 2026-06-16.
+The Node adapter now starts the Swift Accessibility helper in a persistent
+`serve` mode by default, sends helper requests over JSONL, and falls back to the
+previous one-shot execution path if the persistent helper fails.
 
 ## Purpose
 
@@ -108,11 +108,70 @@ Both commands reported:
 Local MCP AX screenshot overlay probe passed.
 ```
 
-## Remaining M16 Work
+Full fixture gates pass under the persistent default:
 
-- Run the full M11, M13, and follow-up suites under persistent mode.
-- Run a targeted one-shot fallback verification after the persistent path is
-  stable.
-- Add explicit crash-restart coverage for the helper connection manager.
+```bash
+npm run test:m11:fixtures
+npm run test:m13:negative
+npm run test:followups
+```
+
+Accepted output:
+
+```text
+Local MCP M11 fixture test suite passed.
+Local MCP M13 negative error suite passed.
+Local MCP follow-up fixture suite passed.
+```
+
+The follow-up fixture was hardened to raise TextEdit windows through System
+Events `AXRaise` instead of AppleScript `set index`, which was brittle on the
+current desktop state. The M11 TextEdit fixture now dismisses possible restored
+dialogs with Escape before waiting for an `AXTextArea`.
+
+## Restart Probe
+
+Run:
+
+```bash
+npm run probe:m16:restart
+```
+
+Accepted output:
+
+```text
+M16 helper restart probe passed: persistent -> persistent
+```
+
+The generated report records that a Calculator state read succeeded before and
+after terminating the active helper process. The replacement state payload still
+reported `helperMode: persistent`.
+
+## Helper Comparison
+
+Run:
+
+```bash
+LOCAL_CUA_M16_COMPARE_REPETITIONS=5 npm run compare:m16:helpers
+```
+
+Current accepted output:
+
+```text
+M16 helper comparison written: persistent get_state p50/p95=371.35/708.25ms, oneshot=448.26/465.66ms
+```
+
+Interpretation:
+
+- Persistent mode improved Calculator warm `get_app_state` p50 in this run.
+- Persistent mode did not improve p95 in this run; one state read outlier
+  dominated the small sample.
+- This confirms helper lifecycle compatibility and gives M17/M18 a comparison
+  command, but it does not prove broad end-to-end state-read speedup yet.
+
+## Remaining Follow-Up Work
+
 - Decide whether M17 should absorb app identity caching or whether a small
   identity cache belongs in the end of M16.
+- Add lower-level phase timing inside the helper if future performance work needs
+  to separate AX traversal, screenshot capture, and JSON serialization.

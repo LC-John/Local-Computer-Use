@@ -333,6 +333,24 @@ async function setupTextEditFixture() {
     "-e",
     "end tell",
   ]).catch(() => {});
+  await execFile("osascript", [
+    "-e",
+    'tell application "System Events"',
+    "-e",
+    'if exists process "TextEdit" then',
+    "-e",
+    'tell process "TextEdit"',
+    "-e",
+    "set frontmost to true",
+    "-e",
+    "key code 53",
+    "-e",
+    "end tell",
+    "-e",
+    "end if",
+    "-e",
+    "end tell",
+  ]).catch(() => {});
   await sleep(1000);
 }
 

@@ -95,7 +95,7 @@ benchmarks.
 
 ## M16: Long-Lived Helper Service
 
-Status: Initial implementation in progress; see
+Status: Initial implementation complete; see
 `docs/milestone-16-long-lived-helper.md`.
 
 Goal: remove per-command Swift process startup from the hot path.
