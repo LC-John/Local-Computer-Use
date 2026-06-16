@@ -19,6 +19,7 @@ import {
   evaluateApproval,
   evaluateAppPolicy,
   loadAppPolicy,
+  approvalScopeForTool,
   permissionErrorForTool,
 } from "./policy.mjs";
 import {
@@ -36,6 +37,10 @@ const serverInfo = {
 let initialized = false;
 let tools = [];
 let appPolicy = null;
+const policyCacheEnabled = process.env.LOCAL_CUA_POLICY_CACHE !== "0";
+const policyCacheTtlMs = Number(process.env.LOCAL_CUA_POLICY_CACHE_TTL_MS || 5000);
+const appIdentityCache = new Map();
+const approvalDecisionCache = new Map();
 
 async function loadTools() {
   tools = await loadNativeToolCatalog();
@@ -211,6 +216,92 @@ function toolResultSuccess(id, text, metadata = {}) {
   };
 }
 
+function nowMs() {
+  return Date.now();
+}
+
+function normalizeCacheKey(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function appIdentityCacheKey(app) {
+  return normalizeCacheKey(app);
+}
+
+function identityStableKey(identity = {}) {
+  return normalizeCacheKey(
+    identity.bundleIdentifier ||
+      identity.path ||
+      identity.executablePath ||
+      identity.name ||
+      identity.query,
+  );
+}
+
+function isFresh(entry) {
+  return entry && entry.expiresAt > nowMs();
+}
+
+function setTimedCache(cache, key, value) {
+  if (!policyCacheEnabled || !key) return;
+  cache.set(key, {
+    value,
+    expiresAt: nowMs() + policyCacheTtlMs,
+  });
+}
+
+async function cachedAppIdentity(app) {
+  const key = appIdentityCacheKey(app);
+  if (policyCacheEnabled) {
+    const cached = appIdentityCache.get(key);
+    if (isFresh(cached)) {
+      return {
+        ...cached.value,
+        cache: "identity-hit",
+      };
+    }
+  }
+
+  const identity = await getAppIdentity(app);
+  if (identity.ok) {
+    setTimedCache(appIdentityCache, key, identity);
+  }
+  return {
+    ...identity,
+    cache: "identity-miss",
+  };
+}
+
+async function cachedApproval(policy, identity, toolName) {
+  const scope = approvalScopeForTool(toolName);
+  const key = [
+    policy.source || "default-policy",
+    policy.approvals?.mode || "store",
+    policy.approvals?.store_path || "",
+    scope,
+    identityStableKey(identity),
+  ].join("|");
+
+  if (policyCacheEnabled) {
+    const cached = approvalDecisionCache.get(key);
+    if (isFresh(cached)) {
+      return {
+        ...cached.value,
+        cache: "approval-hit",
+      };
+    }
+  }
+
+  const approval = await evaluateApproval(policy, identity, toolName);
+  if (approval.ok) {
+    setTimedCache(approvalDecisionCache, key, approval);
+  }
+  return {
+    ...approval,
+    cache: "approval-miss",
+  };
+}
+
 function handleInitialize(id, params = {}) {
   initialized = true;
   return {
@@ -318,6 +409,7 @@ async function handleToolsCall(id, params = {}) {
     return toolResultSuccess(id, JSON.stringify(state), {
       tool: name,
       "local-computer-use/source": state.source,
+      ...(appPolicyResult.metadata || {}),
     });
   }
 
@@ -332,6 +424,7 @@ async function handleToolsCall(id, params = {}) {
     return toolResultSuccess(id, JSON.stringify(result), {
       tool: name,
       "local-computer-use/source": result.source,
+      ...(appPolicyResult.metadata || {}),
     });
   }
 
@@ -350,6 +443,7 @@ async function handleToolsCall(id, params = {}) {
     return toolResultSuccess(id, JSON.stringify(result), {
       tool: name,
       "local-computer-use/source": result.source,
+      ...(appPolicyResult.metadata || {}),
     });
   }
 
@@ -368,6 +462,7 @@ async function handleToolsCall(id, params = {}) {
     return toolResultSuccess(id, JSON.stringify(result), {
       tool: name,
       "local-computer-use/source": result.source,
+      ...(appPolicyResult.metadata || {}),
     });
   }
 
@@ -393,6 +488,7 @@ async function handleToolsCall(id, params = {}) {
     return toolResultSuccess(id, JSON.stringify(result), {
       tool: name,
       "local-computer-use/source": result.source,
+      ...(appPolicyResult.metadata || {}),
     });
   }
 
@@ -411,7 +507,7 @@ async function enforcePolicy(name, args = {}) {
   if (name === "list_apps") return { ok: true };
 
   const app = args.app;
-  const identity = await getAppIdentity(app);
+  const identity = await cachedAppIdentity(app);
   if (!identity.ok) {
     return {
       ok: false,
@@ -423,7 +519,7 @@ async function enforcePolicy(name, args = {}) {
   const appResult = evaluateAppPolicy(appPolicy, identity.app);
   if (!appResult.ok) return appResult;
 
-  const approvalResult = await evaluateApproval(appPolicy, identity.app, name);
+  const approvalResult = await cachedApproval(appPolicy, identity.app, name);
   if (!approvalResult.ok) return approvalResult;
 
   const permissions = await checkPermissions();
@@ -448,6 +544,11 @@ async function enforcePolicy(name, args = {}) {
     ok: true,
     identity: identity.app,
     approval: approvalResult.approval,
+    metadata: {
+      "local-computer-use/policyCacheEnabled": policyCacheEnabled,
+      "local-computer-use/identityCache": identity.cache,
+      "local-computer-use/approvalCache": approvalResult.cache,
+    },
   };
 }
 
