@@ -20,6 +20,7 @@
     "test:m13:negative": "node scripts/run-m13-negative-tests.mjs",
     "test:followups": "node scripts/run-followup-fixtures.mjs",
     "snapshot:m14:native": "node scripts/capture-m14-version-snapshot.mjs",
+    "baseline:m15:performance": "node scripts/run-m15-performance-baseline.mjs",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },

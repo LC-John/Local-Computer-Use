@@ -1,2 +1,9 @@
 .build/
 node_modules/
+.DS_Store
+
+# Runtime captures and generated verification output.
+captures/
+reports/
+snapshots/
+protocol/stderr.log

@@ -3,8 +3,10 @@
 Date: 2026-06-15
 
 Status: Complete for the first native-version tracking baseline. The repository
-now has a repeatable native snapshot command, a baseline snapshot for native
-Computer Use `1.0.809`, a generated changelog, and a compatibility matrix.
+now has a repeatable native snapshot command, generated local snapshots for
+native Computer Use `1.0.809`, a generated changelog, and a compatibility
+matrix. Snapshot output is local generated evidence and is no longer tracked in
+git after the workspace cleanup.
 
 ## Purpose
 
@@ -42,11 +44,14 @@ CUA_NATIVE_RUNTIME_ROOT
 
 ## Baseline Snapshot
 
-The first M14 snapshot is:
+The first M14 snapshot can be regenerated at:
 
 ```text
 snapshots/native/1.0.809
 ```
+
+`snapshots/` is ignored by git. Keep the command and docs tracked; regenerate
+the snapshot when local evidence is needed.
 
 It contains:
 

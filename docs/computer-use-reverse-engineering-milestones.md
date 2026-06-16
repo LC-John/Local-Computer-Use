@@ -1,7 +1,7 @@
 # Computer Use Reverse Engineering and Reimplementation Milestones
 
 Date: 2026-06-12
-Updated: 2026-06-15
+Updated: 2026-06-16
 
 This document defines a practical milestone plan for reverse engineering and
 reimplementing a Computer Use-like local MCP server. The intended approach is
@@ -37,6 +37,10 @@ Milestone 11: Complete for local automated fixture gate
 Milestone 12: Complete
 Milestone 13: Complete for local error semantics baseline
 Milestone 14: Complete for first native-version tracking baseline
+Milestone 15: Initial performance baseline complete
+Milestone 16: Planned, long-lived helper service
+Milestone 17: Planned, fast action path and policy cache
+Milestone 18: Planned, incremental state and screenshot cache
 ```
 
 Completed architecture discovery work is summarized in
@@ -65,6 +69,11 @@ adds the local error model, stable error metadata, negative tests, and
 coordinate safety checks; see `docs/milestone-13-error-semantics.md`.
 Milestone 14 adds a repeatable native snapshot system, native version changelog,
 and compatibility matrix; see `docs/milestone-14-version-tracking.md`.
+Milestones 15-18 turn the current working implementation into a smoother
+interactive tool by measuring latency, replacing per-call helper startup with a
+long-lived helper process, reducing duplicate policy/app-resolution work, and
+making state and screenshot capture incremental where possible; see
+`docs/milestone-15-performance-roadmap.md`.
 
 ## Target Outcome
 
@@ -1156,6 +1165,174 @@ Keep the implementation useful as native Computer Use and Codex evolve.
 - Native behavior may change without public notice.
 - A replacement should expose its own version and native-compatibility target.
 
+## Milestone 15: Performance Baseline and Latency Budget
+
+Status: Initial baseline complete as of 2026-06-16. The baseline runner is
+available as `npm run baseline:m15:performance` and writes generated reports
+under `reports/`. The accepted first run records warm `get_app_state` p95
+latency of about 0.5s for Calculator, 4.5s for TextEdit in its current Open
+dialog state, 0.45s for Google Chrome, and 2.0s for Finder.
+
+### Purpose
+
+Make slowness measurable before changing architecture. The current local path is
+functionally useful, but each tool call can include MCP dispatch, policy checks,
+Swift helper startup, macOS AX traversal, and optional screenshot capture. M15
+defines the latency budget and shows which part of that path dominates.
+
+### Work Items
+
+- Add per-phase timing to the Node adapter and Swift helper output.
+- Record timings for `list_apps`, `get_app_state`, and every action tool.
+- Run the timing suite against Calculator, TextEdit, Chrome, and Finder.
+- Separate cold-start measurements from warm repeated calls.
+- Track payload size, AX node count, screenshot capture time, and helper startup
+  time.
+- Compare local tool latency against Codex-hosted Computer Use observations where
+  the hosted path is available.
+
+### Verification Goals
+
+- One command emits a latency report under `reports/`.
+- The report identifies the top latency sources for state reads and actions.
+- The report includes p50 and p95 timings for warm fixture runs.
+- Future milestones can prove improvement against this baseline.
+
+### Deliverables
+
+- Timing instrumentation.
+- Performance fixture runner.
+- `docs/milestone-15-performance-roadmap.md` with accepted baseline numbers.
+
+### Risks and Notes
+
+- GUI timing is noisy. Use repeated runs and stable fixture setup rather than a
+  single measurement.
+- Hosted native timing may not be fully scriptable, so local measurements should
+  remain useful on their own.
+
+## Milestone 16: Long-Lived Helper Service
+
+Status: Planned as of 2026-06-16.
+
+### Purpose
+
+Remove per-tool Swift process startup from the hot path. Today the Node adapter
+executes the compiled helper for individual commands. A long-lived helper should
+keep app identity, AX handles where safe, display metadata, and recent state
+context warm across calls.
+
+### Work Items
+
+- Introduce a persistent helper protocol between Node and Swift.
+- Keep the existing one-shot helper mode as a fallback and diagnostic path.
+- Add request IDs, structured errors, and timeout handling to helper messages.
+- Cache stable app resolution data, display metadata, and recent window identity.
+- Ensure helper restart is automatic after crashes or protocol failures.
+- Preserve M11, M13, and follow-up fixture behavior.
+
+### Verification Goals
+
+- Warm action calls no longer spawn a Swift process.
+- Repeated Calculator and TextEdit actions are measurably faster than M15
+  baseline.
+- Helper crash recovery returns a structured retryable error or transparently
+  restarts.
+- Existing fixture suites still pass through both persistent and one-shot modes.
+
+### Deliverables
+
+- Persistent Swift helper service.
+- Node adapter connection manager.
+- Performance comparison report against M15.
+
+### Risks and Notes
+
+- Long-lived AX references can go stale when apps relaunch or windows change.
+  The helper must validate cached references before using them.
+- Persistent processes increase lifecycle complexity, so observability matters.
+
+## Milestone 17: Fast Action Path and Policy Cache
+
+Status: Planned as of 2026-06-16.
+
+### Purpose
+
+Make common actions feel interactive. Many actions currently pay for duplicate
+app identity lookup and broad state reconstruction even when the caller already
+has a valid element index or coordinate from a recent state read.
+
+### Work Items
+
+- Cache app identity and approval decisions with clear invalidation rules.
+- Avoid duplicate `app-identity` helper calls when policy state is already
+  satisfied.
+- Add lightweight action commands that resolve only the target app/window/element
+  needed for the action.
+- Reuse the most recent state context for element indexes when it is still valid.
+- Add explicit stale-state errors when cached indexes cannot be trusted.
+- Keep safety checks before every action, even when using cached identity data.
+
+### Verification Goals
+
+- Calculator click, `type_text`, `press_key`, and TextEdit text replacement are
+  faster than the M15 baseline.
+- Action latency improves without weakening app deny/approval behavior.
+- Stale element indexes fail clearly instead of clicking an unintended target.
+- M11, M13, and follow-up suites remain green.
+
+### Deliverables
+
+- Policy/app identity cache.
+- Lightweight action path.
+- Stale-state validation tests.
+
+### Risks and Notes
+
+- The fastest path is not acceptable if it makes actions less predictable.
+  Safety and target validation remain part of the milestone gate.
+
+## Milestone 18: Incremental State and Screenshot Cache
+
+Status: Planned as of 2026-06-16.
+
+### Purpose
+
+Reduce the cost of `get_app_state`, especially for Chrome and Finder. Full AX
+tree traversal and fresh screenshot capture are expensive. Agents often need a
+fresh enough view, not necessarily a complete reconstruction of every node after
+every action.
+
+### Work Items
+
+- Add optional state-read modes such as full, visible, focused, and changed-only.
+- Cache recent AX trees with app/window identity and invalidation metadata.
+- Capture screenshots only when requested, when the window changed, or when the
+  cached image is stale.
+- Explore cheaper screenshot paths or bounded capture regions while preserving
+  coordinate correctness.
+- Add payload-size limits and pruning rules for large AX trees.
+- Keep the default behavior compatible with existing fixture expectations until
+  a new default is intentionally chosen.
+
+### Verification Goals
+
+- Chrome and Finder `get_app_state` warm reads improve against M15 baseline.
+- Cached screenshots are never reused after a target-window change.
+- Overlay validation still passes for cached and freshly captured screenshots.
+- Large AX trees stay within defined payload and latency budgets.
+
+### Deliverables
+
+- Incremental state modes.
+- Screenshot freshness model.
+- Updated fixture and overlay validation for cached state.
+
+### Risks and Notes
+
+- Caching can produce convincing but stale UI state. Every cached payload should
+  report freshness metadata so agents can choose when to force a full read.
+
 ## Suggested Execution Order
 
 Recommended order:
@@ -1176,6 +1353,10 @@ Recommended order:
 12. Codex plugin packaging
 13. Error semantics and edge cases
 14. Version tracking and maintenance
+15. Performance baseline and latency budget
+16. Long-lived helper service
+17. Fast action path and policy cache
+18. Incremental state and screenshot cache
 ```
 
 The most important dependency is that `get_app_state` should be understood
