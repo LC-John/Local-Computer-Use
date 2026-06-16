@@ -31,7 +31,16 @@ struct ElementCache {
     let elements: [Int: AXUIElement]
 }
 
+struct ScreenshotCache {
+    let key: String
+    let capturedAt: Date
+    let payload: [String: Any]
+}
+
 var recentElementCache: ElementCache?
+var recentScreenshotCache: ScreenshotCache?
+let screenshotCacheEnabled = ProcessInfo.processInfo.environment["LOCAL_CUA_SCREENSHOT_CACHE"] != "0"
+let screenshotCacheTTLMilliseconds = Double(ProcessInfo.processInfo.environment["LOCAL_CUA_SCREENSHOT_CACHE_TTL_MS"] ?? "1000") ?? 1000
 
 func writeJSON(_ value: Any) throws {
     let data = try JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted, .sortedKeys])
@@ -765,6 +774,32 @@ func captureWindowScreenshot(app: NSRunningApplication, window: TargetWindow) ->
     }
 
     let windowID = CGWindowID(truncating: windowNumber)
+    let bounds = rectFromWindowBounds(info[kCGWindowBounds as String])
+    let cacheKey = [
+        "\(app.processIdentifier)",
+        "\(windowID)",
+        "\(bounds?.origin.x ?? 0)",
+        "\(bounds?.origin.y ?? 0)",
+        "\(bounds?.size.width ?? 0)",
+        "\(bounds?.size.height ?? 0)",
+    ].joined(separator: "|")
+    if screenshotCacheEnabled,
+       let cached = recentScreenshotCache,
+       cached.key == cacheKey,
+       Date().timeIntervalSince(cached.capturedAt) * 1000 <= screenshotCacheTTLMilliseconds,
+       let path = cached.payload["path"] as? String,
+       FileManager.default.fileExists(atPath: path)
+    {
+        var payload = cached.payload
+        payload["cache"] = [
+            "status": "hit",
+            "ageMs": Int(Date().timeIntervalSince(cached.capturedAt) * 1000),
+            "ttlMs": Int(screenshotCacheTTLMilliseconds),
+            "key": cacheKey,
+        ]
+        return payload
+    }
+
     let screenshotDir = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
         .appendingPathComponent(".build", isDirectory: true)
         .appendingPathComponent("screenshots", isDirectory: true)
@@ -797,7 +832,6 @@ func captureWindowScreenshot(app: NSRunningApplication, window: TargetWindow) ->
         ]
     }
 
-    let bounds = rectFromWindowBounds(info[kCGWindowBounds as String])
     let dimensions = imageDimensions(url) ?? (0, 0)
     let pixelWidth = dimensions.width
     let pixelHeight = dimensions.height
@@ -811,7 +845,7 @@ func captureWindowScreenshot(app: NSRunningApplication, window: TargetWindow) ->
     let contentOriginX = max(0, (CGFloat(pixelWidth) - contentPixelWidth) / 2)
     let contentOriginY = max(0, (CGFloat(pixelHeight) - contentPixelHeight) / 2)
 
-    return [
+    let payload: [String: Any] = [
         "status": "captured",
         "path": url.path,
         "encoding": "png_file",
@@ -836,7 +870,16 @@ func captureWindowScreenshot(app: NSRunningApplication, window: TargetWindow) ->
             "screenshot": "image_pixels",
             "origin": "top_left",
         ],
+        "cache": [
+            "status": "miss",
+            "ttlMs": Int(screenshotCacheTTLMilliseconds),
+            "key": cacheKey,
+        ],
     ]
+    if screenshotCacheEnabled {
+        recentScreenshotCache = ScreenshotCache(key: cacheKey, capturedAt: Date(), payload: payload)
+    }
+    return payload
 }
 
 func pointDictionary(_ point: CGPoint) -> [String: Any] {

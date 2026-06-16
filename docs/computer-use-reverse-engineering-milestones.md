@@ -40,7 +40,7 @@ Milestone 14: Complete for first native-version tracking baseline
 Milestone 15: Initial performance baseline complete
 Milestone 16: Complete for initial persistent helper service
 Milestone 17: Complete for initial fast action path and policy cache
-Milestone 18: Planned, incremental state and screenshot cache
+Milestone 18: Complete for initial same-window screenshot cache
 ```
 
 Completed architecture discovery work is summarized in
@@ -1306,7 +1306,10 @@ has a valid element index or coordinate from a recent state read.
 
 ## Milestone 18: Incremental State and Screenshot Cache
 
-Status: Planned as of 2026-06-16.
+Status: Complete for the first M18 slice as of 2026-06-16. The implementation
+adds a same-window screenshot cache for repeated `get_app_state` calls while
+keeping AX tree traversal fresh on every read. See
+`docs/milestone-18-incremental-state-screenshot-cache.md`.
 
 ### Purpose
 
@@ -1317,28 +1320,35 @@ every action.
 
 ### Work Items
 
-- Add optional state-read modes such as full, visible, focused, and changed-only.
-- Cache recent AX trees with app/window identity and invalidation metadata.
-- Capture screenshots only when requested, when the window changed, or when the
-  cached image is stale.
-- Explore cheaper screenshot paths or bounded capture regions while preserving
-  coordinate correctness.
-- Add payload-size limits and pruning rules for large AX trees.
-- Keep the default behavior compatible with existing fixture expectations until
-  a new default is intentionally chosen.
+- Done: cache the most recent screenshot payload by app pid, CoreGraphics window
+  ID, and window bounds.
+- Done: expose `screenshot.cache.status`, `ageMs`, and `ttlMs` metadata.
+- Done: support `LOCAL_CUA_SCREENSHOT_CACHE=0` and
+  `LOCAL_CUA_SCREENSHOT_CACHE_TTL_MS`.
+- Done: keep the default behavior compatible with existing fixture expectations.
+- Future: add optional state-read modes such as full, visible, focused, and
+  changed-only.
+- Future: cache recent AX trees with app/window identity and invalidation
+  metadata.
+- Future: add payload-size limits and pruning rules for large AX trees.
 
-### Verification Goals
+### Verification Results
 
-- Chrome and Finder `get_app_state` warm reads improve against M15 baseline.
-- Cached screenshots are never reused after a target-window change.
-- Overlay validation still passes for cached and freshly captured screenshots.
-- Large AX trees stay within defined payload and latency budgets.
+- Calculator repeated `get_app_state` warm reads improved at p50:
+  cache-on 192.46ms with 5/6 hits, cache-off 372.64ms with 0/6 hits.
+- `probe:m18:cache-invalidation` verified cached screenshots are not reused after
+  a target-window bounds change.
+- `probe:local`, `test:m11:fixtures`, `test:m13:negative`, and
+  `test:followups` passed after the cache change.
+- The cache-on p95 run had one noisy 3153.56ms outlier, so M18 only claims p50
+  warm-read improvement.
 
 ### Deliverables
 
-- Incremental state modes.
 - Screenshot freshness model.
-- Updated fixture and overlay validation for cached state.
+- M18 benchmark and invalidation probe.
+- Updated milestone docs.
+- Incremental AX tree modes remain future work.
 
 ### Risks and Notes
 

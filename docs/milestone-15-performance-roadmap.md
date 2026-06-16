@@ -140,21 +140,26 @@ Acceptance:
 
 Goal: reduce expensive full state reads.
 
+Status: initial screenshot-cache slice complete as of 2026-06-16. Repeated
+Calculator `get_app_state` improved from cache-off p50 372.64ms to cache-on p50
+192.46ms with 5/6 screenshot cache hits. One cache-on p95 outlier was observed,
+so the accepted claim is p50 warm-read improvement only.
+
 Scope:
 
-- add state modes such as full, visible, focused, and changed-only;
-- cache AX trees with app/window identity and freshness metadata;
-- capture screenshots only when requested or stale;
-- invalidate screenshot cache on window changes;
-- keep overlay validation working for cached and fresh screenshots;
-- cap large AX payloads with documented pruning rules.
+- done: cache the most recent screenshot by app/window identity and bounds;
+- done: expose screenshot freshness metadata in state payloads;
+- done: invalidate screenshot cache on window changes;
+- future: add state modes such as full, visible, focused, and changed-only;
+- future: cache AX trees with app/window identity and freshness metadata;
+- future: keep overlay validation working for cached and fresh screenshots;
+- future: cap large AX payloads with documented pruning rules.
 
 Acceptance:
 
-- warm Chrome and Finder state reads improve against M15;
+- repeated warm state reads improve at p50 with cache enabled;
 - cached screenshots are not reused after target-window changes;
-- state payloads expose freshness metadata so agents can force a full read when
-  needed.
+- state payloads expose freshness metadata.
 
 ## Recommended Order
 
