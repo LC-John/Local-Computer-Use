@@ -72,6 +72,21 @@ function normalizeJsonRpcError(response) {
 }
 
 function errorExpectation(pathPrefix, actual, expected) {
+  if (Array.isArray(expected.code) && expected.code.includes(actual.code)) {
+    return [
+      ...diffValue(`${pathPrefix}.severity`, expected.severity, actual.severity),
+      ...diffValue(
+        `${pathPrefix}.retryable`,
+        expected.retryable,
+        actual.retryable,
+      ),
+      ...expectTrue(
+        `${pathPrefix}.recoveryHint present`,
+        typeof actual.recoveryHint === "string" && actual.recoveryHint.length > 0,
+        actual.recoveryHint,
+      ),
+    ];
+  }
   return [
     ...diffValue(`${pathPrefix}.code`, expected.code, actual.code),
     ...diffValue(`${pathPrefix}.severity`, expected.severity, actual.severity),
@@ -500,7 +515,7 @@ async function runAppCloseRecoveryFixture() {
       setup: ["open TextEdit", "capture state", "quit TextEdit"],
       toolCalls: ["get_app_state", "click"],
       expected: {
-        afterCloseCode: "element_not_found",
+        afterCloseCode: "element_not_found or stale_element_index",
         calculatorRefreshOk: true,
       },
       actual: {
@@ -511,7 +526,7 @@ async function runAppCloseRecoveryFixture() {
       cleanup: ["quit TextEdit without saving"],
       diffs: [
         ...errorExpectation("afterCloseError", afterCloseError, {
-          code: "element_not_found",
+          code: ["element_not_found", "stale_element_index"],
           severity: "recoverable",
           retryable: true,
         }),

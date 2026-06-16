@@ -25,6 +25,7 @@
     "probe:m16:restart": "node scripts/probe-m16-helper-restart.mjs",
     "compare:m16:helpers": "node scripts/run-m16-helper-comparison.mjs",
     "benchmark:m17:actions": "node scripts/run-m17-action-cache-benchmark.mjs",
+    "probe:m17:stale": "node scripts/probe-m17-stale-state.mjs",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },

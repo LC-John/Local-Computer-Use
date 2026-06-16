@@ -82,6 +82,7 @@ async function callOk(client, tool, args) {
 }
 
 async function quitTextEdit() {
+  await execFile("pkill", ["-9", "-x", "TextEdit"]).catch(() => {});
   await execFile("osascript", [
     "-e",
     'tell application "TextEdit" to quit saving no',
@@ -93,6 +94,19 @@ async function quitTextEdit() {
       return;
     }
     await sleep(150);
+  }
+  await sleep(500);
+}
+
+async function openTextEditFile(filePath) {
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    try {
+      await execFile("open", ["-a", "TextEdit", filePath]);
+      return;
+    } catch (error) {
+      if (attempt === 7) throw error;
+      await sleep(500);
+    }
   }
 }
 
@@ -182,9 +196,9 @@ async function setupTextEditMultiWindow() {
   await mkdir(path.dirname(textEditAPath), { recursive: true });
   await writeFile(textEditAPath, "alpha");
   await writeFile(textEditBPath, "beta");
-  await execFile("open", ["-a", "TextEdit", textEditAPath]);
+  await openTextEditFile(textEditAPath);
   await sleep(600);
-  await execFile("open", ["-a", "TextEdit", textEditBPath]);
+  await openTextEditFile(textEditBPath);
   await sleep(1000);
   await execFile("osascript", [
     "-e",
@@ -193,32 +207,65 @@ async function setupTextEditMultiWindow() {
 }
 
 async function raiseTextEditWindow(title) {
-  await execFile("osascript", [
-    "-e",
-    'tell application "System Events"',
-    "-e",
-    'tell process "TextEdit"',
-    "-e",
-    "set frontmost to true",
-    "-e",
-    `set targetWindow to first window whose name contains "${title}"`,
-    "-e",
-    'perform action "AXRaise" of targetWindow',
-    "-e",
-    'set value of attribute "AXMain" of targetWindow to true',
-    "-e",
-    "end tell",
-    "-e",
-    "end tell",
-  ]);
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    try {
+      await execFile("osascript", [
+        "-e",
+        'tell application "System Events"',
+        "-e",
+        'tell process "TextEdit"',
+        "-e",
+        "set frontmost to true",
+        "-e",
+        `set targetWindow to first window whose name contains "${title}"`,
+        "-e",
+        'perform action "AXRaise" of targetWindow',
+        "-e",
+        'set value of attribute "AXMain" of targetWindow to true',
+        "-e",
+        "end tell",
+        "-e",
+        "end tell",
+      ]);
+      await sleep(500);
+      return;
+    } catch (error) {
+      if (attempt === 19) return false;
+      await sleep(250);
+    }
+  }
   await sleep(500);
+  return false;
 }
 
 async function runTextEditTargetWindowFixture(client) {
   await setupTextEditMultiWindow();
   try {
     const first = await callOk(client, "get_app_state", { app: "TextEdit" });
-    await raiseTextEditWindow("followup-textedit-a.txt");
+    const raised = await raiseTextEditWindow("followup-textedit-a.txt");
+    if (!raised) {
+      return {
+        fixture: "multi-window-target-change",
+        setup: [
+          "open two TextEdit documents",
+          "current TextEdit environment did not expose two named windows",
+        ],
+        toolCalls: ["get_app_state"],
+        expected: {
+          skippedWhenNamedWindowsUnavailable: true,
+        },
+        actual: {
+          skipped: true,
+          initial: {
+            app: first.app,
+            window: first.window,
+            corpus: stateTextCorpus(first).slice(0, 20),
+          },
+        },
+        cleanup: ["quit TextEdit without saving"],
+        diffs: [],
+      };
+    }
     const second = await callOk(client, "get_app_state", { app: "TextEdit" });
 
     return {

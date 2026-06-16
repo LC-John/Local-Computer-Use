@@ -116,6 +116,9 @@ Acceptance:
 
 ## M17: Fast Action Path and Policy Cache
 
+Status: Initial implementation complete; see
+`docs/milestone-17-fast-action-policy-cache.md`.
+
 Goal: make common actions feel interactive.
 
 Scope:

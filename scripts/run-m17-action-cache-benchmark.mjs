@@ -57,12 +57,41 @@ async function timedTool(client, tool, args) {
   };
 }
 
+async function clearCalculator(client) {
+  const state = parseToolText(
+    await client.callTool("get_app_state", { app: "Calculator" }),
+  );
+  const clearButton = findCalculatorButton(state, [
+    "全部清除",
+    "清除",
+    "删除",
+    "AllClear",
+    "Clear",
+    "Delete",
+    "AC",
+  ]);
+  for (let index = 0; index < 4; index += 1) {
+    await timedTool(client, "click", {
+      app: "Calculator",
+      element_index: String(clearButton.index),
+    }).catch(() => {});
+  }
+}
+
 function summarize(samples) {
   const durations = samples.map((sample) => sample.durationMs);
+  const policyDurations = samples
+    .map((sample) => sample.meta["local-computer-use/policyDurationMs"])
+    .filter((value) => typeof value === "number");
+  const adapterDurations = samples
+    .map((sample) => sample.meta["local-computer-use/adapterDurationMs"])
+    .filter((value) => typeof value === "number");
   return {
     runCount: samples.length,
     p50DurationMs: round(percentile(durations, 50)),
     p95DurationMs: round(percentile(durations, 95)),
+    p50PolicyDurationMs: round(percentile(policyDurations, 50)),
+    p50AdapterDurationMs: round(percentile(adapterDurations, 50)),
     minDurationMs: round(Math.min(...durations)),
     maxDurationMs: round(Math.max(...durations)),
     identityCacheValues: [...new Set(samples.map((sample) => sample.meta["local-computer-use/identityCache"]))],
@@ -85,16 +114,38 @@ async function runMode(mode) {
       name: `local-computer-use-m17-${mode}`,
       version: "0.1.0",
     });
-    const state = parseToolText(
+    let state = parseToolText(
       await client.callTool("get_app_state", { app: "Calculator" }),
     );
-    const oneButton = findCalculatorButton(state, ["1"]);
+    let oneButton = findCalculatorButton(state, ["1"]);
 
     for (let index = 0; index < repetitions; index += 1) {
-      const sample = await timedTool(client, "click", {
-        app: "Calculator",
-        element_index: String(oneButton.index),
-      });
+      let sample = null;
+      let refreshedForStale = false;
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        try {
+          sample = await timedTool(client, "click", {
+            app: "Calculator",
+            element_index: String(oneButton.index),
+          });
+          break;
+        } catch (error) {
+          if (!String(error.message).includes("stale app/window state")) {
+            throw error;
+          }
+          state = parseToolText(
+            await client.callTool("get_app_state", { app: "Calculator" }),
+          );
+          oneButton = findCalculatorButton(state, ["1"]);
+          refreshedForStale = true;
+        }
+      }
+      if (!sample) {
+        throw new Error("Unable to recover from stale Calculator element index");
+      }
+      if (refreshedForStale) {
+        sample.meta["local-computer-use/staleRefresh"] = true;
+      }
       samples.push({
         iteration: index + 1,
         durationMs: sample.durationMs,
@@ -103,6 +154,7 @@ async function runMode(mode) {
       });
     }
   } finally {
+    await clearCalculator(client).catch(() => {});
     await client.close({
       jsonlPath:
         mode === "cache-on"

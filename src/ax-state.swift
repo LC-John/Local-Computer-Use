@@ -25,6 +25,14 @@ struct ActionOutcome {
     let elementIndex: Int?
 }
 
+struct ElementCache {
+    let pid: pid_t
+    let windowSignature: String
+    let elements: [Int: AXUIElement]
+}
+
+var recentElementCache: ElementCache?
+
 func writeJSON(_ value: Any) throws {
     let data = try JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted, .sortedKeys])
     FileHandle.standardOutput.write(data)
@@ -437,15 +445,28 @@ func findElementByIndex(
     return nil
 }
 
+func windowSignature(_ window: TargetWindow) -> String {
+    let position = window.position ?? [:]
+    let size = window.size ?? [:]
+    return [
+        "\(position["x"] ?? position["X"] ?? "")",
+        "\(position["y"] ?? position["Y"] ?? "")",
+        "\(size["width"] ?? size["Width"] ?? "")",
+        "\(size["height"] ?? size["Height"] ?? "")",
+    ].joined(separator: "|")
+}
+
 func readElement(
     _ element: AXUIElement,
     depth: Int,
     counter: inout Int,
-    visited: inout Set<CFHashCode>
+    visited: inout Set<CFHashCode>,
+    elementCache: inout [Int: AXUIElement]
 ) -> [String: Any] {
     let hash = CFHash(element)
     let index = counter
     counter += 1
+    elementCache[index] = element
 
     var node: [String: Any] = [
         "index": index,
@@ -493,7 +514,13 @@ func readElement(
         let children = childElements(element)
         if !children.isEmpty {
             node["children"] = children.prefix(max(0, maxNodes - counter)).map {
-                readElement($0, depth: depth + 1, counter: &counter, visited: &visited)
+                readElement(
+                    $0,
+                    depth: depth + 1,
+                    counter: &counter,
+                    visited: &visited,
+                    elementCache: &elementCache
+                )
             }
         }
     } else if depth >= maxDepth {
@@ -1106,7 +1133,9 @@ func actionApp(_ args: [String: Any], permissionMessage: String) throws -> NSRun
         throw ToolError(code: "accessibility_permission_denied", message: permissionMessage)
     }
     let app = try resolveApp(appQuery)
-    activateApp(app)
+    if !app.isActive {
+        activateApp(app)
+    }
     return app
 }
 
@@ -1115,6 +1144,19 @@ func currentElement(app: NSRunningApplication, rawIndex: Any?) throws -> AXUIEle
         throw ToolError(code: "missing_element_index", message: "Missing required argument: element_index")
     }
     let targetWindow = focusedWindowOrAppElement(pid: app.processIdentifier)
+    let signature = windowSignature(targetWindow)
+    if let cache = recentElementCache, cache.pid == app.processIdentifier {
+        if cache.windowSignature != signature {
+            throw ToolError(
+                code: "stale_element_index",
+                message: "Element index belongs to a stale app/window state; refresh app state before retrying"
+            )
+        }
+        if let cached = cache.elements[elementIndex] {
+            return cached
+        }
+    }
+
     var counter = 0
     var visited = Set<CFHashCode>()
     guard let element = findElementByIndex(
@@ -1164,26 +1206,16 @@ func performClick(_ rawArguments: String) throws -> [String: Any] {
     }
 
     let app = try resolveApp(appQuery)
-    activateApp(app)
+    if !app.isActive {
+        activateApp(app)
+    }
 
-    let targetWindow = focusedWindowOrAppElement(pid: app.processIdentifier)
     let clickCount = intFromJSON(args["click_count"]) ?? 1
     let button = clickButton(args["mouse_button"])
-    let root = targetWindow.element
 
     let outcome: ActionOutcome
     if let rawIndex = args["element_index"], let elementIndex = intFromJSON(rawIndex) {
-        var counter = 0
-        var visited = Set<CFHashCode>()
-        guard let element = findElementByIndex(
-            root,
-            targetIndex: elementIndex,
-            depth: 0,
-            counter: &counter,
-            visited: &visited
-        ) else {
-            throw ToolError(code: "element_not_found", message: "Element index not found: \(elementIndex)")
-        }
+        let element = try currentElement(app: app, rawIndex: rawIndex)
 
         if button == .left && clickCount == 1 && copyActionNames(element).contains(kAXPressAction) {
             let result = AXUIElementPerformAction(element, kAXPressAction as CFString)
@@ -1202,6 +1234,7 @@ func performClick(_ rawArguments: String) throws -> [String: Any] {
             throw ToolError(code: "unsupported_element", message: "Element has no AXPress action or usable bounds")
         }
     } else if let x = numberFromJSON(args["x"]), let y = numberFromJSON(args["y"]) {
+        let targetWindow = focusedWindowOrAppElement(pid: app.processIdentifier)
         let screenshot = captureWindowScreenshot(app: app, window: targetWindow)
         guard screenshot["status"] as? String == "captured",
               let point = screenshotPointToGlobal(x, y, screenshot: screenshot)
@@ -1490,7 +1523,19 @@ func appState(_ query: String) throws -> [String: Any] {
     let targetWindow = focusedWindowOrAppElement(pid: app.processIdentifier)
     var counter = 0
     var visited = Set<CFHashCode>()
-    let tree = readElement(targetWindow.element, depth: 0, counter: &counter, visited: &visited)
+    var elementCache: [Int: AXUIElement] = [:]
+    let tree = readElement(
+        targetWindow.element,
+        depth: 0,
+        counter: &counter,
+        visited: &visited,
+        elementCache: &elementCache
+    )
+    recentElementCache = ElementCache(
+        pid: app.processIdentifier,
+        windowSignature: windowSignature(targetWindow),
+        elements: elementCache
+    )
     let screenshot = captureWindowScreenshot(app: app, window: targetWindow)
 
     return [

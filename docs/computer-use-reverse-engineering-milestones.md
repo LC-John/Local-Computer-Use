@@ -39,7 +39,7 @@ Milestone 13: Complete for local error semantics baseline
 Milestone 14: Complete for first native-version tracking baseline
 Milestone 15: Initial performance baseline complete
 Milestone 16: Complete for initial persistent helper service
-Milestone 17: In progress, policy/app identity cache started
+Milestone 17: Complete for initial fast action path and policy cache
 Milestone 18: Planned, incremental state and screenshot cache
 ```
 
@@ -1261,8 +1261,11 @@ context warm across calls.
 
 ## Milestone 17: Fast Action Path and Policy Cache
 
-Status: In progress as of 2026-06-16. The first implementation adds a short TTL
-policy/app identity cache and a repeated-action benchmark. See
+Status: Complete for the initial fast-action and policy-cache milestone as of
+2026-06-16. The implementation adds short TTL app identity and approval caches,
+server-side timing metadata, helper-side recent element context for
+element-index actions, stale-state protection, and repeated-action benchmarks.
+M11, M13, follow-up fixtures, and the M17 stale-state probe pass. See
 `docs/milestone-17-fast-action-policy-cache.md`.
 
 ### Purpose

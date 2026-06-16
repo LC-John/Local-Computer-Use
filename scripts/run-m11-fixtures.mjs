@@ -172,6 +172,14 @@ async function callOk(client, tool, args) {
   return parseToolText(await client.callTool(tool, args));
 }
 
+async function callMaybeError(client, tool, args) {
+  const response = await client.callTool(tool, args);
+  if (response.result?.isError) {
+    return { ok: false, error: parseToolError(response) };
+  }
+  return { ok: true, value: parseToolText(response) };
+}
+
 async function appState(client, app) {
   return callOk(client, "get_app_state", { app });
 }
@@ -207,22 +215,34 @@ function calculatorDisplayValues(state) {
 }
 
 async function clickCalculatorButton(client, labels) {
-  const currentState = await appState(client, "Calculator");
-  const element = findCalculatorButton(currentState, labels);
-  const result = await callOk(client, "click", {
+  let currentState = await appState(client, "Calculator");
+  let element = findCalculatorButton(currentState, labels);
+  let result = await callMaybeError(client, "click", {
     app: "Calculator",
     element_index: String(element.index),
   });
+  if (
+    !result.ok &&
+    result.error.meta["local-computer-use/errorCode"] === "stale_element_index"
+  ) {
+    currentState = await appState(client, "Calculator");
+    element = findCalculatorButton(currentState, labels);
+    result = await callMaybeError(client, "click", {
+      app: "Calculator",
+      element_index: String(element.index),
+    });
+  }
+  if (!result.ok) throw new Error(result.error.text);
   return {
     elementIndex: String(element.index),
     labels,
-    method: result.result?.method || result.source || null,
+    method: result.value.result?.method || result.value.source || null,
   };
 }
 
 async function clearCalculator(client) {
   const attempts = [];
-  for (let attempt = 0; attempt < 4; attempt += 1) {
+  for (let attempt = 0; attempt < 12; attempt += 1) {
     attempts.push(
       await clickCalculatorButton(client, [
         "全部清除",
@@ -234,15 +254,6 @@ async function clearCalculator(client) {
         "AC",
       ]),
     );
-    const values = calculatorDisplayValues(
-      await appState(client, "Calculator"),
-    );
-    if (
-      values.length === 0 ||
-      values.every((value) => value === "0" || value === "0.")
-    ) {
-      break;
-    }
   }
   return attempts;
 }
@@ -315,6 +326,7 @@ async function setupTextEditFixture() {
     "-e",
     'tell application "TextEdit" to quit saving no',
   ]).catch(() => {});
+  await execFile("pkill", ["-9", "-x", "TextEdit"]).catch(() => {});
   for (let attempt = 0; attempt < 20; attempt += 1) {
     const stillRunning = await execFile("pgrep", ["-x", "TextEdit"])
       .then(() => true)
@@ -351,10 +363,11 @@ async function setupTextEditFixture() {
     "-e",
     "end tell",
   ]).catch(() => {});
-  await sleep(1000);
+  await sleep(1200);
 }
 
 async function cleanupTextEditFixture() {
+  await execFile("pkill", ["-9", "-x", "TextEdit"]).catch(() => {});
   await execFile("osascript", [
     "-e",
     'tell application "TextEdit" to quit saving no',
@@ -401,7 +414,13 @@ async function runTextEditKeyboardFixture(client) {
   await setupTextEditFixture();
   const typedText = "M11 keyboard fixture";
   const replacementText = "M11 replacement text";
-  const initialState = await waitForTextArea(client);
+  let initialState;
+  try {
+    initialState = await waitForTextArea(client);
+  } catch {
+    await setupTextEditFixture();
+    initialState = await waitForTextArea(client);
+  }
   const initialTextArea = textArea(initialState);
   const clickTextArea = await callOk(client, "click", {
     app: "TextEdit",
@@ -468,7 +487,13 @@ async function runTextEditKeyboardFixture(client) {
 
 async function runTextEditActionFixture(client) {
   await setupTextEditFixture();
-  const initialState = await waitForTextArea(client);
+  let initialState;
+  try {
+    initialState = await waitForTextArea(client);
+  } catch {
+    await setupTextEditFixture();
+    initialState = await waitForTextArea(client);
+  }
   const initialTextArea = textArea(initialState);
   await callOk(client, "click", {
     app: "TextEdit",

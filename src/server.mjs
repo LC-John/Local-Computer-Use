@@ -97,6 +97,8 @@ const errorRecovery = {
     "Ensure the local screenshot directory is writable before retrying.",
   server_not_initialized:
     "Call initialize and send notifications/initialized before other MCP requests.",
+  stale_element_index:
+    "Refresh app state and retry with an element index from the current app/window.",
   text_not_found:
     "Refresh app state and select text that exists in the current element value.",
   unexpected_argument:
@@ -124,6 +126,7 @@ const retryableErrorCodes = new Set([
   "screen_recording_permission_missing",
   "screenshot_capture_failed",
   "server_not_initialized",
+  "stale_element_index",
   "text_not_found",
   "window_not_found",
 ]);
@@ -218,6 +221,10 @@ function toolResultSuccess(id, text, metadata = {}) {
 
 function nowMs() {
   return Date.now();
+}
+
+function durationMs(start) {
+  return Math.round((performance.now() - start) * 100) / 100;
 }
 
 function normalizeCacheKey(value) {
@@ -357,13 +364,19 @@ async function handleToolsCall(id, params = {}) {
     });
   }
 
+  const policyStarted = performance.now();
   const appPolicyResult = await enforcePolicy(name, args);
+  const policyMetadata = {
+    ...(appPolicyResult.metadata || {}),
+    "local-computer-use/policyDurationMs": durationMs(policyStarted),
+  };
   if (!appPolicyResult.ok) {
     return toolResultError(id, appPolicyResult.message, {
       tool: name,
       code: appPolicyResult.code,
       metadata: {
         "local-computer-use/policySource": appPolicy?.source,
+        ...policyMetadata,
       },
     });
   }
@@ -395,7 +408,9 @@ async function handleToolsCall(id, params = {}) {
   }
 
   if (name === "get_app_state") {
+    const adapterStarted = performance.now();
     const state = await getAppState(args.app);
+    const adapterDurationMs = durationMs(adapterStarted);
     if (!state.ok) {
       return toolResultError(
         id,
@@ -409,12 +424,15 @@ async function handleToolsCall(id, params = {}) {
     return toolResultSuccess(id, JSON.stringify(state), {
       tool: name,
       "local-computer-use/source": state.source,
-      ...(appPolicyResult.metadata || {}),
+      "local-computer-use/adapterDurationMs": adapterDurationMs,
+      ...policyMetadata,
     });
   }
 
   if (name === "click") {
+    const adapterStarted = performance.now();
     const result = await click(args);
+    const adapterDurationMs = durationMs(adapterStarted);
     if (!result.ok) {
       return toolResultError(id, result.error?.message || "Unable to click", {
         tool: name,
@@ -424,12 +442,15 @@ async function handleToolsCall(id, params = {}) {
     return toolResultSuccess(id, JSON.stringify(result), {
       tool: name,
       "local-computer-use/source": result.source,
-      ...(appPolicyResult.metadata || {}),
+      "local-computer-use/adapterDurationMs": adapterDurationMs,
+      ...policyMetadata,
     });
   }
 
   if (name === "type_text") {
+    const adapterStarted = performance.now();
     const result = await typeText(args);
+    const adapterDurationMs = durationMs(adapterStarted);
     if (!result.ok) {
       return toolResultError(
         id,
@@ -443,12 +464,15 @@ async function handleToolsCall(id, params = {}) {
     return toolResultSuccess(id, JSON.stringify(result), {
       tool: name,
       "local-computer-use/source": result.source,
-      ...(appPolicyResult.metadata || {}),
+      "local-computer-use/adapterDurationMs": adapterDurationMs,
+      ...policyMetadata,
     });
   }
 
   if (name === "press_key") {
+    const adapterStarted = performance.now();
     const result = await pressKey(args);
+    const adapterDurationMs = durationMs(adapterStarted);
     if (!result.ok) {
       return toolResultError(
         id,
@@ -462,7 +486,8 @@ async function handleToolsCall(id, params = {}) {
     return toolResultSuccess(id, JSON.stringify(result), {
       tool: name,
       "local-computer-use/source": result.source,
-      ...(appPolicyResult.metadata || {}),
+      "local-computer-use/adapterDurationMs": adapterDurationMs,
+      ...policyMetadata,
     });
   }
 
@@ -474,7 +499,9 @@ async function handleToolsCall(id, params = {}) {
     perform_secondary_action: performSecondaryAction,
   };
   if (name in actionHandlers) {
+    const adapterStarted = performance.now();
     const result = await actionHandlers[name](args);
+    const adapterDurationMs = durationMs(adapterStarted);
     if (!result.ok) {
       return toolResultError(
         id,
@@ -488,7 +515,8 @@ async function handleToolsCall(id, params = {}) {
     return toolResultSuccess(id, JSON.stringify(result), {
       tool: name,
       "local-computer-use/source": result.source,
-      ...(appPolicyResult.metadata || {}),
+      "local-computer-use/adapterDurationMs": adapterDurationMs,
+      ...policyMetadata,
     });
   }
 
