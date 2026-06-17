@@ -221,6 +221,40 @@ Acceptance:
 - unknown scenarios fail loudly;
 - MCP server default behavior is unchanged.
 
+## M21+: Dev Manager App Track
+
+Goal: app-ize the developer management surface without changing the current MCP
+runtime.
+
+Status: M21 scope and architecture complete as of 2026-06-17. The project should
+build a lightweight macOS Dev Manager App around the existing
+plugin/server/helper stack:
+
+```text
+Codex plugin -> node src/server.mjs -> .build/ax-state serve
+```
+
+Scope:
+
+- M21: done, define app scope, architecture, goals, and non-goals;
+- M22: build a minimal SwiftUI app shell;
+- M23: add diagnostics and test runner UI;
+- M24: add plugin install, validate, and smoke-test flow;
+- M25: package polish and handoff docs.
+
+Non-goals for this track:
+
+- no multi-client MCP host;
+- no socket or HTTP MCP transport;
+- no launchd/system daemon;
+- no locked computer use;
+- no replacement for the bundled OpenAI `computer-use` plugin.
+
+The official bundled macOS Computer Use plugin is app-shaped, with a bundled
+`Codex Computer Use.app` and `SkyComputerUseClient mcp` entry. The local project
+uses that as directional validation for app packaging, but the first app track
+only productizes diagnostics and developer operations.
+
 ## Recommended Order
 
 Do these in order:
@@ -232,6 +266,7 @@ M17: reduce repeated action overhead
 M18: reduce repeated state and screenshot overhead
 M19: validate state budgets on larger apps
 M20: centralize state-mode selection policy
+M21: define Dev Manager App track
 ```
 
 This order keeps the optimization work honest: each later milestone must beat

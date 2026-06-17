@@ -1,7 +1,7 @@
 # Computer Use Reverse Engineering and Reimplementation Milestones
 
 Date: 2026-06-12
-Updated: 2026-06-16
+Updated: 2026-06-17
 
 This document defines a practical milestone plan for reverse engineering and
 reimplementing a Computer Use-like local MCP server. The intended approach is
@@ -43,6 +43,7 @@ Milestone 17: Complete for initial fast action path and policy cache
 Milestone 18: Complete for screenshot cache and state modes
 Milestone 19: Complete for first large-app state budget pass
 Milestone 20: Complete for first state policy helper
+Milestone 21: Complete for Dev Manager App scope and architecture
 ```
 
 Completed architecture discovery work is summarized in
@@ -1455,11 +1456,67 @@ policy.
 - Coordinate-based workflows must still force full screenshot state before using
   screenshot coordinates.
 
+## Track Boundary
+
+Milestones 0-20 are the Core MCP Reimplementation Track. They establish the
+local MCP server, macOS AX helper, plugin packaging, fixture gates, error model,
+performance baseline, state modes, and state policy helper.
+
+Milestone 21 starts the Dev Manager App Track. This track app-izes the
+development and diagnostics surface around Local Computer Use. It does not
+replace the existing stdio MCP plugin transport, introduce multi-client hosting,
+or turn the current helper into a launchd/system daemon.
+
+The official bundled Computer Use plugin is app-shaped on macOS: the observed
+bundle contains `Codex Computer Use.app`, `SkyComputerUseService`,
+`SkyComputerUseClient.app`, and installer/guardian components. The local project
+uses that as directional evidence that app packaging is appropriate, while
+keeping the first app track intentionally lighter.
+
+## Milestone 21: Dev Manager App Scope and Architecture
+
+Status: Complete for scope and architecture as of 2026-06-17. M21 records the
+decision to build a lightweight macOS developer manager app for Local Computer Use. See
+`docs/milestone-21-dev-manager-app-scope.md`.
+
+### Purpose
+
+Productize the current developer tooling and diagnostics without changing the
+working Codex plugin runtime:
+
+```text
+Codex plugin -> node src/server.mjs -> .build/ax-state serve
+```
+
+### Goals
+
+- Show repo, plugin, permission, and helper health.
+- Run existing probes and fixture tests from a UI.
+- Open reports, logs, and milestone docs.
+- Help validate or reinstall the local plugin.
+- Keep the existing `local-computer-use` MCP plugin behavior unchanged.
+
+### Non-Goals
+
+- No multi-client MCP host.
+- No socket or HTTP MCP transport.
+- No launchd/system daemon.
+- No locked computer use.
+- No replacement for the bundled OpenAI `computer-use` plugin.
+
+### Proposed Follow-Up Milestones
+
+- M22: Minimal SwiftUI app shell.
+- M23: Diagnostics and test runner UI.
+- M24: Plugin install, validate, and smoke flow.
+- M25: Packaging polish and handoff docs.
+
 ## Suggested Execution Order
 
 Recommended order:
 
 ```text
+Core MCP Reimplementation Track:
 0. Scope and boundaries
 1. Entrypoint mapping
 2. Native static profile
@@ -1481,6 +1538,13 @@ Recommended order:
 18. Incremental state and screenshot cache
 19. Large app state budget and default policy
 20. State policy helper
+
+Dev Manager App Track:
+21. Dev Manager App scope and architecture
+22. Minimal SwiftUI app shell
+23. Diagnostics and test runner UI
+24. Plugin install, validate, and smoke flow
+25. Packaging polish and handoff docs
 ```
 
 The most important dependency is that `get_app_state` should be understood
