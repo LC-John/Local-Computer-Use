@@ -119,6 +119,7 @@ M26: Resident app-host MCP path complete
 M27: Native-shaped bundle layout complete
 M28: Client subcommands complete
 M29: Service lifecycle and single-instance runtime complete
+M30: Installer and plugin refresh flow complete
 ```
 
 ## Known Non-Goals

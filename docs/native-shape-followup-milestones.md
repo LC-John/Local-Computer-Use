@@ -2,7 +2,7 @@
 
 Date: 2026-06-17
 
-Status: Planning document. M27-M29 are complete; M30-M35 remain proposed. This
+Status: Planning document. M27-M30 are complete; M31-M35 remain proposed. This
 roadmap starts after M26 and describes what is
 still missing if Local Computer Use should more closely match the native Codex
 Computer Use app shape observed on this machine.
@@ -138,22 +138,30 @@ Verification:
 
 ## Milestone 30: Installer and Plugin Refresh Flow
 
-Status: Proposed.
+Status: Complete for the first installer and plugin refresh flow as of
+2026-06-17.
 
 Purpose: Add the local equivalent of `Codex Computer Use Installer.app` for
 repeatable install, reinstall, and cache-refresh operations.
 
 Work items:
 
-- Add `Local Computer Use Installer.app` or an installer mode inside the app.
-- Validate plugin manifest and `.mcp.json`.
-- Create or repair `~/plugins/local-computer-use`.
-- Run `codex plugin add local-computer-use@personal` when explicitly invoked.
-- Explain when a fresh Codex thread is required.
-- Record installer results in a report.
+- Done: add an installer mode through `src/installer-cli.mjs`.
+- Done: validate plugin manifest and `.mcp.json`.
+- Done: create or repair `~/plugins/local-computer-use`.
+- Done: expose `codex plugin add local-computer-use@personal` when explicitly
+  invoked.
+- Done: explain when a fresh Codex thread is required.
+- Done: record installer results in a report.
+- Done: expose an Installer Check button in the Dev Manager app.
+
+Deferred:
+
+- A separately signed installer app remains release packaging work.
 
 Verification:
 
+- `npm run verify:m30:installer-flow` passes.
 - Installer validates a clean checkout.
 - Installer repairs a missing symlink.
 - Installer refuses to overwrite unrelated paths.
@@ -282,5 +290,5 @@ M34: locked-use guardian feasibility
 M35: release, signing, and update discipline
 ```
 
-The practical next target is M30. It adds installer and plugin-refresh flow
-before taking on permission onboarding, locked-use, or native rewrite work.
+The practical next target is M31. It improves permission onboarding and recovery
+before taking on richer event integration, locked-use, or native rewrite work.

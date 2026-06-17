@@ -237,6 +237,10 @@ final class AppModel: ObservableObject {
         runCommand(title: "plugin flow", command: ["npm", "run", "probe:m24:plugin-flow"])
     }
 
+    func runInstallerCheck() {
+        runCommand(title: "installer check", command: ["npm", "run", "installer:m30:check"])
+    }
+
     func runDiagnostic(_ diagnostic: DiagnosticCommand) {
         runCommand(title: diagnostic.title, command: diagnostic.command)
     }
@@ -436,6 +440,9 @@ struct ContentView: View {
                         }
                         Button("Plugin Flow") {
                             model.runPluginFlowProbe()
+                        }
+                        Button("Installer Check") {
+                            model.runInstallerCheck()
                         }
                         Button("Start Host") {
                             model.startAppHostIfNeeded()

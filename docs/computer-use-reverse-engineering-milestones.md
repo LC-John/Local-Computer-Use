@@ -52,7 +52,8 @@ Milestone 26: Complete for first resident app-host MCP path
 Milestone 27: Complete for first native-shaped bundle layout
 Milestone 28: Complete for first client subcommand surface
 Milestone 29: Complete for first service lifecycle pass
-Milestone 30-35: Proposed native-shaped app/service follow-up track
+Milestone 30: Complete for first installer/plugin refresh flow
+Milestone 31-35: Proposed native-shaped app/service follow-up track
 ```
 
 Completed architecture discovery work is summarized in
@@ -1759,19 +1760,37 @@ Verification:
 
 - `npm run verify:m29:service-lifecycle` passed.
 
-## Milestones 30-35: Native-Shaped App/Service Follow-Up Track
+## Milestone 30: Installer and Plugin Refresh Flow
+
+Status: Complete for the first installer and plugin refresh flow as of
+2026-06-17. See `docs/milestone-30-installer-plugin-refresh-flow.md`.
+
+Purpose: add an explicit install/check/repair flow for the personal
+`local-computer-use` plugin without silently overwriting unrelated user paths.
+
+Work completed:
+
+- Added `src/installer-cli.mjs`.
+- Added installer check, repair-link, and explicit codex-add commands.
+- Added Dev Manager app `Installer Check` button.
+- Added `probe:m30:installer-flow` and `verify:m30:installer-flow`.
+
+Verification:
+
+- `npm run verify:m30:installer-flow` passed.
+
+## Milestones 31-35: Native-Shaped App/Service Follow-Up Track
 
 Status: Proposed. See `docs/native-shape-followup-milestones.md`.
 
-Purpose: close the remaining gap between M29's observable single-instance
-service and the native Codex Computer Use app shape. The observed native shape
-has installer and guardian helper apps, signed app-group style packaging, and
-richer event/notification entrypoints.
+Purpose: close the remaining gap between M30's installer/check flow and the
+native Codex Computer Use app shape. The observed native shape has stronger
+permission onboarding, guardian helper apps, signed app-group style packaging,
+and richer event/notification entrypoints.
 
 Proposed sequence:
 
 ```text
-M30: Installer and plugin refresh flow
 M31: Permission onboarding and recovery
 M32: Event stream and turn-ended integration
 M33: Native capture and automation consolidation
