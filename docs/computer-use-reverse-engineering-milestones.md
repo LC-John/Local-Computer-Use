@@ -51,7 +51,8 @@ Milestone 25: Complete for packaging polish and handoff
 Milestone 26: Complete for first resident app-host MCP path
 Milestone 27: Complete for first native-shaped bundle layout
 Milestone 28: Complete for first client subcommand surface
-Milestone 29-35: Proposed native-shaped app/service follow-up track
+Milestone 29: Complete for first service lifecycle pass
+Milestone 30-35: Proposed native-shaped app/service follow-up track
 ```
 
 Completed architecture discovery work is summarized in
@@ -1737,20 +1738,39 @@ Verification:
 
 - `npm run verify:m28:client-subcommands` passed.
 
-## Milestones 29-35: Native-Shaped App/Service Follow-Up Track
+## Milestone 29: Service Lifecycle and Single-Instance Runtime
+
+Status: Complete for the first service lifecycle pass as of 2026-06-17. See
+`docs/milestone-29-service-lifecycle.md`.
+
+Purpose: make the resident app host observable, single-instance per socket, and
+stable across repeated MCP sessions.
+
+Work completed:
+
+- Added service status JSON with PID, heartbeat, uptime, session counts, state,
+  and last error.
+- Added single-live-service handling for an already-active socket.
+- Added client `status` service-status reporting.
+- Added Dev Manager service PID, uptime, session, and last-error status rows.
+- Added `probe:m29:service-lifecycle` and `verify:m29:service-lifecycle`.
+
+Verification:
+
+- `npm run verify:m29:service-lifecycle` passed.
+
+## Milestones 30-35: Native-Shaped App/Service Follow-Up Track
 
 Status: Proposed. See `docs/native-shape-followup-milestones.md`.
 
-Purpose: close the remaining gap between M28's generated client subcommand
-surface and the native Codex Computer Use app shape. The observed native shape
-has a main service binary, installer and guardian helper apps, signed app-group
-style packaging, stronger service lifecycle behavior, and richer
-event/notification entrypoints.
+Purpose: close the remaining gap between M29's observable single-instance
+service and the native Codex Computer Use app shape. The observed native shape
+has installer and guardian helper apps, signed app-group style packaging, and
+richer event/notification entrypoints.
 
 Proposed sequence:
 
 ```text
-M29: Service lifecycle and single-instance runtime
 M30: Installer and plugin refresh flow
 M31: Permission onboarding and recovery
 M32: Event stream and turn-ended integration

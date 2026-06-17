@@ -11,6 +11,10 @@ struct AppStatus {
     var screenRecordingGranted: Bool
     var appHostSocketPath: String
     var appHostSocketExists: Bool
+    var servicePid: String
+    var serviceUptime: String
+    var serviceSessions: String
+    var serviceLastError: String
 }
 
 struct DiagnosticCommand: Identifiable {
@@ -95,7 +99,11 @@ final class AppModel: ObservableObject {
             accessibilityGranted: AXIsProcessTrusted(),
             screenRecordingGranted: CGPreflightScreenCaptureAccess(),
             appHostSocketPath: appHostSocketPath,
-            appHostSocketExists: FileManager.default.fileExists(atPath: appHostSocketPath)
+            appHostSocketExists: FileManager.default.fileExists(atPath: appHostSocketPath),
+            servicePid: "unknown",
+            serviceUptime: "unknown",
+            serviceSessions: "unknown",
+            serviceLastError: "none"
         )
         startAppHostIfNeeded()
     }
@@ -128,6 +136,7 @@ final class AppModel: ObservableObject {
     }
 
     func refreshStatus() {
+        let serviceStatus = Self.readServiceStatus(repoURL: repoURL)
         status = AppStatus(
             repoPath: repoURL.path,
             pluginPath: NSString(string: "~/plugins/local-computer-use").expandingTildeInPath,
@@ -135,8 +144,40 @@ final class AppModel: ObservableObject {
             accessibilityGranted: AXIsProcessTrusted(),
             screenRecordingGranted: CGPreflightScreenCaptureAccess(),
             appHostSocketPath: appHostSocketPath,
-            appHostSocketExists: FileManager.default.fileExists(atPath: appHostSocketPath)
+            appHostSocketExists: FileManager.default.fileExists(atPath: appHostSocketPath),
+            servicePid: serviceStatus.pid,
+            serviceUptime: serviceStatus.uptime,
+            serviceSessions: serviceStatus.sessions,
+            serviceLastError: serviceStatus.lastError
         )
+    }
+
+    static func readServiceStatus(repoURL: URL) -> (pid: String, uptime: String, sessions: String, lastError: String) {
+        let statusURL = repoURL
+            .appendingPathComponent(".build", isDirectory: true)
+            .appendingPathComponent("runtime", isDirectory: true)
+            .appendingPathComponent("service-status.json")
+        guard
+            let data = try? Data(contentsOf: statusURL),
+            let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
+        else {
+            return ("unknown", "unknown", "unknown", "none")
+        }
+        let pid = object["pid"].map { String(describing: $0) } ?? "unknown"
+        let uptimeMs: Double?
+        if let value = object["uptimeMs"] as? Double {
+            uptimeMs = value
+        } else if let value = object["uptimeMs"] as? Int {
+            uptimeMs = Double(value)
+        } else {
+            uptimeMs = nil
+        }
+        let uptime = uptimeMs.map { String(format: "%.1fs", $0 / 1000) } ?? "unknown"
+        let active = object["activeSessions"].map { String(describing: $0) } ?? "?"
+        let total = object["totalSessions"].map { String(describing: $0) } ?? "?"
+        let lastErrorObject = object["lastError"] as? [String: Any]
+        let lastError = lastErrorObject?["message"] as? String ?? "none"
+        return (pid, uptime, "\(active) active / \(total) total", lastError)
     }
 
     func startAppHostIfNeeded() {
@@ -156,6 +197,11 @@ final class AppModel: ObservableObject {
             "LOCAL_CUA_REPO_ROOT": repoURL.path,
             "LOCAL_CUA_APP_SOCKET": appHostSocketPath,
             "LOCAL_CUA_APP_HOST_LOG": repoURL.appendingPathComponent("reports/app-host.log").path,
+            "LOCAL_CUA_SERVICE_STATUS": repoURL
+                .appendingPathComponent(".build", isDirectory: true)
+                .appendingPathComponent("runtime", isDirectory: true)
+                .appendingPathComponent("service-status.json")
+                .path,
         ]) { _, new in new }
 
         let pipe = Pipe()
@@ -355,6 +401,10 @@ struct ContentView: View {
                     StatusRow(label: "Accessibility", value: model.status.accessibilityGranted ? "granted" : "missing", ok: model.status.accessibilityGranted)
                     StatusRow(label: "Screen Recording", value: model.status.screenRecordingGranted ? "granted" : "missing", ok: model.status.screenRecordingGranted)
                     StatusRow(label: "MCP app host", value: model.status.appHostSocketPath, ok: model.status.appHostSocketExists)
+                    StatusRow(label: "Service PID", value: model.status.servicePid, ok: model.status.servicePid == "unknown" ? false : nil)
+                    StatusRow(label: "Service uptime", value: model.status.serviceUptime, ok: nil)
+                    StatusRow(label: "Sessions", value: model.status.serviceSessions, ok: nil)
+                    StatusRow(label: "Last service error", value: model.status.serviceLastError, ok: model.status.serviceLastError == "none")
                 }
                 .padding(.vertical, 6)
             }

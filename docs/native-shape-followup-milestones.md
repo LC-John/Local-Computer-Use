@@ -2,7 +2,7 @@
 
 Date: 2026-06-17
 
-Status: Planning document. M27-M28 are complete; M29-M35 remain proposed. This
+Status: Planning document. M27-M29 are complete; M30-M35 remain proposed. This
 roadmap starts after M26 and describes what is
 still missing if Local Computer Use should more closely match the native Codex
 Computer Use app shape observed on this machine.
@@ -109,22 +109,28 @@ Verification:
 
 ## Milestone 29: Service Lifecycle and Single-Instance Runtime
 
-Status: Proposed.
+Status: Complete for the first service lifecycle pass as of 2026-06-17.
 
 Purpose: Make the resident service robust enough to behave like an app service,
 not just a manually started Node process.
 
 Work items:
 
-- Enforce one active service instance per user.
-- Add service readiness, heartbeat, restart, and shutdown semantics.
-- Persist service status under `reports/` or `.build/runtime/`.
-- Make the Dev Manager app show live service PID, socket path, uptime, session
+- Done: enforce one active service instance per socket.
+- Done: add service readiness, heartbeat, and shutdown status.
+- Done: persist service status under `.build/runtime/` by default.
+- Done: make the Dev Manager app show live service PID, socket path, uptime, session
   count, and last error.
-- Add bridge behavior for missing service: clear error, no silent hang.
+- Done: add bridge behavior for missing service: clear error, no silent hang.
+
+Deferred:
+
+- Login item or launchd behavior remains out of scope.
+- Rich restart supervision remains future work.
 
 Verification:
 
+- `npm run verify:m29:service-lifecycle` passes.
 - Starting the app twice does not create two competing hosts.
 - Bridge reports a helpful error when service is unavailable.
 - Service survives multiple sequential MCP sessions.
@@ -276,6 +282,5 @@ M34: locked-use guardian feasibility
 M35: release, signing, and update discipline
 ```
 
-The practical next target is M29. It hardens service lifecycle and
-single-instance behavior before taking on installer, locked-use, or native
-rewrite work.
+The practical next target is M30. It adds installer and plugin-refresh flow
+before taking on permission onboarding, locked-use, or native rewrite work.

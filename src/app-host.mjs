@@ -13,11 +13,48 @@ const socketPath =
 const logPath =
   process.env.LOCAL_CUA_APP_HOST_LOG ||
   path.join(repoRoot, "reports", "app-host.log");
+const runtimeDir =
+  process.env.LOCAL_CUA_RUNTIME_DIR || path.join(repoRoot, ".build", "runtime");
+const statusPath =
+  process.env.LOCAL_CUA_SERVICE_STATUS ||
+  path.join(runtimeDir, "service-status.json");
+
+const startedAt = new Date();
+const status = {
+  activeSessions: 0,
+  lastError: null,
+  pid: process.pid,
+  repoRoot,
+  socketPath,
+  startedAt: startedAt.toISOString(),
+  state: "starting",
+  totalSessions: 0,
+};
 
 async function appendLog(message) {
   await mkdir(path.dirname(logPath), { recursive: true });
   await writeFile(logPath, `${new Date().toISOString()} ${message}\n`, {
     flag: "a",
+  });
+}
+
+async function writeStatus(patch = {}) {
+  Object.assign(status, patch, {
+    heartbeatAt: new Date().toISOString(),
+    uptimeMs: Date.now() - startedAt.getTime(),
+  });
+  await mkdir(path.dirname(statusPath), { recursive: true });
+  await writeFile(statusPath, `${JSON.stringify(status, null, 2)}\n`);
+}
+
+async function recordError(error) {
+  const message = error?.stack || error?.message || String(error);
+  await appendLog(`host error: ${message}`);
+  await writeStatus({
+    lastError: {
+      message,
+      recordedAt: new Date().toISOString(),
+    },
   });
 }
 
@@ -40,6 +77,7 @@ async function prepareSocket() {
     }
     if (await canConnect(socketPath)) {
       await appendLog(`host already running at ${socketPath}`);
+      await writeStatus({ state: "already-running" });
       console.error(`Local Computer Use app host already running at ${socketPath}`);
       process.exit(0);
     }
@@ -50,6 +88,10 @@ async function prepareSocket() {
 }
 
 function attachSession(socket) {
+  status.activeSessions += 1;
+  status.totalSessions += 1;
+  writeStatus({ state: "serving" }).catch(() => {});
+
   const child = spawn("node", ["src/server.mjs"], {
     cwd: repoRoot,
     env: {
@@ -79,24 +121,40 @@ function attachSession(socket) {
     appendLog(`session exit pid=${child.pid} code=${code} signal=${signal}`).catch(
       () => {},
     );
+    status.activeSessions = Math.max(0, status.activeSessions - 1);
+    writeStatus({ state: status.activeSessions > 0 ? "serving" : "ready" }).catch(
+      () => {},
+    );
     socket.end();
   });
 }
 
 async function main() {
+  await writeStatus({ state: "starting" });
   await prepareSocket();
   const server = createServer(attachSession);
   server.on("error", (error) => {
-    appendLog(`host error: ${error.stack || error.message}`).catch(() => {});
+    recordError(error).catch(() => {});
     process.exitCode = 1;
   });
   await new Promise((resolve) => server.listen(socketPath, resolve));
   await appendLog(`host listening at ${socketPath}`);
+  await writeStatus({ state: "ready" });
   console.error(`Local Computer Use app host listening at ${socketPath}`);
 
+  const heartbeat = setInterval(() => {
+    writeStatus({ state: status.activeSessions > 0 ? "serving" : "ready" }).catch(
+      () => {},
+    );
+  }, 1000);
+
   function shutdown() {
+    clearInterval(heartbeat);
+    writeStatus({ state: "stopping" }).finally(() => {});
     server.close(() => {
-      rm(socketPath, { force: true }).finally(() => process.exit(0));
+      rm(socketPath, { force: true })
+        .then(() => writeStatus({ state: "stopped" }))
+        .finally(() => process.exit(0));
     });
   }
   process.on("SIGTERM", shutdown);

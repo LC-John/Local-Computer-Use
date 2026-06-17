@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { createConnection } from "node:net";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 
@@ -12,6 +12,9 @@ const socketPath =
 const eventLogPath =
   process.env.LOCAL_CUA_CLIENT_EVENT_LOG ||
   path.join(repoRoot, "reports", "client-events.jsonl");
+const serviceStatusPath =
+  process.env.LOCAL_CUA_SERVICE_STATUS ||
+  path.join(repoRoot, ".build", "runtime", "service-status.json");
 
 function usage() {
   return [
@@ -41,6 +44,17 @@ async function appendEvent(event) {
   await writeFile(eventLogPath, `${JSON.stringify(event)}\n`, { flag: "a" });
 }
 
+async function readServiceStatus() {
+  try {
+    return JSON.parse(await readFile(serviceStatusPath, "utf8"));
+  } catch (error) {
+    return {
+      error: error.message,
+      path: serviceStatusPath,
+    };
+  }
+}
+
 async function statusEvent() {
   const hostReachable = await canConnect(socketPath);
   return {
@@ -49,6 +63,7 @@ async function statusEvent() {
     repoRoot,
     socketPath,
     hostReachable,
+    serviceStatus: await readServiceStatus(),
     client: {
       name: "LocalComputerUseClient",
       version: "0.1.0",

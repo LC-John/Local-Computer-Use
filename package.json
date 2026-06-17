@@ -44,6 +44,8 @@
     "verify:m27:native-bundle": "npm run build:m22:app && npm run probe:m27:native-bundle && npm run probe:m24:plugin-flow",
     "probe:m28:client-subcommands": "node scripts/probe-m28-client-subcommands.mjs",
     "verify:m28:client-subcommands": "npm run build:m22:app && npm run probe:m28:client-subcommands && npm run probe:m27:native-bundle && npm run probe:m24:plugin-flow",
+    "probe:m29:service-lifecycle": "node scripts/probe-m29-service-lifecycle.mjs",
+    "verify:m29:service-lifecycle": "npm run build:m22:app && npm run probe:m29:service-lifecycle && npm run probe:m28:client-subcommands && npm run probe:m24:plugin-flow",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },
