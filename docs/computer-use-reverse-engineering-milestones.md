@@ -44,6 +44,7 @@ Milestone 18: Complete for screenshot cache and state modes
 Milestone 19: Complete for first large-app state budget pass
 Milestone 20: Complete for first state policy helper
 Milestone 21: Complete for Dev Manager App scope and architecture
+Milestone 22: Complete for minimal Dev Manager App shell
 ```
 
 Completed architecture discovery work is summarized in
@@ -1510,6 +1511,47 @@ Codex plugin -> node src/server.mjs -> .build/ax-state serve
 - M23: Diagnostics and test runner UI.
 - M24: Plugin install, validate, and smoke flow.
 - M25: Packaging polish and handoff docs.
+
+## Milestone 22: Minimal Dev Manager App Shell
+
+Status: Complete for the first SwiftUI app shell as of 2026-06-17. M22 adds a
+local macOS app bundle that shows repo/plugin/permission status and runs a small
+set of existing diagnostics. See `docs/milestone-22-dev-manager-app-shell.md`.
+
+### Purpose
+
+Make the Dev Manager App track tangible while keeping the current plugin/server
+runtime unchanged.
+
+### Work Items
+
+- Done: add SwiftUI app source under `apps/LocalComputerUseDevManager/`.
+- Done: add `Info.plist` for `Local Computer Use Dev Manager.app`.
+- Done: add `build:m22:app`.
+- Done: add `probe:m22:app`.
+- Done: show repo path, plugin symlink path, git commit, Accessibility, and
+  Screen Recording status.
+- Done: provide buttons for smoke test, M20 state policy probe, plugin manifest
+  validation, docs, and reports.
+- Future: richer diagnostics UI and command history in M23.
+
+### Verification Results
+
+- `npm run build:m22:app` passed.
+- `npm run probe:m22:app` passed.
+- `node --check scripts/probe-m22-dev-manager-app.mjs` passed.
+
+### Deliverables
+
+- Minimal SwiftUI app shell.
+- App bundle build script.
+- App bundle probe.
+- Updated milestone docs.
+
+### Risks and Notes
+
+- The app shells out to existing repo scripts; it does not host the MCP server.
+- The app bundle is generated under `.build/` and is not tracked in git.
 
 ## Suggested Execution Order
 
