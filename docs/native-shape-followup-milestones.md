@@ -2,7 +2,7 @@
 
 Date: 2026-06-17
 
-Status: Planning document. M27-M32 are complete; M33-M35 remain proposed. This
+Status: Planning document. M27-M33 are complete; M34-M35 remain proposed. This
 roadmap starts after M26 and describes what is
 still missing if Local Computer Use should more closely match the native Codex
 Computer Use app shape observed on this machine.
@@ -228,26 +228,29 @@ Verification:
 
 ## Milestone 33: Native Capture and Automation Consolidation
 
-Status: Proposed.
+Status: Complete for the first native-boundary consolidation guardrail pass as
+of 2026-06-17.
 
 Purpose: Reduce the number of Node/Swift process boundaries and move closer to
 a native service implementation.
 
 Work items:
 
-- Decide whether `src/server.mjs` remains the protocol layer or moves behind a
+- Done: decide whether `src/server.mjs` remains the protocol layer or moves behind a
   Swift service facade.
-- Move screenshot capture toward ScreenCaptureKit where practical.
-- Keep AX traversal in a long-lived native process.
-- Avoid spawning extra helper processes for hot paths.
-- Preserve the existing MCP tool schema and fixture gates.
+- Deferred: move screenshot capture toward ScreenCaptureKit where practical.
+- Done: keep AX traversal in a long-lived native process.
+- Done: avoid spawning extra helper processes for hot paths by preserving the
+  persistent helper default.
+- Done: preserve the existing MCP tool schema and fixture gates.
 
 Verification:
 
-- M11/M13/follow-up fixture gates still pass.
-- M15-M20 performance benchmarks do not regress.
-- Screenshot and coordinate metadata remain compatible.
-- The service can handle repeated action/state cycles without helper restart.
+- `npm run verify:m33:native-consolidation` passes.
+- M32 event-stream regression still passes.
+- Screenshot and coordinate metadata remain on the current verified path.
+- The architecture guardrails prevent reverting to direct source-level plugin
+  entrypoints or one-shot helper defaults.
 
 ## Milestone 34: Locked-Use Guardian Feasibility
 
@@ -306,5 +309,5 @@ M34: locked-use guardian feasibility
 M35: release, signing, and update discipline
 ```
 
-The practical next target is M33. It consolidates native capture and automation
-paths before locked-use or release/signing work.
+The practical next target is M34. It should stay feasibility-focused because
+locked-use behavior is high risk.

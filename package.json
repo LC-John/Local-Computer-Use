@@ -58,6 +58,8 @@
     "verify:m31:permission-onboarding": "npm run build:m22:app && npm run probe:m31:permission-onboarding && npm run probe:m29:service-lifecycle",
     "probe:m32:event-stream": "node scripts/probe-m32-event-stream-turn-ended.mjs",
     "verify:m32:event-stream": "npm run build:m22:app && npm run probe:m32:event-stream && npm run probe:m31:permission-onboarding",
+    "probe:m33:native-consolidation": "node scripts/probe-m33-native-consolidation.mjs",
+    "verify:m33:native-consolidation": "npm run build:m22:app && npm run probe:m33:native-consolidation && npm run probe:m32:event-stream",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },

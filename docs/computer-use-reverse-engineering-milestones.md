@@ -55,7 +55,8 @@ Milestone 29: Complete for first service lifecycle pass
 Milestone 30: Complete for first installer/plugin refresh flow
 Milestone 31: Complete for first permission onboarding/recovery pass
 Milestone 32: Complete for first event-stream/turn-ended integration
-Milestone 33-35: Proposed native-shaped app/service follow-up track
+Milestone 33: Complete for first native-boundary consolidation guardrails
+Milestone 34-35: Proposed native-shaped app/service follow-up track
 ```
 
 Completed architecture discovery work is summarized in
@@ -1822,19 +1823,39 @@ Verification:
 
 - `npm run verify:m32:event-stream` passed.
 
-## Milestones 33-35: Native-Shaped App/Service Follow-Up Track
+## Milestone 33: Native Capture and Automation Consolidation
+
+Status: Complete for the first native-boundary consolidation guardrail pass as
+of 2026-06-17. See
+`docs/milestone-33-native-capture-automation-consolidation.md`.
+
+Purpose: fix the current native boundary in place and verify it does not drift
+while deferring risky full-native rewrites.
+
+Work completed:
+
+- Recorded the decision to keep Node as the MCP protocol layer for now.
+- Recorded the decision to keep the Swift AX helper as the long-lived native
+  automation boundary.
+- Preserved the current verified `screencapture` screenshot path.
+- Added `probe:m33:native-consolidation` and
+  `verify:m33:native-consolidation`.
+
+Verification:
+
+- `npm run verify:m33:native-consolidation` passed.
+
+## Milestones 34-35: Native-Shaped App/Service Follow-Up Track
 
 Status: Proposed. See `docs/native-shape-followup-milestones.md`.
 
-Purpose: close the remaining gap between M32's event integration and the native
-Codex Computer Use app shape. The observed native shape has more native
-capture/service consolidation, guardian helper apps, and signed app-group style
-packaging.
+Purpose: close the remaining gap between M33's native-boundary guardrails and
+the native Codex Computer Use app shape. The observed native shape has guardian
+helper apps and stronger signed release packaging.
 
 Proposed sequence:
 
 ```text
-M33: Native capture and automation consolidation
 M34: Locked-use guardian feasibility
 M35: Release, signing, and update discipline
 ```
