@@ -117,6 +117,7 @@ M24: Plugin validate and smoke flow complete
 M25: Packaging polish and handoff complete
 M26: Resident app-host MCP path complete
 M27: Native-shaped bundle layout complete
+M28: Client subcommands complete
 ```
 
 ## Known Non-Goals
@@ -135,6 +136,6 @@ M27: Native-shaped bundle layout complete
 The next roadmap is recorded in
 `docs/native-shape-followup-milestones.md`. It covers the remaining work needed
 to more closely match the native Codex app shape: bundled client app,
-service lifecycle, installer flow, permission onboarding, event-stream and
-turn-ended commands, native capture consolidation, locked-use feasibility, and
-release/signing discipline.
+client subcommands, service lifecycle, installer flow, permission onboarding,
+richer event-stream integration, native capture consolidation, locked-use
+feasibility, and release/signing discipline.

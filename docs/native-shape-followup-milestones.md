@@ -2,7 +2,7 @@
 
 Date: 2026-06-17
 
-Status: Planning document. M27 is complete; M28-M35 remain proposed. This
+Status: Planning document. M27-M28 are complete; M29-M35 remain proposed. This
 roadmap starts after M26 and describes what is
 still missing if Local Computer Use should more closely match the native Codex
 Computer Use app shape observed on this machine.
@@ -80,25 +80,32 @@ Verification:
 
 ## Milestone 28: Client Subcommands
 
-Status: Proposed.
+Status: Complete for the first client subcommand surface as of 2026-06-17.
 
 Purpose: Replace the generic Node bridge command with an explicit client CLI
 surface like the native `SkyComputerUseClient`.
 
 Work items:
 
-- Add `LocalComputerUseClient mcp`.
-- Add `LocalComputerUseClient turn-ended`.
-- Add `LocalComputerUseClient event-stream` as a diagnostic/read-only stream.
-- Add `LocalComputerUseClient status` for local health checks.
-- Preserve stdio MCP behavior for Codex.
+- Done: add `LocalComputerUseClient mcp`.
+- Done: add `LocalComputerUseClient turn-ended`.
+- Done: add `LocalComputerUseClient event-stream` as a diagnostic/read-only
+  stream.
+- Done: add `LocalComputerUseClient status` for local health checks.
+- Done: preserve stdio MCP behavior for Codex.
+
+Deferred:
+
+- A compiled native client remains M33 work.
+- A richer long-running event bus remains M32 work.
 
 Verification:
 
+- `npm run verify:m28:client-subcommands` passes.
 - `LocalComputerUseClient mcp` returns the same 10 MCP tools.
 - `turn-ended` exits successfully and records a small notification event.
-- `event-stream` can connect to the service and receive health/session events.
-- Unknown subcommands return stable structured errors.
+- `event-stream` can connect to the service and receive a health event.
+- Unknown subcommands return stable usage errors.
 
 ## Milestone 29: Service Lifecycle and Single-Instance Runtime
 
@@ -269,6 +276,6 @@ M34: locked-use guardian feasibility
 M35: release, signing, and update discipline
 ```
 
-The practical next target is M28-M29. Those add the client subcommand surface
-and service lifecycle robustness without taking on the riskier installer,
-locked-use, or native rewrite work too early.
+The practical next target is M29. It hardens service lifecycle and
+single-instance behavior before taking on installer, locked-use, or native
+rewrite work.

@@ -41,13 +41,7 @@ cat >"$client_macos_dir/LocalComputerUseClient" <<EOF
 set -euo pipefail
 export LOCAL_CUA_REPO_ROOT="$repo_root"
 cd "$repo_root"
-subcommand="\${1:-}"
-if [[ "\$subcommand" == "mcp" ]]; then
-  shift
-  exec node src/app-bridge.mjs "\$@"
-fi
-echo "Usage: LocalComputerUseClient mcp" >&2
-exit 64
+exec node src/client-cli.mjs "\$@"
 EOF
 chmod +x "$client_macos_dir/LocalComputerUseClient"
 

@@ -66,6 +66,6 @@ M24 plugin flow probe passed: local-computer-use@0.1.0, tools=10
 M27 uses generated executable wrappers around the existing Node implementation.
 It does not yet replace the client or service with compiled native binaries.
 
-Client subcommands beyond `mcp`, stronger service lifecycle semantics, installer
-flow, event-stream, turn-ended, and native capture consolidation remain later
-milestones.
+M28 adds the first `status`, `event-stream`, and `turn-ended` client
+subcommands. Stronger service lifecycle semantics, installer flow, richer event
+integration, and native capture consolidation remain later milestones.

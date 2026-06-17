@@ -50,7 +50,8 @@ Milestone 24: Complete for plugin validate and smoke flow
 Milestone 25: Complete for packaging polish and handoff
 Milestone 26: Complete for first resident app-host MCP path
 Milestone 27: Complete for first native-shaped bundle layout
-Milestone 28-35: Proposed native-shaped app/service follow-up track
+Milestone 28: Complete for first client subcommand surface
+Milestone 29-35: Proposed native-shaped app/service follow-up track
 ```
 
 Completed architecture discovery work is summarized in
@@ -1715,20 +1716,40 @@ Verification:
 
 - `npm run verify:m27:native-bundle` passed.
 
-## Milestones 28-35: Native-Shaped App/Service Follow-Up Track
+## Milestone 28: Client Subcommands
+
+Status: Complete for the first client subcommand surface as of 2026-06-17.
+See `docs/milestone-28-client-subcommands.md`.
+
+Purpose: replace the generic generated bridge wrapper with an explicit
+client-style CLI surface while preserving the plugin's `mcp` behavior.
+
+Work completed:
+
+- Added `src/client-cli.mjs`.
+- Added `LocalComputerUseClient mcp`.
+- Added `LocalComputerUseClient status`.
+- Added `LocalComputerUseClient event-stream`.
+- Added `LocalComputerUseClient turn-ended`.
+- Added `probe:m28:client-subcommands` and `verify:m28:client-subcommands`.
+
+Verification:
+
+- `npm run verify:m28:client-subcommands` passed.
+
+## Milestones 29-35: Native-Shaped App/Service Follow-Up Track
 
 Status: Proposed. See `docs/native-shape-followup-milestones.md`.
 
-Purpose: close the remaining gap between M27's generated native-shaped bundle
-layout and the native Codex Computer Use app shape. The observed native shape
-has a main service binary, an MCP-facing client app with subcommands, installer
-and guardian helper apps, signed app-group style packaging, and
+Purpose: close the remaining gap between M28's generated client subcommand
+surface and the native Codex Computer Use app shape. The observed native shape
+has a main service binary, installer and guardian helper apps, signed app-group
+style packaging, stronger service lifecycle behavior, and richer
 event/notification entrypoints.
 
 Proposed sequence:
 
 ```text
-M28: Client subcommands
 M29: Service lifecycle and single-instance runtime
 M30: Installer and plugin refresh flow
 M31: Permission onboarding and recovery
