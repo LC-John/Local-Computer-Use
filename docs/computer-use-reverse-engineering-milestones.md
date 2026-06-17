@@ -47,6 +47,7 @@ Milestone 21: Complete for Dev Manager App scope and architecture
 Milestone 22: Complete for minimal Dev Manager App shell
 Milestone 23: Complete for diagnostics and test runner UI
 Milestone 24: Complete for plugin validate and smoke flow
+Milestone 25: Complete for packaging polish and handoff
 ```
 
 Completed architecture discovery work is summarized in
@@ -1624,6 +1625,36 @@ start MCP before an agent tries to use it.
 - Plugin flow report.
 - Dev Manager app Plugin Flow button.
 - Updated M24 docs.
+
+## Milestone 25: Packaging Polish and Handoff
+
+Status: Complete for the first Dev Manager App track handoff as of 2026-06-17.
+M25 adds a single app-track verification command and a handoff document. See
+`docs/milestone-25-packaging-polish-handoff.md` and
+`docs/dev-manager-app-handoff.md`.
+
+### Purpose
+
+Make the M21-M25 app track easy to build, verify, and hand off.
+
+### Work Items
+
+- Done: add `docs/dev-manager-app-handoff.md`.
+- Done: add `verify:m25:app-track`.
+- Done: verify M22 app build, M22 app probe, M23 UI probe, and M24 plugin flow
+  in one command.
+- Done: document the app/runtime boundary for agent readiness.
+
+### Verification Results
+
+- `npm run verify:m25:app-track` passed.
+
+### Deliverables
+
+- App handoff document.
+- App-track verification script.
+- M25 milestone document.
+- Updated milestone docs.
 
 ## Suggested Execution Order
 
