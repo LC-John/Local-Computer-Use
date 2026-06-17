@@ -60,6 +60,8 @@
     "verify:m32:event-stream": "npm run build:m22:app && npm run probe:m32:event-stream && npm run probe:m31:permission-onboarding",
     "probe:m33:native-consolidation": "node scripts/probe-m33-native-consolidation.mjs",
     "verify:m33:native-consolidation": "npm run build:m22:app && npm run probe:m33:native-consolidation && npm run probe:m32:event-stream",
+    "probe:m34:locked-use-feasibility": "node scripts/probe-m34-locked-use-feasibility.mjs",
+    "verify:m34:locked-use-feasibility": "npm run probe:m34:locked-use-feasibility && npm run probe:m33:native-consolidation",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },

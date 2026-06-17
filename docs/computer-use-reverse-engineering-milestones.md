@@ -56,7 +56,8 @@ Milestone 30: Complete for first installer/plugin refresh flow
 Milestone 31: Complete for first permission onboarding/recovery pass
 Milestone 32: Complete for first event-stream/turn-ended integration
 Milestone 33: Complete for first native-boundary consolidation guardrails
-Milestone 34-35: Proposed native-shaped app/service follow-up track
+Milestone 34: Complete for locked-use guardian feasibility boundary
+Milestone 35: Proposed native-shaped app/service release track
 ```
 
 Completed architecture discovery work is summarized in
@@ -1845,18 +1846,36 @@ Verification:
 
 - `npm run verify:m33:native-consolidation` passed.
 
-## Milestones 34-35: Native-Shaped App/Service Follow-Up Track
+## Milestone 34: Locked-Use Guardian Feasibility
+
+Status: Complete for feasibility and safety boundary documentation as of
+2026-06-17. See `docs/milestone-34-locked-use-guardian-feasibility.md`.
+
+Purpose: evaluate the native bundle's guardian-shaped component without
+implementing lock-screen automation or hidden automation.
+
+Work completed:
+
+- Documented that locked computer use is out of scope for the current local
+  project.
+- Recorded explicit non-goals and allowed future state-reporting-only scope.
+- Added `probe:m34:locked-use-feasibility` and
+  `verify:m34:locked-use-feasibility`.
+
+Verification:
+
+- `npm run verify:m34:locked-use-feasibility` passed.
+
+## Milestone 35: Native-Shaped App/Service Release Track
 
 Status: Proposed. See `docs/native-shape-followup-milestones.md`.
 
-Purpose: close the remaining gap between M33's native-boundary guardrails and
-the native Codex Computer Use app shape. The observed native shape has guardian
-helper apps and stronger signed release packaging.
+Purpose: close the remaining gap between M34's safety boundary and a
+maintainable native-shaped release package.
 
 Proposed sequence:
 
 ```text
-M34: Locked-use guardian feasibility
 M35: Release, signing, and update discipline
 ```
 

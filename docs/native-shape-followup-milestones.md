@@ -2,7 +2,7 @@
 
 Date: 2026-06-17
 
-Status: Planning document. M27-M33 are complete; M34-M35 remain proposed. This
+Status: Planning document. M27-M34 are complete; M35 remains proposed. This
 roadmap starts after M26 and describes what is
 still missing if Local Computer Use should more closely match the native Codex
 Computer Use app shape observed on this machine.
@@ -254,22 +254,24 @@ Verification:
 
 ## Milestone 34: Locked-Use Guardian Feasibility
 
-Status: Optional and high risk.
+Status: Complete for feasibility and safety boundary documentation as of
+2026-06-17.
 
 Purpose: Evaluate whether a local `CUALockScreenGuardian`-like helper is needed
 or appropriate for this project.
 
 Work items:
 
-- Define what "locked computer use" means for the local project.
-- Document security, privacy, and UX risks.
-- Prototype only harmless state reporting first.
-- Do not implement lock-screen bypasses or hidden automation.
+- Done: define what "locked computer use" means for the local project.
+- Done: document security, privacy, and UX risks.
+- Done: record that only harmless state reporting would be acceptable as a
+  future first prototype.
+- Done: do not implement lock-screen bypasses or hidden automation.
 
 Verification:
 
+- `npm run verify:m34:locked-use-feasibility` passes.
 - Feasibility document is explicit about what will not be built.
-- Any prototype stays opt-in and visible.
 - Normal app-host MCP use does not depend on this milestone.
 
 ## Milestone 35: Release, Signing, and Update Discipline
