@@ -121,6 +121,7 @@ M28: Client subcommands complete
 M29: Service lifecycle and single-instance runtime complete
 M30: Installer and plugin refresh flow complete
 M31: Permission onboarding and recovery complete
+M32: Event stream and turn-ended integration complete
 ```
 
 ## Known Non-Goals

@@ -12,6 +12,8 @@ const socketPath =
 const eventLogPath =
   process.env.LOCAL_CUA_CLIENT_EVENT_LOG ||
   path.join(repoRoot, "reports", "client-events.jsonl");
+const serviceEventLogPath =
+  process.env.LOCAL_CUA_EVENT_LOG || path.join(repoRoot, "reports", "service-events.jsonl");
 const serviceStatusPath =
   process.env.LOCAL_CUA_SERVICE_STATUS ||
   path.join(repoRoot, ".build", "runtime", "service-status.json");
@@ -44,6 +46,19 @@ async function appendEvent(event) {
   await writeFile(eventLogPath, `${JSON.stringify(event)}\n`, { flag: "a" });
 }
 
+async function appendServiceEvent(event) {
+  await mkdir(path.dirname(serviceEventLogPath), { recursive: true });
+  await writeFile(
+    serviceEventLogPath,
+    `${JSON.stringify({
+      generatedAt: new Date().toISOString(),
+      socketPath,
+      ...event,
+    })}\n`,
+    { flag: "a" },
+  );
+}
+
 async function readServiceStatus() {
   try {
     return JSON.parse(await readFile(serviceStatusPath, "utf8"));
@@ -74,6 +89,7 @@ async function statusEvent() {
 async function runMcp() {
   const socket = createConnection(socketPath);
   socket.once("connect", () => {
+    appendServiceEvent({ type: "bridge-connected" }).catch(() => {});
     process.stdin.pipe(socket);
     socket.pipe(process.stdout);
   });
@@ -97,9 +113,14 @@ async function runStatus() {
 }
 
 async function runEventStream(args) {
+  const lines = await readFile(serviceEventLogPath, "utf8")
+    .then((source) => source.trim().split(/\r?\n/).filter(Boolean))
+    .catch(() => []);
   const event = {
     ...(await statusEvent()),
     type: "event-stream-status",
+    eventLogPath: serviceEventLogPath,
+    recentEvents: lines.slice(-20).map((line) => JSON.parse(line)),
   };
   console.log(JSON.stringify(event));
 
@@ -132,6 +153,7 @@ async function runTurnEnded(args) {
     reason: args[0] || "unspecified",
   };
   await appendEvent(event);
+  await appendServiceEvent(event);
   console.log(JSON.stringify({ ok: true, eventLogPath, event }));
 }
 

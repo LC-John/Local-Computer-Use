@@ -54,7 +54,8 @@ Milestone 28: Complete for first client subcommand surface
 Milestone 29: Complete for first service lifecycle pass
 Milestone 30: Complete for first installer/plugin refresh flow
 Milestone 31: Complete for first permission onboarding/recovery pass
-Milestone 32-35: Proposed native-shaped app/service follow-up track
+Milestone 32: Complete for first event-stream/turn-ended integration
+Milestone 33-35: Proposed native-shaped app/service follow-up track
 ```
 
 Completed architecture discovery work is summarized in
@@ -1801,19 +1802,38 @@ Verification:
 
 - `npm run verify:m31:permission-onboarding` passed.
 
-## Milestones 32-35: Native-Shaped App/Service Follow-Up Track
+## Milestone 32: Event Stream and Turn-Ended Integration
+
+Status: Complete for the first event-stream and turn-ended integration pass as
+of 2026-06-17. See `docs/milestone-32-event-stream-turn-ended.md`.
+
+Purpose: connect service/client lifecycle events into the `event-stream` and
+`turn-ended` client surface while keeping payloads privacy-safe.
+
+Work completed:
+
+- Added service-started/session-opened/session-closed/service-stopping events.
+- Added bridge-connected and turn-ended client events.
+- Added recent event output to `LocalComputerUseClient event-stream`.
+- Added Dev Manager Event Stream diagnostic.
+- Added `probe:m32:event-stream` and `verify:m32:event-stream`.
+
+Verification:
+
+- `npm run verify:m32:event-stream` passed.
+
+## Milestones 33-35: Native-Shaped App/Service Follow-Up Track
 
 Status: Proposed. See `docs/native-shape-followup-milestones.md`.
 
-Purpose: close the remaining gap between M31's permission onboarding and the
-native Codex Computer Use app shape. The observed native shape has richer
-event/notification entrypoints, guardian helper apps, signed app-group style
-packaging, and more native capture/service consolidation.
+Purpose: close the remaining gap between M32's event integration and the native
+Codex Computer Use app shape. The observed native shape has more native
+capture/service consolidation, guardian helper apps, and signed app-group style
+packaging.
 
 Proposed sequence:
 
 ```text
-M32: Event stream and turn-ended integration
 M33: Native capture and automation consolidation
 M34: Locked-use guardian feasibility
 M35: Release, signing, and update discipline

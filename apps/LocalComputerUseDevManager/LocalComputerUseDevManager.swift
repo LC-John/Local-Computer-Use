@@ -245,6 +245,10 @@ final class AppModel: ObservableObject {
         runCommand(title: "permission check", command: ["npm", "run", "permission:m31:status"])
     }
 
+    func runEventStream() {
+        runCommand(title: "event stream", command: ["npm", "run", "probe:m32:event-stream"])
+    }
+
     func openAccessibilitySettings() {
         if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
             NSWorkspace.shared.open(url)
@@ -444,6 +448,17 @@ struct ContentView: View {
                             }
                             Spacer()
                         }
+                    }
+                    Divider()
+                    HStack(spacing: 10) {
+                        Text("Events")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(.secondary)
+                            .frame(width: 92, alignment: .leading)
+                        Button("Event Stream") {
+                            model.runEventStream()
+                        }
+                        Spacer()
                     }
                     Divider()
                     HStack(spacing: 10) {

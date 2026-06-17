@@ -18,6 +18,8 @@ const runtimeDir =
 const statusPath =
   process.env.LOCAL_CUA_SERVICE_STATUS ||
   path.join(runtimeDir, "service-status.json");
+const eventLogPath =
+  process.env.LOCAL_CUA_EVENT_LOG || path.join(repoRoot, "reports", "service-events.jsonl");
 
 const startedAt = new Date();
 const status = {
@@ -36,6 +38,20 @@ async function appendLog(message) {
   await writeFile(logPath, `${new Date().toISOString()} ${message}\n`, {
     flag: "a",
   });
+}
+
+async function appendEvent(event) {
+  await mkdir(path.dirname(eventLogPath), { recursive: true });
+  await writeFile(
+    eventLogPath,
+    `${JSON.stringify({
+      generatedAt: new Date().toISOString(),
+      pid: process.pid,
+      socketPath,
+      ...event,
+    })}\n`,
+    { flag: "a" },
+  );
 }
 
 async function writeStatus(patch = {}) {
@@ -104,6 +120,12 @@ function attachSession(socket) {
   });
 
   appendLog(`accepted session pid=${child.pid}`).catch(() => {});
+  appendEvent({
+    type: "session-opened",
+    sessionPid: child.pid,
+    activeSessions: status.activeSessions,
+    totalSessions: status.totalSessions,
+  }).catch(() => {});
   socket.pipe(child.stdin);
   child.stdout.pipe(socket);
 
@@ -127,6 +149,14 @@ function attachSession(socket) {
     writeStatus({ state: status.activeSessions > 0 ? "serving" : "ready" }).catch(
       () => {},
     );
+    appendEvent({
+      type: "session-closed",
+      sessionPid: child.pid,
+      code,
+      signal,
+      activeSessions: status.activeSessions,
+      totalSessions: status.totalSessions,
+    }).catch(() => {});
     socket.end();
   });
 }
@@ -142,6 +172,7 @@ async function main() {
   await new Promise((resolve) => server.listen(socketPath, resolve));
   await appendLog(`host listening at ${socketPath}`);
   await writeStatus({ state: "ready" });
+  await appendEvent({ type: "service-started", state: "ready" });
   console.error(`Local Computer Use app host listening at ${socketPath}`);
 
   const heartbeat = setInterval(() => {
@@ -152,6 +183,7 @@ async function main() {
 
   function shutdown() {
     clearInterval(heartbeat);
+    appendEvent({ type: "service-stopping" }).catch(() => {});
     writeStatus({ state: "stopping" }).finally(() => {});
     server.close(() => {
       rm(socketPath, { force: true })

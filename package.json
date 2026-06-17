@@ -56,6 +56,8 @@
     "permission:m31:open-screen-recording": "node src/permission-cli.mjs open-screen-recording",
     "probe:m31:permission-onboarding": "node scripts/probe-m31-permission-onboarding.mjs",
     "verify:m31:permission-onboarding": "npm run build:m22:app && npm run probe:m31:permission-onboarding && npm run probe:m29:service-lifecycle",
+    "probe:m32:event-stream": "node scripts/probe-m32-event-stream-turn-ended.mjs",
+    "verify:m32:event-stream": "npm run build:m22:app && npm run probe:m32:event-stream && npm run probe:m31:permission-onboarding",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },

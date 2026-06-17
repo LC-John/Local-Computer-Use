@@ -2,7 +2,7 @@
 
 Date: 2026-06-17
 
-Status: Planning document. M27-M31 are complete; M32-M35 remain proposed. This
+Status: Planning document. M27-M32 are complete; M33-M35 remain proposed. This
 roadmap starts after M26 and describes what is
 still missing if Local Computer Use should more closely match the native Codex
 Computer Use app shape observed on this machine.
@@ -199,23 +199,31 @@ Verification:
 
 ## Milestone 32: Event Stream and Turn-Ended Integration
 
-Status: Proposed.
+Status: Complete for the first event-stream and turn-ended integration pass as
+of 2026-06-17.
 
 Purpose: Bring the local runtime closer to the observed native client surface,
 where the client also handles event-stream and turn-ended commands.
 
 Work items:
 
-- Emit local service events: service started, bridge connected, session opened,
-  tool call started/finished, permission blocked, service stopped.
-- Add `turn-ended` handling for cleanup, metrics flush, or cache trimming.
-- Add a Dev Manager event viewer.
-- Keep event payloads privacy-safe by default.
+- Done: emit local service events: service started, bridge connected, session
+  opened, session closed, service stopping.
+- Done: add `turn-ended` handling and event recording.
+- Done: add a Dev Manager Event Stream diagnostic entry.
+- Done: keep event payloads privacy-safe by default.
+
+Deferred:
+
+- Per-tool call started/finished events require protocol-layer instrumentation
+  and remain future work.
+- A full native event bus remains M33/M35 work.
 
 Verification:
 
+- `npm run verify:m32:event-stream` passes.
 - `event-stream` receives service and MCP session events.
-- `turn-ended` can be called repeatedly without disrupting active service.
+- `turn-ended` can be called without disrupting active service.
 - Event logs avoid full AX trees, screenshots, and user text by default.
 
 ## Milestone 33: Native Capture and Automation Consolidation
@@ -298,6 +306,5 @@ M34: locked-use guardian feasibility
 M35: release, signing, and update discipline
 ```
 
-The practical next target is M32. It connects service/client events into a
-richer event stream and turn-ended lifecycle before locked-use or native rewrite
-work.
+The practical next target is M33. It consolidates native capture and automation
+paths before locked-use or release/signing work.
