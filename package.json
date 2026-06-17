@@ -51,6 +51,11 @@
     "installer:m30:codex-add": "node src/installer-cli.mjs codex-add",
     "probe:m30:installer-flow": "node scripts/probe-m30-installer-flow.mjs",
     "verify:m30:installer-flow": "npm run build:m22:app && npm run probe:m30:installer-flow && npm run probe:m24:plugin-flow",
+    "permission:m31:status": "node src/permission-cli.mjs status",
+    "permission:m31:open-accessibility": "node src/permission-cli.mjs open-accessibility",
+    "permission:m31:open-screen-recording": "node src/permission-cli.mjs open-screen-recording",
+    "probe:m31:permission-onboarding": "node scripts/probe-m31-permission-onboarding.mjs",
+    "verify:m31:permission-onboarding": "npm run build:m22:app && npm run probe:m31:permission-onboarding && npm run probe:m29:service-lifecycle",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },

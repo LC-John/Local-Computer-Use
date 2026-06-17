@@ -2,7 +2,7 @@
 
 import { spawn } from "node:child_process";
 import { createConnection, createServer } from "node:net";
-import { mkdir, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 
@@ -44,7 +44,9 @@ async function writeStatus(patch = {}) {
     uptimeMs: Date.now() - startedAt.getTime(),
   });
   await mkdir(path.dirname(statusPath), { recursive: true });
-  await writeFile(statusPath, `${JSON.stringify(status, null, 2)}\n`);
+  const tempPath = `${statusPath}.${process.pid}.tmp`;
+  await writeFile(tempPath, `${JSON.stringify(status, null, 2)}\n`);
+  await rename(tempPath, statusPath);
 }
 
 async function recordError(error) {

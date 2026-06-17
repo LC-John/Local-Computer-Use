@@ -53,7 +53,8 @@ Milestone 27: Complete for first native-shaped bundle layout
 Milestone 28: Complete for first client subcommand surface
 Milestone 29: Complete for first service lifecycle pass
 Milestone 30: Complete for first installer/plugin refresh flow
-Milestone 31-35: Proposed native-shaped app/service follow-up track
+Milestone 31: Complete for first permission onboarding/recovery pass
+Milestone 32-35: Proposed native-shaped app/service follow-up track
 ```
 
 Completed architecture discovery work is summarized in
@@ -1779,19 +1780,39 @@ Verification:
 
 - `npm run verify:m30:installer-flow` passed.
 
-## Milestones 31-35: Native-Shaped App/Service Follow-Up Track
+## Milestone 31: Permission Onboarding and Recovery
+
+Status: Complete for the first permission onboarding and recovery pass as of
+2026-06-17. See `docs/milestone-31-permission-onboarding-recovery.md`.
+
+Purpose: expose permission status and recovery paths without automating or
+bypassing macOS privacy prompts.
+
+Work completed:
+
+- Added `src/permission-cli.mjs`.
+- Added permission status and System Settings open commands.
+- Added Dev Manager Permission Check, Accessibility, and Screen Recording
+  buttons.
+- Added `probe:m31:permission-onboarding` and
+  `verify:m31:permission-onboarding`.
+
+Verification:
+
+- `npm run verify:m31:permission-onboarding` passed.
+
+## Milestones 32-35: Native-Shaped App/Service Follow-Up Track
 
 Status: Proposed. See `docs/native-shape-followup-milestones.md`.
 
-Purpose: close the remaining gap between M30's installer/check flow and the
-native Codex Computer Use app shape. The observed native shape has stronger
-permission onboarding, guardian helper apps, signed app-group style packaging,
-and richer event/notification entrypoints.
+Purpose: close the remaining gap between M31's permission onboarding and the
+native Codex Computer Use app shape. The observed native shape has richer
+event/notification entrypoints, guardian helper apps, signed app-group style
+packaging, and more native capture/service consolidation.
 
 Proposed sequence:
 
 ```text
-M31: Permission onboarding and recovery
 M32: Event stream and turn-ended integration
 M33: Native capture and automation consolidation
 M34: Locked-use guardian feasibility

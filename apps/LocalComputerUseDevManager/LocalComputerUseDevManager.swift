@@ -241,6 +241,22 @@ final class AppModel: ObservableObject {
         runCommand(title: "installer check", command: ["npm", "run", "installer:m30:check"])
     }
 
+    func runPermissionCheck() {
+        runCommand(title: "permission check", command: ["npm", "run", "permission:m31:status"])
+    }
+
+    func openAccessibilitySettings() {
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
+            NSWorkspace.shared.open(url)
+        }
+    }
+
+    func openScreenRecordingSettings() {
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture") {
+            NSWorkspace.shared.open(url)
+        }
+    }
+
     func runDiagnostic(_ diagnostic: DiagnosticCommand) {
         runCommand(title: diagnostic.title, command: diagnostic.command)
     }
@@ -428,6 +444,23 @@ struct ContentView: View {
                             }
                             Spacer()
                         }
+                    }
+                    Divider()
+                    HStack(spacing: 10) {
+                        Text("Permissions")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(.secondary)
+                            .frame(width: 92, alignment: .leading)
+                        Button("Check") {
+                            model.runPermissionCheck()
+                        }
+                        Button("Accessibility") {
+                            model.openAccessibilitySettings()
+                        }
+                        Button("Screen Recording") {
+                            model.openScreenRecordingSettings()
+                        }
+                        Spacer()
                     }
                     Divider()
                     HStack(spacing: 10) {

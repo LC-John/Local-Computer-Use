@@ -2,7 +2,7 @@
 
 Date: 2026-06-17
 
-Status: Planning document. M27-M30 are complete; M31-M35 remain proposed. This
+Status: Planning document. M27-M31 are complete; M32-M35 remain proposed. This
 roadmap starts after M26 and describes what is
 still missing if Local Computer Use should more closely match the native Codex
 Computer Use app shape observed on this machine.
@@ -169,22 +169,30 @@ Verification:
 
 ## Milestone 31: Permission Onboarding and Recovery
 
-Status: Proposed.
+Status: Complete for the first permission onboarding and recovery pass as of
+2026-06-17.
 
 Purpose: Match the native app's permission-aware feel without bypassing macOS
 privacy boundaries.
 
 Work items:
 
-- Add guided Accessibility and Screen Recording status panels.
-- Add buttons to open the relevant System Settings panes.
-- Detect permission changes after app restart or refresh.
-- Surface permission errors from MCP sessions in the Dev Manager UI.
-- Keep automatic approval of macOS prompts out of scope.
+- Done: add guided Accessibility and Screen Recording status and recovery
+  commands.
+- Done: add buttons to open the relevant System Settings panes.
+- Done: detect permission changes through status refresh.
+- Done: surface permission state in the Dev Manager UI and CLI.
+- Done: keep automatic approval of macOS prompts out of scope.
+
+Deferred:
+
+- Correlating live MCP permission errors into a richer app event viewer remains
+  M32 work.
 
 Verification:
 
-- Missing permissions are shown in the app and MCP error metadata.
+- `npm run verify:m31:permission-onboarding` passes.
+- Missing permissions are shown in the app and CLI status.
 - Granted permissions update after refresh.
 - Coordinate actions still require Screen Recording.
 - No code path attempts to bypass macOS permissions.
@@ -290,5 +298,6 @@ M34: locked-use guardian feasibility
 M35: release, signing, and update discipline
 ```
 
-The practical next target is M31. It improves permission onboarding and recovery
-before taking on richer event integration, locked-use, or native rewrite work.
+The practical next target is M32. It connects service/client events into a
+richer event stream and turn-ended lifecycle before locked-use or native rewrite
+work.
