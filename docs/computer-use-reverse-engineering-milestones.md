@@ -42,6 +42,7 @@ Milestone 16: Complete for initial persistent helper service
 Milestone 17: Complete for initial fast action path and policy cache
 Milestone 18: Complete for screenshot cache and state modes
 Milestone 19: Complete for first large-app state budget pass
+Milestone 20: Complete for first state policy helper
 ```
 
 Completed architecture discovery work is summarized in
@@ -1413,6 +1414,47 @@ turn the measurements into a practical default policy for callers.
 - The server default remains full+screenshot for compatibility; lighter reads
   are explicit opt-ins.
 
+## Milestone 20: State Policy Helper
+
+Status: Complete for the first local state-policy helper as of 2026-06-17. M20
+turns M19's state-read guidance into a reusable module without changing the
+public `get_app_state` default. See
+`docs/milestone-20-state-policy-helper.md`.
+
+### Purpose
+
+Make state-mode selection consistent across future callers and agent loops.
+M18/M19 provide the modes and budgets; M20 provides the scenario-to-arguments
+policy.
+
+### Work Items
+
+- Done: add `src/state-policy.mjs`.
+- Done: map `observe`, `inspect`, `plan_action`, `coordinate_action`, stale
+  state, and window-change scenarios to state args.
+- Done: keep the MCP server default as full+screenshot.
+- Done: add `probe:m20:state-policy`.
+- Future: wire the helper into a higher-level agent loop.
+
+### Verification Results
+
+- `probe:m20:state-policy` passed.
+- Live policy calls verified `observe=focused/skipped` and
+  `coordinate_action=full/captured`.
+- Unknown scenarios fail loudly instead of silently choosing a default.
+
+### Deliverables
+
+- State policy module.
+- State policy probe and report.
+- Updated milestone docs.
+
+### Risks and Notes
+
+- M20 is an explicit caller helper, not automatic server-side downgrading.
+- Coordinate-based workflows must still force full screenshot state before using
+  screenshot coordinates.
+
 ## Suggested Execution Order
 
 Recommended order:
@@ -1438,6 +1480,7 @@ Recommended order:
 17. Fast action path and policy cache
 18. Incremental state and screenshot cache
 19. Large app state budget and default policy
+20. State policy helper
 ```
 
 The most important dependency is that `get_app_state` should be understood

@@ -196,6 +196,31 @@ Acceptance:
 - docs state when callers should choose `focused`, `visible`, full no-screenshot,
   or full screenshot reads.
 
+## M20: State Policy Helper
+
+Goal: make M19's state-read policy reusable by future callers.
+
+Status: first helper complete as of 2026-06-17. `src/state-policy.mjs` maps
+workflow scenarios to `get_app_state` arguments while preserving the public
+default of full+screenshot.
+
+Scope:
+
+- done: add `chooseStateReadPolicy`;
+- done: add `applyStateReadPolicy`;
+- done: cover observe, inspect, action planning, coordinate action, stale state,
+  and window-change scenarios;
+- done: add `probe:m20:state-policy`;
+- future: integrate the helper into a higher-level agent loop.
+
+Acceptance:
+
+- state policy outputs can be passed directly to `get_app_state`;
+- repeated observation chooses focused no-screenshot;
+- coordinate workflows choose full screenshot;
+- unknown scenarios fail loudly;
+- MCP server default behavior is unchanged.
+
 ## Recommended Order
 
 Do these in order:
@@ -206,6 +231,7 @@ M16: remove helper startup cost
 M17: reduce repeated action overhead
 M18: reduce repeated state and screenshot overhead
 M19: validate state budgets on larger apps
+M20: centralize state-mode selection policy
 ```
 
 This order keeps the optimization work honest: each later milestone must beat

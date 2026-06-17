@@ -30,6 +30,7 @@
     "probe:m18:cache-invalidation": "node scripts/probe-m18-screenshot-cache-invalidation.mjs",
     "probe:m18:state-modes": "node scripts/probe-m18-state-modes.mjs",
     "benchmark:m19:large-state": "node scripts/run-m19-large-state-benchmark.mjs",
+    "probe:m20:state-policy": "node scripts/probe-m20-state-policy.mjs",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },
