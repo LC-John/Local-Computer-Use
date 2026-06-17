@@ -1,5 +1,6 @@
 import AppKit
 import ApplicationServices
+import Darwin
 import SwiftUI
 
 struct AppStatus {
@@ -8,6 +9,8 @@ struct AppStatus {
     var gitCommit: String
     var accessibilityGranted: Bool
     var screenRecordingGranted: Bool
+    var appHostSocketPath: String
+    var appHostSocketExists: Bool
 }
 
 struct DiagnosticCommand: Identifiable {
@@ -41,6 +44,8 @@ final class AppModel: ObservableObject {
     @Published var commandHistory: [CommandHistoryItem] = []
 
     private let repoURL: URL
+    private let appHostSocketPath: String
+    private var appHostProcess: Process?
     let diagnosticCommands: [DiagnosticCommand] = [
         DiagnosticCommand(
             id: "probe-local",
@@ -82,13 +87,17 @@ final class AppModel: ObservableObject {
 
     init() {
         self.repoURL = Self.resolveRepoURL()
+        self.appHostSocketPath = Self.defaultAppHostSocketPath()
         self.status = AppStatus(
             repoPath: repoURL.path,
             pluginPath: NSString(string: "~/plugins/local-computer-use").expandingTildeInPath,
             gitCommit: Self.runSync(["git", "rev-parse", "--short", "HEAD"], cwd: repoURL).trimmedFallback("unknown"),
             accessibilityGranted: AXIsProcessTrusted(),
-            screenRecordingGranted: CGPreflightScreenCaptureAccess()
+            screenRecordingGranted: CGPreflightScreenCaptureAccess(),
+            appHostSocketPath: appHostSocketPath,
+            appHostSocketExists: FileManager.default.fileExists(atPath: appHostSocketPath)
         )
+        startAppHostIfNeeded()
     }
 
     static func resolveRepoURL() -> URL {
@@ -102,14 +111,53 @@ final class AppModel: ObservableObject {
         return URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
     }
 
+    static func defaultAppHostSocketPath() -> String {
+        let uid = getuid()
+        return URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent("local-computer-use-\(uid).sock")
+            .path
+    }
+
     func refreshStatus() {
         status = AppStatus(
             repoPath: repoURL.path,
             pluginPath: NSString(string: "~/plugins/local-computer-use").expandingTildeInPath,
             gitCommit: Self.runSync(["git", "rev-parse", "--short", "HEAD"], cwd: repoURL).trimmedFallback("unknown"),
             accessibilityGranted: AXIsProcessTrusted(),
-            screenRecordingGranted: CGPreflightScreenCaptureAccess()
+            screenRecordingGranted: CGPreflightScreenCaptureAccess(),
+            appHostSocketPath: appHostSocketPath,
+            appHostSocketExists: FileManager.default.fileExists(atPath: appHostSocketPath)
         )
+    }
+
+    func startAppHostIfNeeded() {
+        if appHostProcess?.isRunning == true {
+            refreshStatus()
+            return
+        }
+
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+        process.arguments = ["node", "src/app-host.mjs"]
+        process.currentDirectoryURL = repoURL
+        process.environment = ProcessInfo.processInfo.environment.merging([
+            "LOCAL_CUA_REPO_ROOT": repoURL.path,
+            "LOCAL_CUA_APP_SOCKET": appHostSocketPath,
+            "LOCAL_CUA_APP_HOST_LOG": repoURL.appendingPathComponent("reports/app-host.log").path,
+        ]) { _, new in new }
+
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        process.standardError = pipe
+
+        do {
+            try process.run()
+            appHostProcess = process
+            commandOutput = "Started app host at \(appHostSocketPath)."
+        } catch {
+            commandOutput = "Unable to start app host: \(error.localizedDescription)"
+        }
+        refreshStatus()
     }
 
     func openDocs() {
@@ -287,13 +335,14 @@ struct ContentView: View {
                 }
             }
 
-            GroupBox("Status") {
+        GroupBox("Status") {
                 VStack(alignment: .leading, spacing: 8) {
                     StatusRow(label: "Repo", value: model.status.repoPath, ok: nil)
                     StatusRow(label: "Plugin symlink", value: model.status.pluginPath, ok: FileManager.default.fileExists(atPath: model.status.pluginPath))
                     StatusRow(label: "Git commit", value: model.status.gitCommit, ok: nil)
                     StatusRow(label: "Accessibility", value: model.status.accessibilityGranted ? "granted" : "missing", ok: model.status.accessibilityGranted)
                     StatusRow(label: "Screen Recording", value: model.status.screenRecordingGranted ? "granted" : "missing", ok: model.status.screenRecordingGranted)
+                    StatusRow(label: "MCP app host", value: model.status.appHostSocketPath, ok: model.status.appHostSocketExists)
                 }
                 .padding(.vertical, 6)
             }
@@ -325,6 +374,9 @@ struct ContentView: View {
                         }
                         Button("Plugin Flow") {
                             model.runPluginFlowProbe()
+                        }
+                        Button("Start Host") {
+                            model.startAppHostIfNeeded()
                         }
                         Spacer()
                         Button("Open Docs") {

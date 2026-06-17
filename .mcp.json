@@ -2,7 +2,7 @@
   "mcpServers": {
     "local-computer-use": {
       "command": "node",
-      "args": ["src/server.mjs"],
+      "args": ["src/app-bridge.mjs"],
       "cwd": "."
     }
   }

@@ -1,30 +1,31 @@
 ---
 name: computer-use
-description: Use the local Computer Use reimplementation as a standalone macOS MCP stdio server for agent desktop automation, fixture testing, and compatibility checks. Prefer it when intentionally exercising this local replacement rather than any bundled/native Computer Use provider.
+description: Use the local Computer Use reimplementation backed by its resident macOS app host for agent desktop automation, fixture testing, and compatibility checks. Prefer it when intentionally exercising this local replacement rather than any bundled/native Computer Use provider.
 ---
 
 # Local Computer Use
 
 This skill describes how to use the repository's local Computer Use-like MCP
-server as a standalone macOS desktop automation backend. It is intended for
+path as a macOS desktop automation backend. It is intended for
 agent integration, black-box compatibility testing, fixture validation, and
 maintenance work.
 
 Use this implementation when the user explicitly wants to exercise the local
 reimplementation. Do not treat it as a bundled or native Computer Use provider.
 
-## Server Entry
+## Resident App Host Entry
 
-Run the server from the repository root:
+Start the resident app host from the repository root, or open the Dev Manager
+app:
 
 ```bash
-node src/server.mjs
+npm run start:app-host
 ```
 
-Equivalent package command:
+The plugin-facing stdio bridge is:
 
 ```bash
-npm start
+node src/app-bridge.mjs
 ```
 
 For MCP clients that accept a stdio server configuration, use:
@@ -32,10 +33,14 @@ For MCP clients that accept a stdio server configuration, use:
 ```json
 {
   "command": "node",
-  "args": ["src/server.mjs"],
+  "args": ["src/app-bridge.mjs"],
   "cwd": "/Users/lczhang/Documents/computer-use"
 }
 ```
+
+The bridge requires the resident app host socket to be running. For direct
+low-level server debugging only, `npm start` still runs `src/server.mjs`
+without the app host.
 
 The repo also includes `.mcp.json` for clients that can load MCP server config
 files directly.

@@ -48,6 +48,7 @@ Milestone 22: Complete for minimal Dev Manager App shell
 Milestone 23: Complete for diagnostics and test runner UI
 Milestone 24: Complete for plugin validate and smoke flow
 Milestone 25: Complete for packaging polish and handoff
+Milestone 26: Complete for first resident app-host MCP path
 ```
 
 Completed architecture discovery work is summarized in
@@ -1656,6 +1657,42 @@ Make the M21-M25 app track easy to build, verify, and hand off.
 - M25 milestone document.
 - Updated milestone docs.
 
+## Milestone 26: Resident App Host
+
+Status: Complete for the first resident app-host MCP path as of 2026-06-17.
+M26 makes the Dev Manager app the durable runtime boundary for local Computer
+Use requests while preserving the plugin's stdio MCP contract. See
+`docs/milestone-26-resident-app-host.md`.
+
+### Purpose
+
+Let agents keep using MCP while routing through a resident local app:
+
+```text
+Agent -> plugin stdio bridge -> app host socket -> local MCP server -> macOS
+```
+
+### Work Items
+
+- Done: add `src/app-host.mjs`.
+- Done: add `src/app-bridge.mjs`.
+- Done: point `.mcp.json` at the bridge.
+- Done: have the Dev Manager app start and display the app-host socket.
+- Done: update plugin-flow validation to test the bridge-backed path.
+- Done: add `probe:m26:app-host` and `verify:m26:resident-app`.
+
+### Verification Results
+
+- `npm run probe:m26:app-host` passed.
+- `npm run probe:m24:plugin-flow` passed with the bridge-backed plugin path.
+
+### Deliverables
+
+- Resident app-host socket process.
+- MCP stdio bridge.
+- App status and start-host controls.
+- M26 probe and docs.
+
 ## Suggested Execution Order
 
 Recommended order:
@@ -1690,6 +1727,7 @@ Dev Manager App Track:
 23. Diagnostics and test runner UI
 24. Plugin install, validate, and smoke flow
 25. Packaging polish and handoff docs
+26. Resident app-host MCP path
 ```
 
 The most important dependency is that `get_app_state` should be understood

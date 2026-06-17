@@ -20,21 +20,22 @@ The app helps a developer:
 - validate plugin manifest and local MCP startup;
 - open docs and reports.
 
-It does not replace the Codex plugin. It does not host a socket, HTTP, or
-multi-client MCP server.
+It does not replace the Codex plugin. It now hosts a local Unix socket for the
+plugin bridge, but it still does not provide HTTP, multi-client hosting, or a
+system daemon.
 
 ## Runtime Boundary
 
 The agent-facing runtime remains:
 
 ```text
-Codex plugin -> node src/server.mjs -> .build/ax-state serve
+Codex plugin -> node src/app-bridge.mjs -> app host socket -> node src/server.mjs -> .build/ax-state serve
 ```
 
 The app-facing runtime is:
 
 ```text
-Dev Manager App -> shell out to npm scripts -> reports/docs
+Dev Manager App -> node src/app-host.mjs -> per-session node src/server.mjs
 ```
 
 ## Build
@@ -85,10 +86,18 @@ open ".build/Local Computer Use Dev Manager.app"
 
 ## Agent Readiness
 
-The app can confirm that the local plugin path and MCP smoke path are healthy,
-but the app itself is not the MCP endpoint. Agent readiness still depends on the
-`local-computer-use` plugin being installed/enabled and a fresh Codex thread
-loading the plugin tools.
+The app now starts the local app-host socket used by the plugin bridge. Agent
+readiness depends on three pieces being healthy:
+
+```text
+Local Computer Use Dev Manager.app
+  -> node src/app-host.mjs
+    -> local-computer-use plugin bridge: node src/app-bridge.mjs
+      -> per-session node src/server.mjs
+```
+
+The plugin still speaks MCP over stdio to Codex. The bridge forwards that MCP
+traffic to the resident app host.
 
 Manual plugin reinstall:
 
@@ -106,6 +115,7 @@ M22: Minimal SwiftUI app shell complete
 M23: Diagnostics and test runner UI complete
 M24: Plugin validate and smoke flow complete
 M25: Packaging polish and handoff complete
+M26: Resident app-host MCP path complete
 ```
 
 ## Known Non-Goals
@@ -116,3 +126,4 @@ M25: Packaging polish and handoff complete
 - No locked computer use.
 - No automatic macOS permission prompt approval.
 - No replacement for OpenAI's bundled `computer-use` plugin.
+- No launchd/system daemon; the app or `npm run start:app-host` must be running.

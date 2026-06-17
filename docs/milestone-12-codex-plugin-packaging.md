@@ -31,6 +31,7 @@ The repo root is now a plugin bundle:
 .codex-plugin/plugin.json
 .mcp.json
 skills/computer-use/SKILL.md
+src/app-bridge.mjs
 src/server.mjs
 ```
 
@@ -48,10 +49,13 @@ The MCP server entry is portable within the plugin root:
 ```json
 {
   "command": "node",
-  "args": ["src/server.mjs"],
+  "args": ["src/app-bridge.mjs"],
   "cwd": "."
 }
 ```
+
+M12 originally pointed directly at `src/server.mjs`. M26 changed the packaged
+entry to the resident-app stdio bridge while preserving the same tool surface.
 
 ## Verification
 

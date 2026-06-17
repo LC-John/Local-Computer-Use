@@ -26,11 +26,11 @@ npm run probe:m24:plugin-flow
 The probe checks:
 
 - `.codex-plugin/plugin.json` identifies `local-computer-use`;
-- `.mcp.json` points at `node src/server.mjs`;
+- `.mcp.json` points at `node src/app-bridge.mjs`;
 - `~/plugins/local-computer-use` exists and resolves to this repo;
 - plugin manifest validation passes;
-- local MCP starts and returns expected tools such as `list_apps` and
-  `get_app_state`;
+- local app host starts, the plugin bridge connects, and MCP returns expected
+  tools such as `list_apps` and `get_app_state`;
 - installed cache path is reported when present.
 
 The generated report is metric/status only:
@@ -78,8 +78,9 @@ M24 does not:
 
 - run `codex plugin add` automatically;
 - modify marketplace entries;
-- replace the stdio MCP transport;
-- make the app an MCP host.
+- replace the stdio MCP transport.
+
+M26 later makes the app a resident host behind the stdio bridge.
 
 Manual reinstall remains:
 

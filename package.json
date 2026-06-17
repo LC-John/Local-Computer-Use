@@ -8,6 +8,8 @@
   },
   "scripts": {
     "start": "node src/server.mjs",
+    "start:app-host": "node src/app-host.mjs",
+    "start:app-bridge": "node src/app-bridge.mjs",
     "probe:local": "node scripts/probe-reimplementation-mcp.mjs",
     "probe:m8:click": "node scripts/probe-m8-click.mjs",
     "probe:m8:keyboard": "node scripts/probe-m8-keyboard.mjs",
@@ -36,6 +38,8 @@
     "probe:m23:diagnostics-ui": "node scripts/probe-m23-diagnostics-ui.mjs",
     "probe:m24:plugin-flow": "node scripts/probe-m24-plugin-flow.mjs",
     "verify:m25:app-track": "scripts/verify-m25-app-track.sh",
+    "probe:m26:app-host": "node scripts/probe-m26-app-host.mjs",
+    "verify:m26:resident-app": "npm run build:m22:app && npm run probe:m26:app-host && npm run probe:m24:plugin-flow",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },
