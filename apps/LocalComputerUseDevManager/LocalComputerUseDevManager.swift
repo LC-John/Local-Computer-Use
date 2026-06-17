@@ -127,6 +127,10 @@ final class AppModel: ObservableObject {
         runCommand(title: "validate plugin", command: ["python3", validator, "."])
     }
 
+    func runPluginFlowProbe() {
+        runCommand(title: "plugin flow", command: ["npm", "run", "probe:m24:plugin-flow"])
+    }
+
     func runDiagnostic(_ diagnostic: DiagnosticCommand) {
         runCommand(title: diagnostic.title, command: diagnostic.command)
     }
@@ -318,6 +322,9 @@ struct ContentView: View {
                             .frame(width: 92, alignment: .leading)
                         Button("Validate Plugin") {
                             model.validatePluginManifest()
+                        }
+                        Button("Plugin Flow") {
+                            model.runPluginFlowProbe()
                         }
                         Spacer()
                         Button("Open Docs") {

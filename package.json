@@ -34,6 +34,7 @@
     "build:m22:app": "scripts/build-m22-dev-manager-app.sh",
     "probe:m22:app": "node scripts/probe-m22-dev-manager-app.mjs",
     "probe:m23:diagnostics-ui": "node scripts/probe-m23-diagnostics-ui.mjs",
+    "probe:m24:plugin-flow": "node scripts/probe-m24-plugin-flow.mjs",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },

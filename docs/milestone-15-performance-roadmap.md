@@ -239,7 +239,7 @@ Scope:
 - M21: done, define app scope, architecture, goals, and non-goals;
 - M22: done, build a minimal SwiftUI app shell;
 - M23: done, add diagnostics and test runner UI;
-- M24: add plugin install, validate, and smoke-test flow;
+- M24: done, add plugin install, validate, and smoke-test flow;
 - M25: package polish and handoff docs.
 
 Non-goals for this track:
@@ -269,6 +269,7 @@ M20: centralize state-mode selection policy
 M21: define Dev Manager App track
 M22: build minimal Dev Manager App shell
 M23: add diagnostics and test runner UI
+M24: add plugin validate and smoke flow
 ```
 
 This order keeps the optimization work honest: each later milestone must beat

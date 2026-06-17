@@ -46,6 +46,7 @@ Milestone 20: Complete for first state policy helper
 Milestone 21: Complete for Dev Manager App scope and architecture
 Milestone 22: Complete for minimal Dev Manager App shell
 Milestone 23: Complete for diagnostics and test runner UI
+Milestone 24: Complete for plugin validate and smoke flow
 ```
 
 Completed architecture discovery work is summarized in
@@ -1587,6 +1588,42 @@ fixture gates.
 - Grouped test runner UI.
 - Command history UI.
 - M23 probe and docs.
+
+## Milestone 24: Plugin Install, Validate, and Smoke Flow
+
+Status: Complete for the first plugin validation and smoke flow as of
+2026-06-17. M24 adds a single probe and app button for checking whether the
+local plugin source, manifest, symlink, and MCP smoke path are healthy. See
+`docs/milestone-24-plugin-install-validate-smoke-flow.md`.
+
+### Purpose
+
+Answer whether the local plugin is installed or installable, valid, and able to
+start MCP before an agent tries to use it.
+
+### Work Items
+
+- Done: add `probe:m24:plugin-flow`.
+- Done: validate `.codex-plugin/plugin.json` and `.mcp.json`.
+- Done: check `~/plugins/local-computer-use` resolves to this repo.
+- Done: run manifest validation.
+- Done: run local MCP `tools/list` smoke.
+- Done: add a `Plugin Flow` button to the Dev Manager app.
+- Future: package/handoff polish in M25.
+
+### Verification Results
+
+- `npm run probe:m24:plugin-flow` passed.
+- `npm run build:m22:app` passed.
+- `npm run probe:m23:diagnostics-ui` passed.
+- `npm run probe:m22:app` passed.
+
+### Deliverables
+
+- Plugin flow probe.
+- Plugin flow report.
+- Dev Manager app Plugin Flow button.
+- Updated M24 docs.
 
 ## Suggested Execution Order
 

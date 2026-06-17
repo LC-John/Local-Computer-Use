@@ -17,6 +17,8 @@ const requiredSnippets = [
   "test:m13:negative",
   "test:followups",
   "test:m11:fixtures",
+  "probe:m24:plugin-flow",
+  "Plugin Flow",
   "Command History",
   "durationText",
 ];

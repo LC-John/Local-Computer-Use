@@ -7,7 +7,6 @@ import { promisify } from "node:util";
 
 const execFile = promisify(execFileCallback);
 const appPath = path.resolve(".build/Local Computer Use Dev Manager.app");
-const executablePath = path.join(appPath, "Contents/MacOS/LocalComputerUseDevManager");
 const plistPath = path.join(appPath, "Contents/Info.plist");
 const reportPath = path.resolve("reports/m22-dev-manager-app.json");
 
@@ -31,8 +30,12 @@ async function plistValue(key) {
 
 async function main() {
   const appExists = await exists(appPath);
-  const executableExists = await exists(executablePath);
   const plistExists = await exists(plistPath);
+  const executableName = plistExists ? await plistValue("CFBundleExecutable") : null;
+  const executablePath = executableName
+    ? path.join(appPath, "Contents/MacOS", executableName)
+    : path.join(appPath, "Contents/MacOS/LocalComputerUseDevManager");
+  const executableExists = await exists(executablePath);
   const executableStat = executableExists ? await stat(executablePath) : null;
   const executableIsRunnable = Boolean(executableStat && (executableStat.mode & 0o111) !== 0);
   const bundleIdentifier = plistExists ? await plistValue("CFBundleIdentifier") : null;
@@ -43,6 +46,7 @@ async function main() {
       executableExists &&
       plistExists &&
       executableIsRunnable &&
+      executableName === "LocalComputerUseDevManager" &&
       bundleIdentifier === "local.computer-use.dev-manager" &&
       bundleName === "Local Computer Use Dev Manager",
   );
@@ -55,6 +59,7 @@ async function main() {
     checks: {
       appExists,
       executableExists,
+      executableName,
       plistExists,
       executableIsRunnable,
       bundleIdentifier,
