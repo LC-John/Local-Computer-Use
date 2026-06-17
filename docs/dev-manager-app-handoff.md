@@ -124,6 +124,7 @@ M31: Permission onboarding and recovery complete
 M32: Event stream and turn-ended integration complete
 M33: Native capture and automation consolidation guardrails complete
 M34: Locked-use guardian feasibility complete
+M35: Release, signing, and update discipline complete
 ```
 
 ## Known Non-Goals

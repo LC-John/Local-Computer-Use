@@ -62,6 +62,8 @@
     "verify:m33:native-consolidation": "npm run build:m22:app && npm run probe:m33:native-consolidation && npm run probe:m32:event-stream",
     "probe:m34:locked-use-feasibility": "node scripts/probe-m34-locked-use-feasibility.mjs",
     "verify:m34:locked-use-feasibility": "npm run probe:m34:locked-use-feasibility && npm run probe:m33:native-consolidation",
+    "probe:m35:release-package": "node scripts/probe-m35-release-package.mjs",
+    "verify:m35:native-shape": "npm run build:m22:app && npm run probe:m35:release-package && npm run verify:m34:locked-use-feasibility && npm run verify:m30:installer-flow && npm run verify:m29:service-lifecycle",
     "approve:app": "node scripts/approve-app.mjs",
     "overlay:latest": "node scripts/render-bounds-overlay.mjs"
   },

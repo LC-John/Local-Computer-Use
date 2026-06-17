@@ -7,16 +7,18 @@ app_name="Local Computer Use Dev Manager.app"
 app_dir="$repo_root/.build/$app_name"
 contents_dir="$app_dir/Contents"
 macos_dir="$contents_dir/MacOS"
+resources_dir="$contents_dir/Resources"
 shared_support_dir="$contents_dir/SharedSupport"
 client_app_dir="$shared_support_dir/LocalComputerUseClient.app"
 client_contents_dir="$client_app_dir/Contents"
 client_macos_dir="$client_contents_dir/MacOS"
 
 rm -rf "$app_dir"
-mkdir -p "$macos_dir" "$client_macos_dir"
+mkdir -p "$macos_dir" "$resources_dir" "$client_macos_dir"
 
 cp "$source_dir/Info.plist" "$contents_dir/Info.plist"
 cp "$source_dir/LocalComputerUseClient.Info.plist" "$client_contents_dir/Info.plist"
+cp "$repo_root/VERSION.json" "$resources_dir/VERSION.json"
 
 /usr/bin/swiftc \
   -O \
@@ -45,6 +47,7 @@ exec node src/client-cli.mjs "\$@"
 EOF
 chmod +x "$client_macos_dir/LocalComputerUseClient"
 
+/usr/bin/codesign --force --sign - "$macos_dir/LocalComputerUseService" >/dev/null 2>&1 || true
 /usr/bin/codesign --force --sign - "$client_app_dir" >/dev/null 2>&1 || true
 /usr/bin/codesign --force --sign - "$app_dir" >/dev/null 2>&1 || true
 

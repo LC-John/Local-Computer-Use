@@ -57,7 +57,7 @@ Milestone 31: Complete for first permission onboarding/recovery pass
 Milestone 32: Complete for first event-stream/turn-ended integration
 Milestone 33: Complete for first native-boundary consolidation guardrails
 Milestone 34: Complete for locked-use guardian feasibility boundary
-Milestone 35: Proposed native-shaped app/service release track
+Milestone 35: Complete for first release/signing/update discipline pass
 ```
 
 Completed architecture discovery work is summarized in
@@ -1866,12 +1866,24 @@ Verification:
 
 - `npm run verify:m34:locked-use-feasibility` passed.
 
-## Milestone 35: Native-Shaped App/Service Release Track
+## Milestone 35: Release, Signing, and Update Discipline
 
-Status: Proposed. See `docs/native-shape-followup-milestones.md`.
+Status: Complete for the first release/signing/update discipline pass as of
+2026-06-17. See `docs/milestone-35-release-signing-update-discipline.md`.
 
-Purpose: close the remaining gap between M34's safety boundary and a
-maintainable native-shaped release package.
+Purpose: make the native-shaped local runtime maintainable across plugin and
+MCP entry changes.
+
+Work completed:
+
+- Added `VERSION.json`.
+- Added release package/signature probe.
+- Added `verify:m35:native-shape`.
+- Documented update discipline for plugin metadata and fresh-thread refresh.
+
+Verification:
+
+- `npm run verify:m35:native-shape` passed.
 
 Proposed sequence:
 

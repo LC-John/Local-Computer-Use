@@ -2,7 +2,8 @@
 
 Date: 2026-06-17
 
-Status: Planning document. M27-M34 are complete; M35 remains proposed. This
+Status: Complete for the M27-M35 native-shaped follow-up track as of
+2026-06-17. This
 roadmap starts after M26 and describes what is
 still missing if Local Computer Use should more closely match the native Codex
 Computer Use app shape observed on this machine.
@@ -276,18 +277,19 @@ Verification:
 
 ## Milestone 35: Release, Signing, and Update Discipline
 
-Status: Proposed.
+Status: Complete for the first native-shaped release discipline pass as of
+2026-06-17.
 
 Purpose: Make the native-shaped local runtime maintainable across Codex/plugin
 updates.
 
 Work items:
 
-- Add repeatable app build output under `.build/`.
-- Add ad-hoc signing for local development.
-- Add version metadata for app, client, service, plugin, and helper.
-- Add upgrade notes when `.mcp.json` or plugin metadata changes.
-- Add a single verification command covering bundle layout, plugin flow, service
+- Done: add repeatable app build output under `.build/`.
+- Done: add ad-hoc signing for local development.
+- Done: add version metadata for app, client, service, plugin, and helper.
+- Done: add upgrade notes when `.mcp.json` or plugin metadata changes.
+- Done: add a single verification command covering bundle layout, plugin flow, service
   lifecycle, and fixture smoke.
 
 Verification:
