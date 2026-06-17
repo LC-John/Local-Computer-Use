@@ -48,14 +48,15 @@ The MCP server entry is portable within the plugin root:
 
 ```json
 {
-  "command": "node",
-  "args": ["src/app-bridge.mjs"],
+  "command": ".build/Local Computer Use Dev Manager.app/Contents/SharedSupport/LocalComputerUseClient.app/Contents/MacOS/LocalComputerUseClient",
+  "args": ["mcp"],
   "cwd": "."
 }
 ```
 
 M12 originally pointed directly at `src/server.mjs`. M26 changed the packaged
 entry to the resident-app stdio bridge while preserving the same tool surface.
+M27 changed the entry again to the bundled client wrapper.
 
 ## Verification
 

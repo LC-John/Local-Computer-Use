@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "local-computer-use": {
-      "command": "node",
-      "args": ["src/app-bridge.mjs"],
+      "command": ".build/Local Computer Use Dev Manager.app/Contents/SharedSupport/LocalComputerUseClient.app/Contents/MacOS/LocalComputerUseClient",
+      "args": ["mcp"],
       "cwd": "."
     }
   }

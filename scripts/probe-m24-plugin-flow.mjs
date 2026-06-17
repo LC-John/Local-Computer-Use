@@ -87,7 +87,7 @@ function waitForSocket(targetPath, timeoutMs = 10000) {
   });
 }
 
-async function localMcpSmoke() {
+async function localMcpSmoke(mcpServer) {
   const socketPath = path.join(os.tmpdir(), `local-computer-use-m24-${process.pid}.sock`);
   const host = spawn("node", ["src/app-host.mjs"], {
     cwd: repoRoot,
@@ -101,7 +101,8 @@ async function localMcpSmoke() {
 
   await waitForSocket(socketPath);
   const client = createLocalMcpClient({
-    serverPath: path.resolve("src/app-bridge.mjs"),
+    command: path.resolve(mcpServer.command),
+    serverArgs: mcpServer.args || [],
     env: {
       LOCAL_CUA_APP_SOCKET: socketPath,
     },
@@ -130,15 +131,17 @@ async function main() {
   const symlink = await pathStatus(pluginSymlinkPath);
   const installed = await pathStatus(installedPluginPath);
   const manifestValidation = await validateManifest();
-  const smoke = await localMcpSmoke();
 
   const mcpServer = sourceMcp.mcpServers?.["local-computer-use"] || {};
+  const smoke = await localMcpSmoke(mcpServer);
   const report = {
     ok:
       sourceManifest.name === "local-computer-use" &&
       sourceManifest.mcpServers === "./.mcp.json" &&
-      mcpServer.command === "node" &&
-      mcpServer.args?.[0] === "src/app-bridge.mjs" &&
+      String(mcpServer.command || "").endsWith(
+        "LocalComputerUseClient.app/Contents/MacOS/LocalComputerUseClient",
+      ) &&
+      mcpServer.args?.[0] === "mcp" &&
       symlink.exists &&
       symlink.realpath === repoRoot &&
       manifestValidation.ok &&

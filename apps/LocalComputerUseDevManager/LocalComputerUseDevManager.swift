@@ -118,6 +118,15 @@ final class AppModel: ObservableObject {
             .path
     }
 
+    func serviceExecutableURL() -> URL {
+        let bundledService = Bundle.main.bundleURL
+            .appendingPathComponent("Contents/MacOS/LocalComputerUseService")
+        if FileManager.default.isExecutableFile(atPath: bundledService.path) {
+            return bundledService
+        }
+        return URL(fileURLWithPath: "/usr/bin/env")
+    }
+
     func refreshStatus() {
         status = AppStatus(
             repoPath: repoURL.path,
@@ -137,8 +146,11 @@ final class AppModel: ObservableObject {
         }
 
         let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-        process.arguments = ["node", "src/app-host.mjs"]
+        let serviceURL = serviceExecutableURL()
+        process.executableURL = serviceURL
+        process.arguments = serviceURL.path == "/usr/bin/env"
+            ? ["node", "src/app-host.mjs"]
+            : []
         process.currentDirectoryURL = repoURL
         process.environment = ProcessInfo.processInfo.environment.merging([
             "LOCAL_CUA_REPO_ROOT": repoURL.path,

@@ -29,7 +29,7 @@ system daemon.
 The agent-facing runtime remains:
 
 ```text
-Codex plugin -> node src/app-bridge.mjs -> app host socket -> node src/server.mjs -> .build/ax-state serve
+Codex plugin -> LocalComputerUseClient mcp -> app host socket -> node src/server.mjs -> .build/ax-state serve
 ```
 
 The app-facing runtime is:
@@ -116,14 +116,25 @@ M23: Diagnostics and test runner UI complete
 M24: Plugin validate and smoke flow complete
 M25: Packaging polish and handoff complete
 M26: Resident app-host MCP path complete
+M27: Native-shaped bundle layout complete
 ```
 
 ## Known Non-Goals
 
 - No multi-client MCP host.
-- No socket or HTTP MCP transport.
+- No HTTP MCP transport.
 - No launchd/system daemon.
 - No locked computer use.
 - No automatic macOS permission prompt approval.
 - No replacement for OpenAI's bundled `computer-use` plugin.
-- No launchd/system daemon; the app or `npm run start:app-host` must be running.
+- The app or `npm run start:app-host` must be running; this is not a boot-time
+  background service.
+
+## Native-Shaped Follow-Up
+
+The next roadmap is recorded in
+`docs/native-shape-followup-milestones.md`. It covers the remaining work needed
+to more closely match the native Codex app shape: bundled client app,
+service lifecycle, installer flow, permission onboarding, event-stream and
+turn-ended commands, native capture consolidation, locked-use feasibility, and
+release/signing discipline.

@@ -22,24 +22,24 @@ app:
 npm run start:app-host
 ```
 
-The plugin-facing stdio bridge is:
+The plugin-facing client wrapper is:
 
 ```bash
-node src/app-bridge.mjs
+".build/Local Computer Use Dev Manager.app/Contents/SharedSupport/LocalComputerUseClient.app/Contents/MacOS/LocalComputerUseClient" mcp
 ```
 
 For MCP clients that accept a stdio server configuration, use:
 
 ```json
 {
-  "command": "node",
-  "args": ["src/app-bridge.mjs"],
+  "command": ".build/Local Computer Use Dev Manager.app/Contents/SharedSupport/LocalComputerUseClient.app/Contents/MacOS/LocalComputerUseClient",
+  "args": ["mcp"],
   "cwd": "/Users/lczhang/Documents/computer-use"
 }
 ```
 
-The bridge requires the resident app host socket to be running. For direct
-low-level server debugging only, `npm start` still runs `src/server.mjs`
+The client wrapper requires the resident app host socket to be running. For
+direct low-level server debugging only, `npm start` still runs `src/server.mjs`
 without the app host.
 
 The repo also includes `.mcp.json` for clients that can load MCP server config

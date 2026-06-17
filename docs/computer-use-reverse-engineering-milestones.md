@@ -49,6 +49,8 @@ Milestone 23: Complete for diagnostics and test runner UI
 Milestone 24: Complete for plugin validate and smoke flow
 Milestone 25: Complete for packaging polish and handoff
 Milestone 26: Complete for first resident app-host MCP path
+Milestone 27: Complete for first native-shaped bundle layout
+Milestone 28-35: Proposed native-shaped app/service follow-up track
 ```
 
 Completed architecture discovery work is summarized in
@@ -1693,6 +1695,49 @@ Agent -> plugin stdio bridge -> app host socket -> local MCP server -> macOS
 - App status and start-host controls.
 - M26 probe and docs.
 
+## Milestone 27: Native-Shaped Bundle Layout
+
+Status: Complete for the first native-shaped bundle layout as of 2026-06-17.
+See `docs/native-shape-followup-milestones.md`.
+
+Purpose: make the generated local app bundle structurally closer to the native
+Codex Computer Use bundle while preserving the existing black-box local
+implementation.
+
+Work completed:
+
+- Generated `Contents/MacOS/LocalComputerUseService`.
+- Generated `Contents/SharedSupport/LocalComputerUseClient.app`.
+- Updated `.mcp.json` to invoke `LocalComputerUseClient mcp`.
+- Added `probe:m27:native-bundle` and `verify:m27:native-bundle`.
+
+Verification:
+
+- `npm run verify:m27:native-bundle` passed.
+
+## Milestones 28-35: Native-Shaped App/Service Follow-Up Track
+
+Status: Proposed. See `docs/native-shape-followup-milestones.md`.
+
+Purpose: close the remaining gap between M27's generated native-shaped bundle
+layout and the native Codex Computer Use app shape. The observed native shape
+has a main service binary, an MCP-facing client app with subcommands, installer
+and guardian helper apps, signed app-group style packaging, and
+event/notification entrypoints.
+
+Proposed sequence:
+
+```text
+M28: Client subcommands
+M29: Service lifecycle and single-instance runtime
+M30: Installer and plugin refresh flow
+M31: Permission onboarding and recovery
+M32: Event stream and turn-ended integration
+M33: Native capture and automation consolidation
+M34: Locked-use guardian feasibility
+M35: Release, signing, and update discipline
+```
+
 ## Suggested Execution Order
 
 Recommended order:
@@ -1728,6 +1773,17 @@ Dev Manager App Track:
 24. Plugin install, validate, and smoke flow
 25. Packaging polish and handoff docs
 26. Resident app-host MCP path
+
+Native-Shaped App/Service Follow-Up Track:
+27. Native-shaped bundle layout
+28. Client subcommands
+29. Service lifecycle and single-instance runtime
+30. Installer and plugin refresh flow
+31. Permission onboarding and recovery
+32. Event stream and turn-ended integration
+33. Native capture and automation consolidation
+34. Locked-use guardian feasibility
+35. Release, signing, and update discipline
 ```
 
 The most important dependency is that `get_app_state` should be understood

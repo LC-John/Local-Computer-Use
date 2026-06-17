@@ -2,9 +2,10 @@
 
 Date: 2026-06-17
 
-Status: Complete for the first resident app-host MCP path. M26 changes the
+Status: Complete for the first resident app-host MCP path. M26 changed the
 local plugin entry from a direct `src/server.mjs` process to a stdio bridge that
-connects to a long-running app host socket.
+connects to a long-running app host socket. M27 later wrapped that bridge in a
+native-shaped bundled client app.
 
 ## Purpose
 
@@ -29,7 +30,8 @@ moving the durable runtime boundary into the resident app host.
   directory.
 - `src/app-bridge.mjs` is the plugin-facing stdio process and forwards JSON-RPC
   traffic to the app host socket.
-- `.mcp.json` now points `local-computer-use` at `src/app-bridge.mjs`.
+- M26 pointed `local-computer-use` at `src/app-bridge.mjs`; M27 updates that
+  entry to the bundled `LocalComputerUseClient mcp` wrapper.
 - The Dev Manager app starts `node src/app-host.mjs` on launch and shows the
   host socket in status.
 - `probe:m24:plugin-flow` now validates the bridge-backed plugin smoke path.

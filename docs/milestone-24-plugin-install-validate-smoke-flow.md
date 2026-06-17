@@ -26,7 +26,7 @@ npm run probe:m24:plugin-flow
 The probe checks:
 
 - `.codex-plugin/plugin.json` identifies `local-computer-use`;
-- `.mcp.json` points at `node src/app-bridge.mjs`;
+- `.mcp.json` points at the bundled `LocalComputerUseClient mcp` wrapper;
 - `~/plugins/local-computer-use` exists and resolves to this repo;
 - plugin manifest validation passes;
 - local app host starts, the plugin bridge connects, and MCP returns expected
@@ -80,7 +80,8 @@ M24 does not:
 - modify marketplace entries;
 - replace the stdio MCP transport.
 
-M26 later makes the app a resident host behind the stdio bridge.
+M26 makes the app a resident host behind the stdio bridge. M27 wraps the bridge
+in a generated client app inside the main app bundle.
 
 Manual reinstall remains:
 
