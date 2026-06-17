@@ -41,6 +41,7 @@ Milestone 15: Initial performance baseline complete
 Milestone 16: Complete for initial persistent helper service
 Milestone 17: Complete for initial fast action path and policy cache
 Milestone 18: Complete for screenshot cache and state modes
+Milestone 19: Complete for first large-app state budget pass
 ```
 
 Completed architecture discovery work is summarized in
@@ -1365,6 +1366,53 @@ every action.
 - Caching can produce convincing but stale UI state. Every cached payload should
   report freshness metadata so agents can choose when to force a full read.
 
+## Milestone 19: Large App State Budget and Default Policy
+
+Status: Complete for the first large-app state budget pass as of 2026-06-17.
+The benchmark covers deterministic Chrome, Finder, and TextEdit fixture windows
+and records the caller policy for M18 state modes. See
+`docs/milestone-19-large-app-state-budget.md`.
+
+### Purpose
+
+Prove that M18 state modes help on larger real apps, not only Calculator, and
+turn the measurements into a practical default policy for callers.
+
+### Work Items
+
+- Done: add `benchmark:m19:large-state`.
+- Done: measure Chrome, Finder, and TextEdit with full screenshot, full
+  no-screenshot, visible no-screenshot, and focused no-screenshot reads.
+- Done: save metric-only output to avoid persisting full browser/file-manager AX
+  trees.
+- Done: record default caller policy while preserving the public full+screenshot
+  default.
+- Future: use these budgets to drive automatic state-mode selection in a higher
+  level agent loop.
+
+### Verification Results
+
+- Chrome full+screenshot p50 33.37ms with 44 nodes; focused no-screenshot p50
+  10.95ms with 7 nodes.
+- Finder full+screenshot p50 305.44ms with 276 nodes; focused no-screenshot p50
+  15.01ms with 18 nodes.
+- TextEdit full+screenshot p50 16.87ms with 13 nodes; focused no-screenshot p50
+  14.06ms with 12 nodes.
+
+### Deliverables
+
+- Large-app state benchmark script.
+- Metric-only benchmark report.
+- State-read policy for callers.
+- Updated milestone docs.
+
+### Risks and Notes
+
+- Chrome/Finder AX payloads can contain user-visible text, so M19 avoids writing
+  full JSONL traffic.
+- The server default remains full+screenshot for compatibility; lighter reads
+  are explicit opt-ins.
+
 ## Suggested Execution Order
 
 Recommended order:
@@ -1389,6 +1437,7 @@ Recommended order:
 16. Long-lived helper service
 17. Fast action path and policy cache
 18. Incremental state and screenshot cache
+19. Large app state budget and default policy
 ```
 
 The most important dependency is that `get_app_state` should be understood

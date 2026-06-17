@@ -167,6 +167,35 @@ Acceptance:
 - lighter state modes reduce payload size and latency without changing the
   default full state behavior.
 
+## M19: Large App State Budget and Default Policy
+
+Goal: validate M18 state modes on larger real app fixtures and turn the results
+into a caller policy.
+
+Status: first pass complete as of 2026-06-17. Chrome, Finder, and TextEdit were
+measured with `fullScreenshot`, `fullNoScreenshot`, `visibleNoScreenshot`, and
+`focusedNoScreenshot`. Finder showed the largest win: full+screenshot p50
+305.44ms with 276 nodes versus focused no-screenshot p50 15.01ms with 18 nodes.
+
+Scope:
+
+- done: add `benchmark:m19:large-state`;
+- done: measure Chrome, Finder, and TextEdit fixture windows;
+- done: record payload byte and node count budgets;
+- done: keep reports metric-only, without full browser/file-manager AX trees;
+- done: document the default state-read policy for callers;
+- future: use budgets for automatic state-mode selection in a higher-level agent
+  loop.
+
+Acceptance:
+
+- large-app benchmark runs on local fixture windows;
+- each app records p50 latency, p95 latency, payload bytes, node count, and
+  screenshot cache status;
+- default public behavior remains `full` + screenshot;
+- docs state when callers should choose `focused`, `visible`, full no-screenshot,
+  or full screenshot reads.
+
 ## Recommended Order
 
 Do these in order:
@@ -176,6 +205,7 @@ M15: measure and set budgets
 M16: remove helper startup cost
 M17: reduce repeated action overhead
 M18: reduce repeated state and screenshot overhead
+M19: validate state budgets on larger apps
 ```
 
 This order keeps the optimization work honest: each later milestone must beat
