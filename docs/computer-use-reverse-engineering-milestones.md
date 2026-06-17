@@ -45,6 +45,7 @@ Milestone 19: Complete for first large-app state budget pass
 Milestone 20: Complete for first state policy helper
 Milestone 21: Complete for Dev Manager App scope and architecture
 Milestone 22: Complete for minimal Dev Manager App shell
+Milestone 23: Complete for diagnostics and test runner UI
 ```
 
 Completed architecture discovery work is summarized in
@@ -1552,6 +1553,40 @@ runtime unchanged.
 
 - The app shells out to existing repo scripts; it does not host the MCP server.
 - The app bundle is generated under `.build/` and is not tracked in git.
+
+## Milestone 23: Diagnostics and Test Runner UI
+
+Status: Complete for the first diagnostics UI pass as of 2026-06-17. M23 expands
+the Dev Manager app with grouped diagnostic commands and command history. See
+`docs/milestone-23-diagnostics-test-runner-ui.md`.
+
+### Purpose
+
+Turn the M22 shell into a useful developer runner for routine health checks and
+fixture gates.
+
+### Work Items
+
+- Done: model diagnostics as grouped commands.
+- Done: add Smoke, App, and Fixture Gates groups.
+- Done: expose M13, follow-up, and M11 fixture gates from the UI.
+- Done: add command history with status and elapsed duration.
+- Done: add `probe:m23:diagnostics-ui`.
+- Future: add plugin install, validate, and post-install smoke flow in M24.
+
+### Verification Results
+
+- `npm run build:m22:app` passed.
+- `npm run probe:m23:diagnostics-ui` passed.
+- `npm run probe:m22:app` passed.
+- GUI launch smoke passed.
+
+### Deliverables
+
+- Diagnostics command model.
+- Grouped test runner UI.
+- Command history UI.
+- M23 probe and docs.
 
 ## Suggested Execution Order
 
