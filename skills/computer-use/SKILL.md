@@ -70,10 +70,12 @@ fresh.
 
 - Keep fixture work scoped to deterministic local apps and files.
 - Avoid sensitive apps such as terminals, the agent host itself, password
-  managers, system settings, and editors containing private work.
+  managers, system settings, editors containing private work, and communication
+  apps unless the user explicitly authorizes the target app, scope, and action.
 - Do not bypass macOS Accessibility or Screen Recording permissions.
-- Do not automate third-party accounts, messages, payments, or destructive UI
-  actions through this server.
+- Treat third-party accounts, messages, payments, and destructive UI actions as
+  authorization-gated. Ask for explicit user approval first, then keep the work
+  narrowly scoped to the approved app, account, content, and operation.
 
 ## Permissions and Policy
 
@@ -121,8 +123,9 @@ reports/follow-up-fixtures.json
 reports/m13-negative-tests.json
 ```
 
-Raw JSONL MCP transcripts may contain local app names, AX trees, and UI text.
-Keep them as local debug output rather than long-term evidence unless reviewed.
+Raw JSONL MCP transcripts may contain local app names, AX trees, and UI text,
+including content from user-authorized sensitive apps. Keep them as local debug
+output rather than long-term evidence unless reviewed.
 
 ## Known Gaps
 
